@@ -1,0 +1,20 @@
+digraph G {
+graph [rankdir=TB,bgcolor="white",pad="0.2",nodesep="0.35",ranksep="0.45",label="Boot chain and evidence levels",labelloc=t,fontname="DejaVu Sans",fontsize=17];
+node [shape=box,style="rounded,filled",fillcolor="#eef3f8",color="#415a77",fontname="DejaVu Sans",fontsize=11,margin="0.14,0.1"];
+edge [color="#415a77",fontname="DejaVu Sans",fontsize=9];
+rom [label="SoC Boot ROM"];
+spl [label="QSPI SPL"];
+ub [label="QSPI U-Boot"];
+emmc [label="Selected eMMC slot 5 or 6"];
+kernel [label="Genuine zImage and DTB"];
+rescue [label="External Rescue V2 initramfs"];
+normal [label="Normal SysV init"];
+owner [label="Separate owner S98 hook"];
+rom -> spl [label=""];
+spl -> ub [label=""];
+ub -> emmc [label=""];
+emmc -> kernel [label=""];
+kernel -> rescue [label="OWNER HARDWARE OBSERVATION"];
+kernel -> normal [label="FILE/CODE"];
+normal -> owner [label="OWNER HARDWARE OBSERVATION"];
+}

@@ -1,0 +1,14 @@
+flowchart TD
+  sysv["Nonblocking owner SysV supervisor"]
+  socket["Narrow root socket launcher"]
+  drop["Bind physical interface; drop<br/>groups/UID/GID"]
+  panel["Unprivileged owner panel1328"]
+  browser["Owner browser; explicit LAN login<br/>policy"]
+  inputs["Allowlisted proc/sys + reviewed<br/>private summaries"]
+  writes["Owner settings only; bounded<br/>atomic state"]
+  sysv --> socket
+  socket --> drop
+  drop --> panel
+  browser -->  |"HTTPS or opt-in LAN HTTP / Host / Origin / session / CSRF"| panel
+  inputs -->  |"source and freshness labels"| panel
+  panel --> writes

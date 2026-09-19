@@ -1,0 +1,19 @@
+#!/bin/sh
+# BLKROSET changes a volatile Linux block-layer flag, not media contents.
+failed=0
+found=0
+for dev in /dev/mmcblk0 /dev/mmcblk0p* /dev/mmcblk0boot0 /dev/mmcblk0boot1; do
+    [ -b "$dev" ] || continue
+    found=1
+    if blockdev --setro "$dev" && [ "$(blockdev --getro "$dev")" = 1 ]; then
+        printf 'READ-ONLY: %s\n' "$dev"
+    else
+        printf '\n*** WARNING: CANNOT CONFIRM READ-ONLY FLAG: %s ***\n\n' "$dev" >&2
+        failed=1
+    fi
+done
+if [ "$found" = 0 ]; then
+    printf '\n*** WARNING: NO eMMC BLOCK DEVICES FOUND ***\n\n' >&2
+    failed=1
+fi
+exit "$failed"

@@ -1,0 +1,18 @@
+digraph G {
+graph [rankdir=TB,bgcolor="white",pad="0.2",nodesep="0.35",ranksep="0.45",label="Panel privilege boundary",labelloc=t,fontname="DejaVu Sans",fontsize=17];
+node [shape=box,style="rounded,filled",fillcolor="#eef3f8",color="#415a77",fontname="DejaVu Sans",fontsize=11,margin="0.14,0.1"];
+edge [color="#415a77",fontname="DejaVu Sans",fontsize=9];
+sysv [label="Nonblocking owner SysV supervisor"];
+socket [label="Narrow root socket launcher"];
+drop [label="Bind physical interface; drop\ngroups/UID/GID"];
+panel [label="Unprivileged owner panel1328"];
+browser [label="Owner browser; explicit LAN login\npolicy"];
+inputs [label="Allowlisted proc/sys + reviewed\nprivate summaries"];
+writes [label="Owner settings only; bounded\natomic state"];
+sysv -> socket [label=""];
+socket -> drop [label=""];
+drop -> panel [label=""];
+browser -> panel [label="HTTPS or opt-in LAN HTTP / Host / Origin / session / CSRF"];
+inputs -> panel [label="source and freshness labels"];
+panel -> writes [label=""];
+}

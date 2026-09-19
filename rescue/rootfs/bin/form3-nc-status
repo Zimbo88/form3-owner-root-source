@@ -1,0 +1,23 @@
+#!/bin/sh
+# Read-only service diagnosis. /run and /proc are RAM/kernel state.
+if [ ! -r /run/form3-nc.pid ]; then
+    echo 'NC SHELL NOT CONFIRMED: /run/form3-nc.pid is absent' >&2
+    exit 1
+fi
+read -r pid < /run/form3-nc.pid
+case "$pid" in ''|*[!0-9]*) echo 'NC SHELL NOT CONFIRMED: invalid PID' >&2; exit 1 ;; esac
+if ! kill -0 "$pid" 2>/dev/null; then
+    echo 'NC SHELL FAILED: listener exited; inspect /run/form3-nc.log' >&2
+    exit 1
+fi
+if [ -r /proc/net/tcp ]; then
+    while read -r slot local peer state rest; do
+        # IPv4 little-endian 10.0.0.77, TCP port 2324, TCP_LISTEN.
+        if [ "$local" = '4D00000A:0914' ] && [ "$state" = '0A' ]; then
+            printf 'FORM3 V2 NC SHELL LISTENING: 10.0.0.77:2324 (PID %s; no PTY)\n' "$pid"
+            exit 0
+        fi
+    done < /proc/net/tcp
+fi
+echo 'NC SHELL NOT CONFIRMED: no matching LISTEN socket; inspect /run/form3-nc.log' >&2
+exit 1

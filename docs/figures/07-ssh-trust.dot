@@ -1,0 +1,16 @@
+digraph G {
+graph [rankdir=TB,bgcolor="white",pad="0.2",nodesep="0.35",ranksep="0.45",label="Independent owner SSH authority",labelloc=t,fontname="DejaVu Sans",fontsize=17];
+node [shape=box,style="rounded,filled",fillcolor="#eef3f8",color="#415a77",fontname="DejaVu Sans",fontsize=11,margin="0.14,0.1"];
+edge [color="#415a77",fontname="DejaVu Sans",fontsize=9];
+client [label="New owner client private key\nLAPTOP only"];
+pub [label="Owner public authorized key"];
+server [label="Separate sshd2222\npassword auth off; StrictModes on"];
+host [label="Separate owner SSH host identity"];
+check [label="Isolated first-use enrollment;\nretain host fingerprint for later\ncontinuity"];
+vendor [label="Vendor CA / host identities\npreserved"];
+client -> server [label="prove possession"];
+pub -> server [label="explicit enrollment"];
+host -> server [label=""];
+check -> host [label="sole-peer TOFU before first login"];
+vendor -> server [label="no vendor authorization reuse"];
+}

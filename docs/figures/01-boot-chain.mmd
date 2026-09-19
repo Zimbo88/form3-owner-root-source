@@ -1,0 +1,16 @@
+flowchart TD
+  rom["SoC Boot ROM"]
+  spl["QSPI SPL"]
+  ub["QSPI U-Boot"]
+  emmc["Selected eMMC slot 5 or 6"]
+  kernel["Genuine zImage and DTB"]
+  rescue["External Rescue V2 initramfs"]
+  normal["Normal SysV init"]
+  owner["Separate owner S98 hook"]
+  rom --> spl
+  spl --> ub
+  ub --> emmc
+  emmc --> kernel
+  kernel -->  |"OWNER HARDWARE OBSERVATION"| rescue
+  kernel -->  |"FILE/CODE"| normal
+  normal -->  |"OWNER HARDWARE OBSERVATION"| owner

@@ -1,0 +1,17 @@
+digraph G {
+graph [rankdir=TB,bgcolor="white",pad="0.2",nodesep="0.35",ranksep="0.45",label="Measurement relationships — contacts must first be identified",labelloc=t,fontname="DejaVu Sans",fontsize=17];
+node [shape=box,style="rounded,filled",fillcolor="#eef3f8",color="#415a77",fontname="DejaVu Sans",fontsize=11,margin="0.14,0.1"];
+edge [color="#415a77",fontname="DejaVu Sans",fontsize=9];
+g [label="G: confirmed board ground (not\nassumed shield)"];
+v [label="V: confirmed flash supply contact\n(unresolved)"];
+c [label="C1..Cn: individually identified\nclip contacts"];
+p [label="P: disconnected programmer supply\nand ground"];
+meter [label="Meter: resistance only unpowered;\nDC voltage for voltage"];
+hold [label="STOP until actual G/V/clip\norientation is established"];
+meter -> g [label="reference probe"];
+meter -> v [label="residual DC voltage; no current mode"];
+meter -> c [label="unpowered continuity/adjacent shorts"];
+meter -> p [label="programmer voltage before connection"];
+g -> hold [label="if not confirmed"];
+v -> hold [label="if not confirmed"];
+}

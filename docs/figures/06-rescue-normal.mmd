@@ -1,0 +1,16 @@
+flowchart TD
+  r["Proven Rescue V2 shell"]
+  runtime["Verified read-only p6 loader /<br/>Python"]
+  plan["Signed owner-file plan + review"]
+  write["Approved narrow p6/p7 file<br/>installation"]
+  readback["Readback + retained rollback +<br/>untouched p5"]
+  qspi["Separately reviewed QSPI return"]
+  normal["Supervised normal boot"]
+  access["Owner SSH2222 / HTTPS1328<br/>acceptance"]
+  r --> runtime
+  runtime --> plan
+  plan -->  |"deliberate operator approval"| write
+  write --> readback
+  readback -.->  |"electrical gates remain"| qspi
+  qspi --> normal
+  normal -->  |"verify on each target"| access

@@ -1,0 +1,27 @@
+    // Display-only Europe/Berlin wall time. No system TZ/clock or license writes.
+    // Current German DST rule: last Sundays in March/October at 01:00 UTC.
+    property double ownerClockEpochMs: Date.now()
+    QtQuick.Timer {
+        interval: 1000
+        repeat: true
+        running: true
+        onTriggered: ownerClockEpochMs = Date.now()
+    }
+    function ownerClockAppend(status, showClock) {
+        if (!showClock) return status;
+        var date = new Date(ownerClockEpochMs);
+        var year = date.getUTCFullYear();
+        if (!isFinite(ownerClockEpochMs) || year < 2020 || year >= 2038)
+            return status + " time unavailable";
+        var marchSunday = 31 - new Date(Date.UTC(year, 2, 31)).getUTCDay();
+        var octoberSunday = 31 - new Date(Date.UTC(year, 9, 31)).getUTCDay();
+        var summerStart = Date.UTC(year, 2, marchSunday, 1);
+        var summerEnd = Date.UTC(year, 9, octoberSunday, 1);
+        var offset = ownerClockEpochMs >= summerStart && ownerClockEpochMs < summerEnd ? 7200000 : 3600000;
+        date = new Date(ownerClockEpochMs + offset);
+        year = date.getUTCFullYear();
+        function pad(value) { return (value < 10 ? "0" : "") + value; }
+        return status + " " + pad(date.getUTCDate()) + "." +
+               pad(date.getUTCMonth() + 1) + "." + pad(year % 100) + " " +
+               pad(date.getUTCHours()) + ":" + pad(date.getUTCMinutes());
+    }

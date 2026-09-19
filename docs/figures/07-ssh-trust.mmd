@@ -1,0 +1,12 @@
+flowchart TD
+  client["New owner client private key<br/>LAPTOP only"]
+  pub["Owner public authorized key"]
+  server["Separate sshd2222<br/>password auth off; StrictModes on"]
+  host["Separate owner SSH host identity"]
+  check["Isolated first-use enrollment;<br/>retain host fingerprint for later<br/>continuity"]
+  vendor["Vendor CA / host identities<br/>preserved"]
+  client -->  |"prove possession"| server
+  pub -->  |"explicit enrollment"| server
+  host --> server
+  check -->  |"sole-peer TOFU before first login"| host
+  vendor -->  |"no vendor authorization reuse"| server

@@ -1,0 +1,7 @@
+FORM3 ROOT RESCUE
+RESCUE V2: PRIMARY RAW TCP SHELL 10.0.0.77:2324 (no PTY).
+Telnet on 2323 is an optional diagnostic service and may fail on this kernel.
+WARNING: UNAUTHENTICATED, UNENCRYPTED ROOT SHELLS. PHYSICALLY ISOLATED ETHERNET ONLY.
+Listener diagnosis: form3-nc-status; cat /run/form3-nc.log
+eMMC is evidence. Do not mount it, repair it, or write to it.
+Use form3-backup to stream a raw image to the service bridge.

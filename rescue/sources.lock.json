@@ -1,0 +1,21 @@
+{
+  "busybox": {
+    "version": "1.37.0",
+    "archive": "busybox-1.37.0.tar.bz2",
+    "sha256": "3311dff32e746499f4df0d5df04d7eb396382d7e108bb9250e7b519b837043a4",
+    "urls": ["https://busybox.net/downloads/busybox-1.37.0.tar.bz2", "https://sources.buildroot.net/busybox/busybox-1.37.0.tar.bz2"],
+    "checksum_source": "https://raw.githubusercontent.com/buildroot/buildroot/2025.02/package/busybox/busybox.hash"
+  },
+  "toolchain": {
+    "version": "armv7-eabihf--musl--stable-2024.05-1",
+    "archive": "armv7-eabihf--musl--stable-2024.05-1.tar.xz",
+    "sha256": "5b34157a4c9f53064002f12f57c42836cd551c591a4be6a99b3ee201add506aa",
+    "urls": ["https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs/armv7-eabihf--musl--stable-2024.05-1.tar.xz"],
+    "checksum_source": "https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs/armv7-eabihf--musl--stable-2024.05-1.sha256",
+    "gcc": "13.3.0",
+    "binutils": "2.41",
+    "musl": "1.2.5",
+    "linux_headers": "4.19.315"
+  },
+  "source_date_epoch": 1727395200
+}

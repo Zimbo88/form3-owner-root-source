@@ -1,0 +1,1285 @@
+{
+  "excluded_tracked_file_count": 667,
+  "hardware_contact": false,
+  "history_included": false,
+  "kind": "UNSIGNED SOURCE REVIEW; not an installation package",
+  "legal_clearance": false,
+  "producer_allowlist_sha256": "eb436921ed096661b65a97eab8d645dfa62b61dd159e11cfe2f4f3a031f779de",
+  "producer_commit": "78f8b88024c4090ed4386fa2cbeb28824f4499d0",
+  "reviewed_files": [
+    {
+      "category": "notice",
+      "destination": ".gitignore",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Project version, distribution boundary or retained authorship/third-party notice.",
+      "sha256": "272e7cc95cd1db501329bb8f2f4563da6b75f0f5dd8bb1f934e118e2ed872cd3",
+      "source": ".gitignore"
+    },
+    {
+      "category": "notice",
+      "destination": "CONTRIBUTING.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Project version, distribution boundary or retained authorship/third-party notice.",
+      "sha256": "a36e0345d4ac5a25d1d2dc4cb5e5f86fbeaa464841c1df52ec2408ef1fce77af",
+      "source": "CONTRIBUTING.md"
+    },
+    {
+      "category": "notice",
+      "destination": "LICENSE",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Project version, distribution boundary or retained authorship/third-party notice.",
+      "sha256": "0a19c397608274adaa13e090cdaa662d4f855294554e3eb7fbdee0cb684a1f7a",
+      "source": "LICENSE"
+    },
+    {
+      "category": "guide",
+      "destination": "README.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "First-person public project introduction; curated navigation and explicit compatibility limits.",
+      "sha256": "e199b49f893e6c44149ff5842c6861b0b767920a09abff12253de05722473f06",
+      "source": "PUBLIC_README.md"
+    },
+    {
+      "category": "notice",
+      "destination": "SECURITY.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Project version, distribution boundary or retained authorship/third-party notice.",
+      "sha256": "53f7188035b2c9109f760f034ce922cfbf5626595594514371c207d4674f9aa1",
+      "source": "SECURITY.md"
+    },
+    {
+      "category": "notice",
+      "destination": "THIRD_PARTY_NOTICES.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Project version, distribution boundary or retained authorship/third-party notice.",
+      "sha256": "817230b89b23202e7ecfcb3324d081bdab7f10126d7ce4525d32371efe4b3d58",
+      "source": "THIRD_PARTY_NOTICES.md"
+    },
+    {
+      "category": "notice",
+      "destination": "VERSION",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Project version, distribution boundary or retained authorship/third-party notice.",
+      "sha256": "8b79e2afbf7f652a963464ac6f744e984fb4c86602110aad6fec8edf27853a69",
+      "source": "VERSION"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "assets/signature-brand.svg",
+      "license": "MIT authored geometry; Lato wordmark artwork, see rights guide",
+      "provenance": "Original terminal/root project emblem; credited Lato Light wordmark outlines, no manufacturer logo.",
+      "sha256": "58d66195245ed9e9a51575a922c0f3d16d84e83106676d2caf7c64c35388e471",
+      "source": "assets/signature-brand.svg"
+    },
+    {
+      "category": "compatibility-checksums",
+      "destination": "checksums/rescue-runtime-files.json",
+      "license": "Factual compatibility metadata; referenced software rights retained",
+      "provenance": "Individually reviewed reference p6 runtime path/size/SHA256 list only; no binaries, account credentials or device identifiers.",
+      "sha256": "305e65f5b6469e9b19f4b5ff372814d59513526c2ca3fb9050d5fbe17805804b",
+      "source": "analysis/owner-install-v1/rescue-runtime-files.json"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/assets/print-diagnostics-DEMO.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Screenshot of authored panel in disconnected synthetic Firefox fixture; no device data.",
+      "sha256": "30684028d040064fe378a657b6b4032e74ffc365627e12db21262b95d8b62f93",
+      "source": "docs/assets/print-diagnostics-DEMO.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/01-boot-chain.dot",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "6266783d183e9b55f41118c5b99a279fe91867a2c0202c0551bdbd0371f54a24",
+      "source": "docs/figures/01-boot-chain.dot"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/01-boot-chain.mmd",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "a8b6e373e9dd23f3966b3863ca9f51d153cdb3fbfed86a2da5512439b35b978b",
+      "source": "docs/figures/01-boot-chain.mmd"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/01-boot-chain.svg",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "64482124ba21aac7de7dab7d21f5994de27af28475f70e8b5bf92caaad518b59",
+      "source": "docs/figures/01-boot-chain.svg"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/02-storage-map.dot",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "ecb82559bfc2f28071d32df87b0e3b1750bf1acdb459f3834a55dfb8ff61f443",
+      "source": "docs/figures/02-storage-map.dot"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/02-storage-map.mmd",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "878109ae1ac90da4d038bb1bf1bf337a7b7fc34d5c344bd1c0c82a5cc88fa9ce",
+      "source": "docs/figures/02-storage-map.mmd"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/02-storage-map.svg",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "a262c46ec4ad8a2e571f5d46af211fb1b92b34972e9a2fb6145e85f10abb7720",
+      "source": "docs/figures/02-storage-map.svg"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/03-clip-power-boundary.dot",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "f7d447cd591d8ae151ec7a0294ab0127c2ce8944e2a9d338e9205049585cc9be",
+      "source": "docs/figures/03-clip-power-boundary.dot"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/03-clip-power-boundary.mmd",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "5d7c179ad5b092b5f99662b8dd4a641320d4b31ac5046d1ad4e9cb3aa622016b",
+      "source": "docs/figures/03-clip-power-boundary.mmd"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/03-clip-power-boundary.svg",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "c04aedbbd4fb7e00e1dccfe29908eadaf65c509185b27aebb7814978b080f54b",
+      "source": "docs/figures/03-clip-power-boundary.svg"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/04-measurement-points.dot",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "01672e1bfd17bf1afdd6d55bf036bd1cd505643d15adefafee956826f98edc13",
+      "source": "docs/figures/04-measurement-points.dot"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/04-measurement-points.mmd",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "3af6a39f471d12c8faa475df98edf8167d737c1ebd61ea87bf70b389a0ebb358",
+      "source": "docs/figures/04-measurement-points.mmd"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/04-measurement-points.svg",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "1089796df4a4736e5b9d0c7c77bcc27d603651a43a200285f88f99929f0015d7",
+      "source": "docs/figures/04-measurement-points.svg"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/05-acquisition-network.dot",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "84ef79858bc5daf38a91495190e25d33586090d7807ed7cf3ba88a438c6e81ad",
+      "source": "docs/figures/05-acquisition-network.dot"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/05-acquisition-network.mmd",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "4640018fcac7fd9a92fd67c92cdd7575dbe623f2031f2fb8d397da28a17728a1",
+      "source": "docs/figures/05-acquisition-network.mmd"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/05-acquisition-network.svg",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "1ac6290dcff899675a97e78f1f7e9b8d684ccbc5fbb0a0e30d2877fbe4a33d9e",
+      "source": "docs/figures/05-acquisition-network.svg"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/06-rescue-normal.dot",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "53e9ccb413f279b0b080d9d2a9d4db573b81fc4aaafdb2734f2d8d5e79999b40",
+      "source": "docs/figures/06-rescue-normal.dot"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/06-rescue-normal.mmd",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "03134801d6ed0a07d2663eecb094756716a3c6775ab27b05bdbaf9677d52436c",
+      "source": "docs/figures/06-rescue-normal.mmd"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/06-rescue-normal.svg",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "2d5a2917d263e3f384ffd6a44072bc27063d053115f15cab9c90f3905e817360",
+      "source": "docs/figures/06-rescue-normal.svg"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/07-ssh-trust.dot",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "887d76d117dc88837f4ecdac8af5028a0eea8453015233f4d97a4b9eca591efe",
+      "source": "docs/figures/07-ssh-trust.dot"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/07-ssh-trust.mmd",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "0e0eca29cbc79b76a55bd083da131ea04c7312e88e5796f8d9680b829ccb479c",
+      "source": "docs/figures/07-ssh-trust.mmd"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/07-ssh-trust.svg",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "5418d6b46b16120069d786991219b9ad322e66f85350be2721fcf169fd790229",
+      "source": "docs/figures/07-ssh-trust.svg"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/08-panel-privilege.dot",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "894c1d161d6cb57a1b200cf031fe6aa1499504b07fc179d4f4541db9b347582f",
+      "source": "docs/figures/08-panel-privilege.dot"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/08-panel-privilege.mmd",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "df5ea36607332f7ade7c65480854c3912958495c247d6d72a8da457d64dfbf41",
+      "source": "docs/figures/08-panel-privilege.mmd"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/08-panel-privilege.svg",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "d7cd4085d6865cafc50d1c2fbdb75ab2c5ccc495737f0c3f36cebbcd2f7075b5",
+      "source": "docs/figures/08-panel-privilege.svg"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/09-package-transaction.dot",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "56d3d91d5c1e73f883e3b4775199e2c3525418ba912b85554997659851b6dfbd",
+      "source": "docs/figures/09-package-transaction.dot"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/09-package-transaction.mmd",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "d0caae117d13e7039448d8f6b44a773f95a84fd9f092aa6ee7f8d5b4350971d1",
+      "source": "docs/figures/09-package-transaction.mmd"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/09-package-transaction.svg",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "e62a259ad0c63c07b050519a464504e18d1f1957b813465514faf55ddef64766",
+      "source": "docs/figures/09-package-transaction.svg"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/10-api-boundaries.dot",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "09279161782896e8e7581e4505228d4fbac955b49a62bd70a9196dabbd63e40c",
+      "source": "docs/figures/10-api-boundaries.dot"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/10-api-boundaries.mmd",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "48a97dc51784a4fbdee62d7b0510407c3521a1ad492587e57addf7f8ebc25b93",
+      "source": "docs/figures/10-api-boundaries.mmd"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/10-api-boundaries.svg",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "15bd09b3d360f17b4eb53ec347cc7602690dcb2f1f5cc3f3e86ac76a1360375f",
+      "source": "docs/figures/10-api-boundaries.svg"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/11-factory-netboot.dot",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "a1b3d6ae613f821b613c5c11802fa5c1fcb2cfbe91abd65d81a645ecf1257fcf",
+      "source": "docs/figures/11-factory-netboot.dot"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/11-factory-netboot.mmd",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "3f170b4e022ed09a2a8f604811986011a1f148c6896211656be108df1c3138b8",
+      "source": "docs/figures/11-factory-netboot.mmd"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/11-factory-netboot.svg",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "07148f2a7417f9747a0dcadfaf70869f47d7df63ea9554e8ff858c82827be800",
+      "source": "docs/figures/11-factory-netboot.svg"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/12-privacy-cloud.dot",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "fe59adc4594087c1b5d24a46ea5bfc73b7f543186b3b3c9193353b6dfbde0ad8",
+      "source": "docs/figures/12-privacy-cloud.dot"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/12-privacy-cloud.mmd",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "c22684e313e8d1f4d2fe933b20f6bdb434f2709b4114ead07830360f780e052c",
+      "source": "docs/figures/12-privacy-cloud.mmd"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/figures/12-privacy-cloud.svg",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored editable logical diagram/render; proof boundary in public LIMITS guide, not a hardware pinout or measurement.",
+      "sha256": "de0490ae02ce95414c4b99f528a19b619c717e13859b3879e016b2d63169a5be",
+      "source": "docs/figures/12-privacy-cloud.svg"
+    },
+    {
+      "category": "guide",
+      "destination": "docs/methodology/LIVE_PRINT_CAPTURE.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Passive acquisition method and explicitly bounded historical observation claims.",
+      "sha256": "be47ab349ace6688e62de8fc80194663ea7071281f1cc70148cb885c834a67d0",
+      "source": "docs/methodology/LIVE_PRINT_CAPTURE.md"
+    },
+    {
+      "category": "guide",
+      "destination": "docs/public/BUILD.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored scoped reproduction guide; no private research records or recovered vendor source.",
+      "sha256": "5b4e1a89a4f38cfa975d3943389d0d8d810e8f0ac28bda5593b37f5a553a33c8",
+      "source": "docs/public/BUILD.md"
+    },
+    {
+      "category": "guide",
+      "destination": "docs/public/COMMAND_WALKTHROUGH.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Command-by-command own-device tutorial; explicit terminal, write, electrical and rollback gates. No device credentials.",
+      "sha256": "e636a27da6df5e7fd1c326e59f22731d95dfa785cdfdc30bbda94706fec2a110",
+      "source": "docs/public/COMMAND_WALKTHROUGH.md"
+    },
+    {
+      "category": "guide",
+      "destination": "docs/public/LIMITS.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored scoped reproduction guide; no private research records or recovered vendor source.",
+      "sha256": "bd588771f69c63cd2356ca79089b0dc17ec0c5ae189fb660922cb6a54532ca3c",
+      "source": "docs/public/LIMITS.md"
+    },
+    {
+      "category": "guide",
+      "destination": "docs/public/LOG_REVIEW.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Offline private log review, evidence coverage and historical-panel instructions.",
+      "sha256": "de896336eb1e6b68472d9ad9c53ba4ce2c879b2374786d62e2a693751c9d96ea",
+      "source": "docs/public/LOG_REVIEW.md"
+    },
+    {
+      "category": "guide",
+      "destination": "docs/public/NATIVE_DISPLAY.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored scoped reproduction guide; no private research records or recovered vendor source.",
+      "sha256": "72452a1fb38daf1aeb77e7581b1510232af8cb663ce677378fefabc96ed2485b",
+      "source": "docs/public/NATIVE_DISPLAY.md"
+    },
+    {
+      "category": "guide",
+      "destination": "docs/public/OWNER_INSTALL.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored scoped reproduction guide; no private research records or recovered vendor source.",
+      "sha256": "4a1ecedf621aeecb2885516935b43a25e21ed8b63d24c21a348927bfa1fb9777",
+      "source": "docs/public/OWNER_INSTALL.md"
+    },
+    {
+      "category": "guide",
+      "destination": "docs/public/PI5_CLIP_GUIDE.md",
+      "license": "MIT; Mathias Zimmermann",
+      "provenance": "Authored bench guide; conditional historical map and primary-documentation citations, no new hardware proof.",
+      "sha256": "9bd108dd59f36928d0451cb0719467b302d63a976c193713d2e9e2b542a77a36",
+      "source": "docs/public/PI5_CLIP_GUIDE.md"
+    },
+    {
+      "category": "guide",
+      "destination": "docs/public/RELEASE_CHECKLIST.md",
+      "license": "MIT; Mathias Zimmermann",
+      "provenance": "Authored clean-source publication review; no automatic visibility change.",
+      "sha256": "464a2c9a08c9f40c98f7f607c37ed027631312c98c2a971a0691bdc2f405957c",
+      "source": "docs/public/RELEASE_CHECKLIST.md"
+    },
+    {
+      "category": "guide",
+      "destination": "docs/public/RIGHTS_AND_RELEASE.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored scoped reproduction guide; no private research records or recovered vendor source.",
+      "sha256": "dac704062ae3fcda094a3b2bd211baba376a5184f2b8b02b2df4b81fea5d6103",
+      "source": "docs/public/RIGHTS_AND_RELEASE.md"
+    },
+    {
+      "category": "guide",
+      "destination": "docs/public/ROOT_GUIDE.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored scoped reproduction guide; no private research records or recovered vendor source.",
+      "sha256": "589d1785a3ad87d4c058817c71e9665152b36426ca4f7dd2fc1d553b217d3f4c",
+      "source": "docs/public/ROOT_GUIDE.md"
+    },
+    {
+      "category": "guide",
+      "destination": "docs/public/SECURE_SSH.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Secure owner SSH/SFTP walkthrough, independent key roles, trust checks and recovery.",
+      "sha256": "d99269e204e24adf164daf05682c07961cd10e49859d32395a25856ce32cb222",
+      "source": "docs/public/SECURE_SSH.md"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/clip-orientation.svg",
+      "license": "MIT; Mathias Zimmermann",
+      "provenance": "Original editable reference diagram; not a measured board pinout or copied manufacturer artwork.",
+      "sha256": "68ec7a82d93ceb980e343db68a8fc7c10805b0a7d9f0b3fe50d938e884b0d5f0",
+      "source": "docs/public/assets/clip-orientation.svg"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/clip-signal-map.svg",
+      "license": "MIT; Mathias Zimmermann",
+      "provenance": "Original conditional signal diagram; unapproved auxiliary pins are explicitly unconnected.",
+      "sha256": "8cd6601a25fdb0bcbe84f2c7f719a4d2697168fe4911053ae6c6842cbaa3a27d",
+      "source": "docs/public/assets/clip-signal-map.svg"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/root/assets/img_4040.jpg",
+      "license": "Mathias Zimmermann; included with author permission",
+      "provenance": "Owner-supplied hardware closeup; visual and metadata review; incomplete part marking, not electrical proof.",
+      "sha256": "a8d9f469d3270ab3f528e1e6fff8e7e37375c0a66fd407d886604bbe93f68460",
+      "source": "docs/root/assets/img_4040.jpg"
+    },
+    {
+      "category": "notice",
+      "destination": "licenses/GPL-2.0.txt",
+      "license": "GPL-2.0-only license text; copyright FSF",
+      "provenance": "Unmodified standard GPL version 2 text from the host common-licenses package; redistribution of the license text permitted.",
+      "sha256": "edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6",
+      "source": "licenses/GPL-2.0.txt"
+    },
+    {
+      "category": "guide",
+      "destination": "owner-maintenance/README.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "1bc84924c11fa9149c895ad8feea4a48174f09e6f683f68152f5b28f282083f1",
+      "source": "owner-maintenance/README.md"
+    },
+    {
+      "category": "authored-code",
+      "destination": "owner-maintenance/bootstrap.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "1f8e9e6e1d71d78cb602b1fb9823b981ae9928df601b9bdf71d8909cab9779c6",
+      "source": "owner-maintenance/bootstrap.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "owner-maintenance/lan_ipv4.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "8a56ebe47eaace4caf43a5e78f0d8f949d2b88067283f4cb415948287f43d3c9",
+      "source": "owner-maintenance/lan_ipv4.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "owner-maintenance/owner-maintenance.init",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "f491aa7dfde1edf67b5029738d43c2af46e764aba94f86bab60cc7022fe5dfac",
+      "source": "owner-maintenance/owner-maintenance.init"
+    },
+    {
+      "category": "authored-code",
+      "destination": "owner-maintenance/ownerctl.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "4e17166882fc360e261fc178194e5648f2c52c38949772364e5fc467ac5f5379",
+      "source": "owner-maintenance/ownerctl.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "owner-maintenance/package_format.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "ff7dd4776fdf1c2abf2e8651b1af885063bada707c5b28e7fae5bb4076fa8665",
+      "source": "owner-maintenance/package_format.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "owner-maintenance/socket_launcher.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "dae55771a984aeb8b7a16f57df7da3d6eed3145758384b9b1513a312c306dbda",
+      "source": "owner-maintenance/socket_launcher.py"
+    },
+    {
+      "category": "guide",
+      "destination": "owner-ui/README.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored standalone panel/read-adapter source or project documentation; no vendor payload.",
+      "sha256": "d4d0646b347242522f817117e0d16499b6237e1cdbe118481647a21e12562528",
+      "source": "owner-ui/README.md"
+    },
+    {
+      "category": "authored-code",
+      "destination": "owner-ui/formule_codec.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored standalone panel/read-adapter source or project documentation; no vendor payload.",
+      "sha256": "50ff516c24663f9ef655f8435c0b7c69c88c4af8e40da7ca7b40d50a6980157d",
+      "source": "owner-ui/formule_codec.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "owner-ui/native/idle-clock.qmlinc",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored standalone panel/read-adapter source or project documentation; no vendor payload.",
+      "sha256": "4dcbb6f0c9a1a81b5127755f72fe058f4fd9cc1e109ea6032cca27408adea5a2",
+      "source": "owner-ui/native/idle-clock.qmlinc"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "owner-ui/native/root-mark.svg",
+      "license": "MIT authored geometry/code; Lato wordmark artwork, see rights guide",
+      "provenance": "Authored panel/native geometry; orange wordmark uses credited Lato Light outlines, no manufacturer logo.",
+      "sha256": "6a4c324dddc124d04bed9ba451d07dabda60aa288f4be2476ae980498d5d107e",
+      "source": "owner-ui/native/root-mark.svg"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "owner-ui/native/signature-mark.svg",
+      "license": "MIT authored geometry/code; Lato wordmark artwork, see rights guide",
+      "provenance": "Authored panel/native geometry; orange wordmark uses credited Lato Light outlines, no manufacturer logo.",
+      "sha256": "7f25f4a784ef9a13e5041381d352f513af4864de186fab40c224c657ebba2ad8",
+      "source": "owner-ui/native/signature-mark.svg"
+    },
+    {
+      "category": "authored-code",
+      "destination": "owner-ui/panel_data.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored standalone panel/read-adapter source or project documentation; no vendor payload.",
+      "sha256": "ad250d6db3ac597f880625666804f3af5f0a535d07db6c2e40efcb339c83eb17",
+      "source": "owner-ui/panel_data.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "owner-ui/server.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored standalone panel/read-adapter source or project documentation; no vendor payload.",
+      "sha256": "56118a77876394099272d3441597c8cfb711286dc2a514a027e9be2c4a7ec5ac",
+      "source": "owner-ui/server.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "owner-ui/static/app.js",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored standalone panel/read-adapter source or project documentation; no vendor payload.",
+      "sha256": "68a9f378c894767e2a052a4e14458014273115e556a38bd0355f20f15f3c1579",
+      "source": "owner-ui/static/app.js"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "owner-ui/static/index.html",
+      "license": "MIT authored geometry/code; Lato wordmark artwork, see rights guide",
+      "provenance": "Authored panel/native geometry; orange wordmark uses credited Lato Light outlines, no manufacturer logo.",
+      "sha256": "b3ae534f0ff84f789d2319d2651b73677b7a0682a707197ec822265042371c39",
+      "source": "owner-ui/static/index.html"
+    },
+    {
+      "category": "authored-code",
+      "destination": "owner-ui/static/style.css",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored standalone panel/read-adapter source or project documentation; no vendor payload.",
+      "sha256": "41b822a462e177d85c7cedb9cd4d789784db595fe8088f7dbb76d09df0826603",
+      "source": "owner-ui/static/style.css"
+    },
+    {
+      "category": "dependency-recipe",
+      "destination": "rescue/busybox.config",
+      "license": "GPL-2.0-only scope for BusyBox configuration; upstream toolchain terms separate",
+      "provenance": "Reproducible upstream dependency configuration/hash lock; no downloaded archives or compiled binary.",
+      "sha256": "6daa48e930afe5c29f97a685eacd3e0d52cd922788ad4089fc22b20af26fd617",
+      "source": "rescue/busybox.config"
+    },
+    {
+      "category": "compatibility-checksums",
+      "destination": "rescue/hardware_results.json",
+      "license": "Factual historical reference metadata",
+      "provenance": "Acquisition-phase hardware result metadata and hashes only; no raw capture, identifier or firmware payload.",
+      "sha256": "8cfed721c71e5996cb86a02f7f170fa3cd913d3e86e16c8458d60b8cf448f28d",
+      "source": "rescue/hardware_results.json"
+    },
+    {
+      "category": "dependency-recipe",
+      "destination": "rescue/patches/0001-nc-listen-address-and-stderr.patch",
+      "license": "GPL-2.0-only; BusyBox upstream code/context and authored changes",
+      "provenance": "Small source patch against upstream BusyBox 1.37.0; no manufacturer source or binary delta.",
+      "sha256": "5c10a3254dc591c98a8f0dbdfe4704772b2c3d5c46298433fe22bcb21c113049",
+      "source": "rescue/patches/0001-nc-listen-address-and-stderr.patch"
+    },
+    {
+      "category": "authored-code",
+      "destination": "rescue/rootfs/bin/form3-backup",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored RAM rescue source/configuration; locked fixture account fields, no device credentials.",
+      "sha256": "3bd6bd480a63984ada6f15b321b8fbab9446ac98c52806c43c190a56ee048933",
+      "source": "rescue/rootfs/bin/form3-backup"
+    },
+    {
+      "category": "authored-code",
+      "destination": "rescue/rootfs/bin/form3-nc-listen",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored RAM rescue source/configuration; locked fixture account fields, no device credentials.",
+      "sha256": "4b0dede4b590a160c44327dbedbee590d6eecf796f2ae0b341b21034dc16e023",
+      "source": "rescue/rootfs/bin/form3-nc-listen"
+    },
+    {
+      "category": "authored-code",
+      "destination": "rescue/rootfs/bin/form3-nc-status",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored RAM rescue source/configuration; locked fixture account fields, no device credentials.",
+      "sha256": "9586fb5a9a63e95af4973ae8f79c6029cc54e053a9f87023ba5204f35e9d5219",
+      "source": "rescue/rootfs/bin/form3-nc-status"
+    },
+    {
+      "category": "authored-code",
+      "destination": "rescue/rootfs/bin/form3-readonly",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored RAM rescue source/configuration; locked fixture account fields, no device credentials.",
+      "sha256": "30a29e9b9504350419ec56cd1050dd90824a2b766e291c06c50e3095435c43b4",
+      "source": "rescue/rootfs/bin/form3-readonly"
+    },
+    {
+      "category": "authored-code",
+      "destination": "rescue/rootfs/etc/group",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored RAM rescue source/configuration; locked fixture account fields, no device credentials.",
+      "sha256": "7a696fcfba89a55a6d73fa1a03c7f071fad2141340027b17a25db249e26b9be8",
+      "source": "rescue/rootfs/etc/group"
+    },
+    {
+      "category": "authored-code",
+      "destination": "rescue/rootfs/etc/motd",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored RAM rescue source/configuration; locked fixture account fields, no device credentials.",
+      "sha256": "b07552f4b33467678694611e04e2394b5b81b82c22feaec2a39f0cc85c1069ed",
+      "source": "rescue/rootfs/etc/motd"
+    },
+    {
+      "category": "authored-code",
+      "destination": "rescue/rootfs/etc/passwd",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored RAM rescue source/configuration; locked fixture account fields, no device credentials.",
+      "sha256": "62df511af66eca280dd02932d2f3d148d88da3f5920779fd6ada06f63ad2b39e",
+      "source": "rescue/rootfs/etc/passwd"
+    },
+    {
+      "category": "authored-code",
+      "destination": "rescue/rootfs/etc/profile",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored RAM rescue source/configuration; locked fixture account fields, no device credentials.",
+      "sha256": "59e826f7abfdf7043a1780d14295cdef5bdc70d982aba055a89cfcf7df7c97d4",
+      "source": "rescue/rootfs/etc/profile"
+    },
+    {
+      "category": "authored-code",
+      "destination": "rescue/rootfs/etc/shadow",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored RAM rescue source/configuration; locked fixture account fields, no device credentials.",
+      "sha256": "c764b25865af95b76b5dc880f22e31fd0e2de8aac5209fa1029c81d69ed673e6",
+      "source": "rescue/rootfs/etc/shadow"
+    },
+    {
+      "category": "authored-code",
+      "destination": "rescue/rootfs/init",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored RAM rescue source/configuration; locked fixture account fields, no device credentials.",
+      "sha256": "bb5a41a5d94463ab8d33fd7e3d24b0cb42f525a434b53b9d8f9d1f58083b46da",
+      "source": "rescue/rootfs/init"
+    },
+    {
+      "category": "dependency-recipe",
+      "destination": "rescue/sources.lock.json",
+      "license": "GPL-2.0-only scope for BusyBox configuration; upstream toolchain terms separate",
+      "provenance": "Reproducible upstream dependency configuration/hash lock; no downloaded archives or compiled binary.",
+      "sha256": "95a181a4fc4cc1248ff7a348beb05718c716ddcae148ec014e60cdb055a4efff",
+      "source": "rescue/sources.lock.json"
+    },
+    {
+      "category": "authored-code",
+      "destination": "scripts/pi_rescue_link_setup.sh",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored explicit-context rescue-link/receiver helper; no automatic hardware flashing or private management identity.",
+      "sha256": "a2ae7f5621dd9cc1ce775ec3b3309a22df11c1b0f1b74c99fc0dda29c5126c5f",
+      "source": "scripts/pi_rescue_link_setup.sh"
+    },
+    {
+      "category": "authored-code",
+      "destination": "scripts/receive_emmc_via_pi.sh",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored explicit-context rescue-link/receiver helper; no automatic hardware flashing or private management identity.",
+      "sha256": "17ab69fb9cd86402daab6274f9aff5976030b08363c437f086ec493f7f3c2169",
+      "source": "scripts/receive_emmc_via_pi.sh"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/native_clock_driver.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "3df2be9acc24c009985a5e4c3f8012aba257ead1493eee6773185a39b757b4e1",
+      "source": "tests/native_clock_driver.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/native_logo_driver.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "97b98d3ef28b558a9e6921376a3f10e80fa942692cec8636b15c0cb75c96d905",
+      "source": "tests/native_logo_driver.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/signature_render_driver.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "b0464a0e97b18e8d8efa6a923deafd588846580cc0b7b125ee5348b0e277e47c",
+      "source": "tests/signature_render_driver.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_acquisition_checks.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "c20459f44c67adbd262242054fef026d18c67ca69e09008eeb1456cf87a1d887",
+      "source": "tests/test_acquisition_checks.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_bootstrap_stop.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "62932222b01db407d6d884dad53007b866fc7d41c6042bb0483cb5eea0de2b2c",
+      "source": "tests/test_bootstrap_stop.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_capture_provider.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "0d3751f0faa6a12f6718971d95a4739767e8e44df0b9e4ac904140e0a83dd805",
+      "source": "tests/test_capture_provider.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_cpu_usage.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "a88457aa30f287732d7eef58ca5f325c8f6c3b7fd9fff29fa4cae0e04b78b308",
+      "source": "tests/test_cpu_usage.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_developer_package.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "b39ce5aed5fc0ceb41bc13a5cccc3bdef800602118a97c95a348c1cc9425c614",
+      "source": "tests/test_developer_package.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_documentation_voice.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored voice fixtures preserve first-person/impersonal narrative and third-party attribution.",
+      "sha256": "4f687874092b9a7c7390279f3c485f1645c540fc288b6972168310d92b735485",
+      "source": "tests/test_documentation_voice.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_formule_codec.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "8cb2509ba6ef4564aedbde538e23378b5ed760d2ec31b4d3acbf8cc7d4cefd26",
+      "source": "tests/test_formule_codec.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_frontend_session.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "37749db471b6aa13c2ef3add61782e73d4899be385b042f7cb292e7ea9a4e745",
+      "source": "tests/test_frontend_session.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_launcher_clock.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "8614cab7d5490fe5c2163d8a5457bd69a8780f4fa32c7c91505d508abdb12de6",
+      "source": "tests/test_launcher_clock.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_native_clock_timezone.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "e940697d23a6a25b6815847bb4dd6383b3d63d592d1cd63583e62f0bd301162c",
+      "source": "tests/test_native_clock_timezone.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_native_display_transaction.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "ecb21e04ffb536a9ec848afa272c7c3da47e1d38eb933160a674a9af97f52bdb",
+      "source": "tests/test_native_display_transaction.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_owner_install.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "1bd4823ab0a89242e5cdf3410f35b851645a0a449d61111f36bbbb675edd5166",
+      "source": "tests/test_owner_install.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_owner_ui.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "084beef49427271d480a4b33abb5176e47a3c74c3b10a8bc2086194e08fcb2ce",
+      "source": "tests/test_owner_ui.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_print_analysis.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored bounded parser/projection tests with synthetic frames and no private data.",
+      "sha256": "84d7ee803cd127c1ad4f55e11a8060b1925b191aa1ed213013478e38df8a0dba",
+      "source": "tests/test_print_analysis.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_print_capture.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored recorder fixtures; no device connection or original log bytes.",
+      "sha256": "56a6180009192358455969103f5aa7e083d5fe54aed5cb2f84171b8b8cf02805",
+      "source": "tests/test_print_capture.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_public_export.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "ff634689a58779de6de6b643d4267b6d6457f8ec3c87f2ed886825c2cde0edb3",
+      "source": "tests/test_public_export.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_qt_resources.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "4f7d73cf4f707eae0b4be0d544c24cb54f661234d8ed4b030a43c894aa05f21e",
+      "source": "tests/test_qt_resources.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_receiver_receipts.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "3e96f1b08d900984998cf8475b3eb54d5aa6074b5549d0e7b8ac6d0bfe48f281",
+      "source": "tests/test_receiver_receipts.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_rescue.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "eaaa0950aabbf814dbcc8b153629b8c07163634f9635199a9591cac0de4b1e47",
+      "source": "tests/test_rescue.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_root_tutorial.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Tutorial command syntax and local SSH-profile rejection/configuration tests; no SSH connection.",
+      "sha256": "e38de5b3684d8d1abe1da540aa2b5622200f46494eef0349c0c214c328ebf0da",
+      "source": "tests/test_root_tutorial.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_sensor_events.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "2d1a74d8a698980154dfd1cff3a599b17af835990b36bfde692f9de0ff371b0c",
+      "source": "tests/test_sensor_events.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_signature_brand.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "5a9058ad32b81c9456dabd8e959c1682af6979aa72375bde5e2320da17f63f65",
+      "source": "tests/test_signature_brand.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_state_observation.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "d02a9631a145e92072f77a58a0076efead0d7977189c4743760c28396b00dddf",
+      "source": "tests/test_state_observation.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_status_research.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "2c346ba51789593005ea8f25f12dbb5e34a00b75fd1c76724e0d6eb9be8c2786",
+      "source": "tests/test_status_research.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_wlan_owner.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
+      "sha256": "148e3176d9445a15eca940badd93a8521f848b465cb108a0d79d866b9ddf65aa",
+      "source": "tests/test_wlan_owner.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/analyze_print_session.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Bounded offline saved-stream parser; no raw evidence or network execution.",
+      "sha256": "85125b2c6570037047497f62cb2683759891164a00b82c7b1a5dc0194c76f52b",
+      "source": "tools/analyze_print_session.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/build_diagnostic_bundle.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "42b615286a01984f80562529913d84c82625ea2a4c0f0ba6a67c9342745d30e2",
+      "source": "tools/build_diagnostic_bundle.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/build_native_clock_review.py",
+      "license": "MIT for authored transformation; target matching expression is compatibility context, not relicensed vendor code",
+      "provenance": "Authored clock recipe plus a short original binding expression for exact matching; this minimal context needs specific publication review.",
+      "sha256": "ca58f43bc4490da0b607d686378be103bf82c5c9c52ae058b2b0430c0a9321e9",
+      "source": "tools/build_native_clock_review.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/build_native_display_review.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "7d2c11c7df5ee9d3d88f30ac2cd1d5a0cdda8265d7b9287cbadadf55d5fbcc99",
+      "source": "tools/build_native_display_review.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/build_owner_package.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "b1b2a3b50368153c0f5bb840ebb4e93d41716a17886a03f2d363b387aa0223be",
+      "source": "tools/build_owner_package.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/build_psplash_review.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "f9af22dbbe904d62cbf8617a59e2e84f641514cb6e5c1bab746f517b83ad5031",
+      "source": "tools/build_psplash_review.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/build_qspi_rescue.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "8bb7f63a776c1535158a14c259b540aa1af482e4a93d81210b1afe6e1909962a",
+      "source": "tools/build_qspi_rescue.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/build_rescue.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "a94a3bc59652f5e27ec6b886db8f149a9f363239a5606bc01fdc30c3aa35d388",
+      "source": "tools/build_rescue.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/build_signature_brand.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "eac12cf475968751e32fe3a34da0bdffe9004800c711ca9af5f1d31c47af684c",
+      "source": "tools/build_signature_brand.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/capture_owner_bootenv.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "d6f930868c56ff0b589886af0d0b55ddb9cedc71d8668465f809c66b8eedd7e2",
+      "source": "tools/capture_owner_bootenv.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/create_owner_ssh_profile.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Local-only strict SSH profile creation from independently reviewed public host fingerprint; no connection or private-key content access.",
+      "sha256": "1f87b47f0593a8f554ff80df4eb277108fe6b09a21b97cc51c1644129e0e451c",
+      "source": "tools/create_owner_ssh_profile.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/developer_check.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "f7619481b9d5aade3675ae1dfd64a43f5ac71311ddff8944d5c1c004c1c855ab",
+      "source": "tools/developer_check.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/enrich_diagnostic_history.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "862126311b4551a3a824c099c8d3b8fc627671b36d6565a4a4cda6d0d6c0cc81",
+      "source": "tools/enrich_diagnostic_history.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/evidence_lib.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "35f6e522f60ca9853af7af720f768fec78fa2741193fe4e80494cfc0cc0512c8",
+      "source": "tools/evidence_lib.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/export_diagnostics.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "c847541fafa96d67e0bfd142c613f90cb25737a6f211153bac8c5772e4eb3f05",
+      "source": "tools/export_diagnostics.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/export_public_source.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "6e35f38f9f678c8e8abfbcbc4ca3529b6baf84156601f40e10f2f06243baa2d6",
+      "source": "tools/export_public_source.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/form3ctl.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "18422b9b812cb73a4a98557bf108dbcbc07b35f1450c9c311532f7f7e814c80e",
+      "source": "tools/form3ctl.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/inspect_palantir_resources.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "9eb74fc5db12e54553cfcd3663a80f9875bd58c07efac6f1de4725c721b61eb1",
+      "source": "tools/inspect_palantir_resources.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/inspect_psplash_image.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "56f4940df6e9f9c88629a5b5883085d4cc23d9d24d2aa0c59f63cb8ccdb2c9d5",
+      "source": "tools/inspect_psplash_image.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/inspect_qspi_reads.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "d1acc824bd5784ac1a40f5efc6df826efd5c69554e67abcdc565af622f01d96e",
+      "source": "tools/inspect_qspi_reads.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/inspect_qt_metadata.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "d448db2620be9acc00b5d577f4a2a3a21f212fb649017182d7752598309b1434",
+      "source": "tools/inspect_qt_metadata.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/inspect_qt_resources.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "c16475c500dbf330611db0881742b3903edded7aa67798decd2a7b06ae77a0fd",
+      "source": "tools/inspect_qt_resources.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/native_display_transaction.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "c796d9777d789a313821635e191d63bfaac584d8845a7a27ae3dc9bc9a42b06c",
+      "source": "tools/native_display_transaction.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/nc_shell_probe.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "f789f6bc5dff718720034fd98665a75681beb04cd64f0ca04f4c3756ae6f38bb",
+      "source": "tools/nc_shell_probe.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/package_developer_source.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "f91255b4c3aaf06e4f5a383c5116fd24a0158927db4a9e1baf669bd1f2b6da18",
+      "source": "tools/package_developer_source.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/print_capture_agent.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Explicitly authorized passive reference recorder; no embedded credentials or printing commands.",
+      "sha256": "e14df9343dd2657e516f2d65873de2d919afea91053168c629c1e40f4b5df11e",
+      "source": "tools/print_capture_agent.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/print_state_snapshot.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Read-only named filesystem mirror snapshot; no chip or counter writes.",
+      "sha256": "d7b44737187ffb52ccfe18d197cddc56e0e61d4725acce56988dc90158a06655",
+      "source": "tools/print_state_snapshot.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/record_print_session.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Bounded laptop recorder requiring an explicit existing pinned SSH configuration.",
+      "sha256": "b7a17326d8f4023c95eb44af647588fb8c71974170432d5b33ba0f383a8f7a37",
+      "source": "tools/record_print_session.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/record_print_state.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Bounded private laptop mirror recorder; explicit authorized target only.",
+      "sha256": "0244d99e4b998b0e8802f9b896c290717498572761ec6dbeb02c316b2cd11176",
+      "source": "tools/record_print_state.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/rescue_common.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "70f771c43908aeff8730723b77d3da3bab9d78e03bc96e88725198700bc5f653",
+      "source": "tools/rescue_common.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/run_offline_tests.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "2d585d3572398cf65c6edbe55aec9e638f098587ca12aa5fd864c6c90efa3f5b",
+      "source": "tools/run_offline_tests.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/sanitize_report.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "10e6dfd1207e0bc27d505ec0d93d56bf1ae12201e68972d3050f4147ff485ea0",
+      "source": "tools/sanitize_report.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/sensor_event_model.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "06c6f6b9d8bbf610ea86044395e396d585c1c5baa91890c5338b6ac5d3a8d842",
+      "source": "tools/sensor_event_model.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/stage_owner_delivery.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "f2b27ea6ba7b9f3f3185eb664a827bbff2571ed05f97967d4b8fa9953f97083c",
+      "source": "tools/stage_owner_delivery.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/state_observation_model.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
+      "sha256": "783328464b7a52b493dfda7821428c72c80247386aaa6ac9dd68ae867cf8df9e",
+      "source": "tools/state_observation_model.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/test_panel_browser.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Disconnected browser driver with visibly synthetic data and disposable credentials.",
+      "sha256": "c66534396d1bde26179c35a77cddacb101d2da7870907734ad3576d91abfb882",
+      "source": "tools/test_panel_browser.py"
+    }
+  ],
+  "schema": 1,
+  "version": "0.5.9-review"
+}

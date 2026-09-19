@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="830" viewBox="0 0 1180 830" role="img" aria-labelledby="title desc">
+<title id="title">Clip orientation and Pi 5 physical header reference</title><desc id="desc">Conditional eight-lead flash top view: 1 to 4 down the left, 5 to 8 up the right. Pi physical pins 17 supply, 19 MOSI, 21 MISO, 23 CLK, 24 CE0, 25 ground. This is not verified board wiring.</desc>
+<rect width="1180" height="830" fill="#f6f7f9"/>
+<g font-family="DejaVu Sans, sans-serif" fill="#182c3b">
+<text x="40" y="50" font-size="26" >01 / ORIENTATION BEFORE CONNECTION</text>
+<text x="40" y="84" font-size="17" >Reference drawing • actual part, supply and cable mapping must be verified</text>
+<rect x="30" y="112" width="525" height="590" rx="14" fill="#ffffff" stroke="#c4ced7"/>
+<rect x="575" y="112" width="575" height="590" rx="14" fill="#ffffff" stroke="#c4ced7"/>
+<text x="58" y="151" font-size="21" >FLASH • MARKED TOP VIEW</text>
+<text x="605" y="151" font-size="21" >PI 5 • PHYSICAL HEADER NUMBERS</text>
+<text x="605" y="181" font-size="16" >Orient from confirmed pin 1, not the ports.</text>
+<rect x="170" y="215" width="240" height="340" rx="14" fill="#e7edf2" stroke="#c4ced7"/>
+<path d="M270 216 A20 20 0 0 0 310 216" fill="none" stroke="#526879" stroke-width="3"/>
+<circle cx="198" cy="251" r="8" fill="#dd6c24"/>
+<text x="220" y="305" font-size="25" >8-lead</text>
+<text x="213" y="338" font-size="25" >package</text>
+<text x="202" y="380" font-size="15" >not to scale</text>
+<rect x="147" y="246" width="23" height="17" fill="#889ba9"/>
+<text x="129" y="260" font-size="18" text-anchor="end">1  /CS</text>
+<rect x="410" y="246" width="23" height="17" fill="#889ba9"/>
+<text x="459" y="260" font-size="18" text-anchor="start">8  VCC *</text>
+<rect x="147" y="323" width="23" height="17" fill="#889ba9"/>
+<text x="129" y="337" font-size="18" text-anchor="end">2  DO</text>
+<rect x="410" y="323" width="23" height="17" fill="#889ba9"/>
+<text x="459" y="337" font-size="18" text-anchor="start">7  IO3 *</text>
+<rect x="147" y="400" width="23" height="17" fill="#889ba9"/>
+<text x="129" y="414" font-size="18" text-anchor="end">3  IO2 *</text>
+<rect x="410" y="400" width="23" height="17" fill="#889ba9"/>
+<text x="459" y="414" font-size="18" text-anchor="start">6  CLK</text>
+<rect x="147" y="477" width="23" height="17" fill="#889ba9"/>
+<text x="129" y="491" font-size="18" text-anchor="end">4  GND</text>
+<rect x="410" y="477" width="23" height="17" fill="#889ba9"/>
+<text x="459" y="491" font-size="18" text-anchor="start">5  DI</text>
+<text x="59" y="600" font-size="16" >* Supply / auxiliary pins: part-specific review.</text>
+<text x="59" y="634" font-size="16" >Pin 1 marker: match the actual package drawing.</text>
+<text x="59" y="665" font-size="16" >Clip underside views can be mirrored.</text>
+<circle cx="838" cy="218" r="8" fill="#bbc5ce"/>
+<text x="821" y="223" font-size="14" text-anchor="end">1</text>
+<circle cx="925" cy="218" r="8" fill="#bbc5ce"/>
+<text x="942" y="223" font-size="14" text-anchor="start">2</text>
+<circle cx="838" cy="241" r="8" fill="#bbc5ce"/>
+<text x="821" y="246" font-size="14" text-anchor="end">3</text>
+<circle cx="925" cy="241" r="8" fill="#bbc5ce"/>
+<text x="942" y="246" font-size="14" text-anchor="start">4</text>
+<circle cx="838" cy="264" r="8" fill="#bbc5ce"/>
+<text x="821" y="269" font-size="14" text-anchor="end">5</text>
+<circle cx="925" cy="264" r="8" fill="#bbc5ce"/>
+<text x="942" y="269" font-size="14" text-anchor="start">6</text>
+<circle cx="838" cy="287" r="8" fill="#bbc5ce"/>
+<text x="821" y="292" font-size="14" text-anchor="end">7</text>
+<circle cx="925" cy="287" r="8" fill="#bbc5ce"/>
+<text x="942" y="292" font-size="14" text-anchor="start">8</text>
+<circle cx="838" cy="310" r="8" fill="#bbc5ce"/>
+<text x="821" y="315" font-size="14" text-anchor="end">9</text>
+<circle cx="925" cy="310" r="8" fill="#bbc5ce"/>
+<text x="942" y="315" font-size="14" text-anchor="start">10</text>
+<circle cx="838" cy="333" r="8" fill="#bbc5ce"/>
+<text x="821" y="338" font-size="14" text-anchor="end">11</text>
+<circle cx="925" cy="333" r="8" fill="#bbc5ce"/>
+<text x="942" y="338" font-size="14" text-anchor="start">12</text>
+<circle cx="838" cy="356" r="8" fill="#bbc5ce"/>
+<text x="821" y="361" font-size="14" text-anchor="end">13</text>
+<circle cx="925" cy="356" r="8" fill="#bbc5ce"/>
+<text x="942" y="361" font-size="14" text-anchor="start">14</text>
+<circle cx="838" cy="379" r="8" fill="#bbc5ce"/>
+<text x="821" y="384" font-size="14" text-anchor="end">15</text>
+<circle cx="925" cy="379" r="8" fill="#bbc5ce"/>
+<text x="942" y="384" font-size="14" text-anchor="start">16</text>
+<circle cx="838" cy="402" r="8" fill="#dc702f"/>
+<text x="821" y="407" font-size="14" text-anchor="end">17</text>
+<text x="786" y="407" font-size="15" text-anchor="end">3.3 V *</text>
+<circle cx="925" cy="402" r="8" fill="#bbc5ce"/>
+<text x="942" y="407" font-size="14" text-anchor="start">18</text>
+<circle cx="838" cy="425" r="8" fill="#247390"/>
+<text x="821" y="430" font-size="14" text-anchor="end">19</text>
+<text x="786" y="430" font-size="15" text-anchor="end">MOSI / GPIO10</text>
+<circle cx="925" cy="425" r="8" fill="#bbc5ce"/>
+<text x="942" y="430" font-size="14" text-anchor="start">20</text>
+<circle cx="838" cy="448" r="8" fill="#247390"/>
+<text x="821" y="453" font-size="14" text-anchor="end">21</text>
+<text x="786" y="453" font-size="15" text-anchor="end">MISO / GPIO9</text>
+<circle cx="925" cy="448" r="8" fill="#bbc5ce"/>
+<text x="942" y="453" font-size="14" text-anchor="start">22</text>
+<circle cx="838" cy="471" r="8" fill="#247390"/>
+<text x="821" y="476" font-size="14" text-anchor="end">23</text>
+<text x="786" y="476" font-size="15" text-anchor="end">CLK / GPIO11</text>
+<circle cx="925" cy="471" r="8" fill="#247390"/>
+<text x="942" y="476" font-size="14" text-anchor="start">24</text>
+<text x="980" y="476" font-size="15" text-anchor="start">CE0 / GPIO8</text>
+<circle cx="838" cy="494" r="8" fill="#526879"/>
+<text x="821" y="499" font-size="14" text-anchor="end">25</text>
+<text x="786" y="499" font-size="15" text-anchor="end">GND</text>
+<circle cx="925" cy="494" r="8" fill="#bbc5ce"/>
+<text x="942" y="499" font-size="14" text-anchor="start">26</text>
+<circle cx="838" cy="517" r="8" fill="#bbc5ce"/>
+<text x="821" y="522" font-size="14" text-anchor="end">27</text>
+<circle cx="925" cy="517" r="8" fill="#bbc5ce"/>
+<text x="942" y="522" font-size="14" text-anchor="start">28</text>
+<circle cx="838" cy="540" r="8" fill="#bbc5ce"/>
+<text x="821" y="545" font-size="14" text-anchor="end">29</text>
+<circle cx="925" cy="540" r="8" fill="#bbc5ce"/>
+<text x="942" y="545" font-size="14" text-anchor="start">30</text>
+<circle cx="838" cy="563" r="8" fill="#bbc5ce"/>
+<text x="821" y="568" font-size="14" text-anchor="end">31</text>
+<circle cx="925" cy="563" r="8" fill="#bbc5ce"/>
+<text x="942" y="568" font-size="14" text-anchor="start">32</text>
+<circle cx="838" cy="586" r="8" fill="#bbc5ce"/>
+<text x="821" y="591" font-size="14" text-anchor="end">33</text>
+<circle cx="925" cy="586" r="8" fill="#bbc5ce"/>
+<text x="942" y="591" font-size="14" text-anchor="start">34</text>
+<circle cx="838" cy="609" r="8" fill="#bbc5ce"/>
+<text x="821" y="614" font-size="14" text-anchor="end">35</text>
+<circle cx="925" cy="609" r="8" fill="#bbc5ce"/>
+<text x="942" y="614" font-size="14" text-anchor="start">36</text>
+<circle cx="838" cy="632" r="8" fill="#bbc5ce"/>
+<text x="821" y="637" font-size="14" text-anchor="end">37</text>
+<circle cx="925" cy="632" r="8" fill="#bbc5ce"/>
+<text x="942" y="637" font-size="14" text-anchor="start">38</text>
+<circle cx="838" cy="655" r="8" fill="#bbc5ce"/>
+<text x="821" y="660" font-size="14" text-anchor="end">39</text>
+<circle cx="925" cy="655" r="8" fill="#bbc5ce"/>
+<text x="942" y="660" font-size="14" text-anchor="start">40</text>
+<text x="40" y="742" font-size="20" >Physical pin 19 = GPIO10. It does NOT mean GPIO19.</text>
+<text x="40" y="777" font-size="18" >No 5-V connection. No inferred board ground. No wire-colour assumptions.</text>
+</g></svg>

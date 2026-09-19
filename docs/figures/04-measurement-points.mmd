@@ -1,0 +1,13 @@
+flowchart TD
+  g["G: confirmed board ground (not<br/>assumed shield)"]
+  v["V: confirmed flash supply contact<br/>(unresolved)"]
+  c["C1..Cn: individually identified<br/>clip contacts"]
+  p["P: disconnected programmer supply<br/>and ground"]
+  meter["Meter: resistance only unpowered;<br/>DC voltage for voltage"]
+  hold["STOP until actual G/V/clip<br/>orientation is established"]
+  meter -->  |"reference probe"| g
+  meter -->  |"residual DC voltage; no current mode"| v
+  meter -->  |"unpowered continuity/adjacent shorts"| c
+  meter -->  |"programmer voltage before connection"| p
+  g -->  |"if not confirmed"| hold
+  v -->  |"if not confirmed"| hold

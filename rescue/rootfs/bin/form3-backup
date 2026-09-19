@@ -1,0 +1,71 @@
+#!/bin/sh
+# Read one allowlisted raw device once. All working files are in RAM.
+# Each pipeline stage is a separately waited process; do not hide dd errors.
+set -u
+umask 077
+usage() {
+    echo 'Usage: form3-backup /dev/mmcblk0|/dev/mmcblk0boot0|/dev/mmcblk0boot1 [IPv4-server [port]]' >&2
+    exit 2
+}
+[ "$#" -ge 1 ] && [ "$#" -le 3 ] || usage
+device=$1
+server=${2:-10.0.0.1}
+port=${3:-9000}
+case "$device" in /dev/mmcblk0|/dev/mmcblk0boot0|/dev/mmcblk0boot1) ;; *) usage ;; esac
+case "$server" in ''|*[!0-9.]*|.*|*.) usage ;; esac
+oldifs=$IFS; IFS=.; set -- $server; IFS=$oldifs
+[ "$#" -eq 4 ] || usage
+for octet do
+    [ "${#octet}" -le 3 ] && [ "$octet" -ge 0 ] 2>/dev/null && [ "$octet" -le 255 ] || usage
+done
+case "$port" in ''|*[!0-9]*) usage ;; esac
+[ "${#port}" -le 5 ] && [ "$port" -ge 1 ] && [ "$port" -le 65535 ] || usage
+[ -b "$device" ] || { echo "Not a block device: $device" >&2; exit 1; }
+# Do not silently operate from a normal system with evidence mounted.
+while read -r mounted rest; do
+    case "$mounted" in /dev/mmcblk0*) echo 'Refusing: an eMMC filesystem is mounted.' >&2; exit 1 ;; esac
+done < /proc/mounts
+if [ "$(blockdev --getro "$device" 2>/dev/null)" != 1 ]; then
+    echo '*** WARNING: source software read-only flag is not set. Reads only will be issued. ***' >&2
+fi
+bytes=$(blockdev --getsize64 "$device" 2>/dev/null) || bytes=unknown
+printf 'device: %s\nexpected bytes: %s\ndestination: %s:%s\n' "$device" "$bytes" "$server" "$port"
+work=$(mktemp -d /run/form3-backup.XXXXXX) || exit 1
+pids=''
+cleanup() {
+    trap '' HUP INT TERM
+    for pid in $pids; do kill "$pid" 2>/dev/null || :; done
+    for pid in $pids; do wait "$pid" 2>/dev/null || :; done
+    rm -rf "$work"
+}
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' HUP TERM
+mkfifo "$work/source" "$work/hash" "$work/network" "$work/count" || exit 1
+sha256sum < "$work/hash" > "$work/sha256" & hash_pid=$!; pids="$pids $hash_pid"
+wc -c < "$work/count" > "$work/bytes" & count_pid=$!; pids="$pids $count_pid"
+# BusyBox nc (NC_110_COMPAT=n) half-closes at stdin EOF; -w limits connection setup.
+# During a stalled transfer, use Ctrl-C; there is no post-connect idle timeout.
+nc -w 30 "$server" "$port" < "$work/network" > /dev/null & nc_pid=$!; pids="$pids $nc_pid"
+tee "$work/hash" "$work/count" < "$work/source" > "$work/network" & tee_pid=$!; pids="$pids $tee_pid"
+dd if="$device" bs=1M > "$work/source" & dd_pid=$!; pids="$pids $dd_pid"
+failed=0
+for pid in "$dd_pid" "$tee_pid" "$nc_pid" "$hash_pid" "$count_pid"; do
+    if ! wait "$pid"; then
+        failed=1
+        # Release any FIFO reader/writer still blocked after another stage failed.
+        for remaining in $pids; do kill "$remaining" 2>/dev/null || :; done
+    fi
+done
+pids=''
+actual=$(cat "$work/bytes")
+printf 'source stream bytes: %s\n' "$actual"
+if [ -s "$work/sha256" ]; then
+    read -r digest ignored < "$work/sha256"
+    printf 'source stream SHA256: %s\n' "$digest"
+fi
+if [ "$failed" != 0 ] || { [ "$bytes" != unknown ] && [ "$actual" != "$bytes" ]; }; then
+    echo 'TRANSFER FAILED OR INCOMPLETE: any printed hash covers only the bytes processed.' >&2
+    exit 1
+fi
+echo 'Source stream complete. Confirm receiver byte count AND SHA256 before accepting the backup.'

@@ -1,0 +1,20 @@
+digraph G {
+graph [rankdir=TB,bgcolor="white",pad="0.2",nodesep="0.35",ranksep="0.45",label="First installation has no circular SSH dependency",labelloc=t,fontname="DejaVu Sans",fontsize=17];
+node [shape=box,style="rounded,filled",fillcolor="#eef3f8",color="#415a77",fontname="DejaVu Sans",fontsize=11,margin="0.14,0.1"];
+edge [color="#415a77",fontname="DejaVu Sans",fontsize=9];
+r [label="Proven Rescue V2 shell"];
+runtime [label="Verified read-only p6 loader /\nPython"];
+plan [label="Signed owner-file plan + review"];
+write [label="Approved narrow p6/p7 file\ninstallation"];
+readback [label="Readback + retained rollback +\nuntouched p5"];
+qspi [label="Separately reviewed QSPI return"];
+normal [label="Supervised normal boot"];
+access [label="Owner SSH2222 / HTTPS1328\nacceptance"];
+r -> runtime [label=""];
+runtime -> plan [label=""];
+plan -> write [label="deliberate operator approval"];
+write -> readback [label=""];
+readback -> qspi [label="electrical gates remain",style=dashed];
+qspi -> normal [label=""];
+normal -> access [label="verify on each target"];
+}

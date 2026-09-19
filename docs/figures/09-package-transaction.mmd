@@ -1,0 +1,19 @@
+flowchart TD
+  signer["Owner signing private key<br/>LAPTOP/offline only"]
+  signed["Bounded signed package"]
+  pin["Independently pinned public-key<br/>hash"]
+  plan["Exact reviewed target + source<br/>hashes"]
+  tx["Private write-ahead transaction"]
+  files["Narrow allowlisted files +<br/>readback"]
+  done["Commit release pointer"]
+  fail["Interruption or mismatch"]
+  rollback["Explicit rollback; preserve<br/>backups"]
+  signer --> signed
+  signed --> plan
+  pin --> plan
+  plan -->  |"explicit --apply + device/plan pins"| tx
+  tx --> files
+  files --> done
+  files --> fail
+  fail --> rollback
+  rollback -->  |"restore reviewed before state"| tx

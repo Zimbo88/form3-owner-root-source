@@ -1,0 +1,17 @@
+digraph G {
+graph [rankdir=TB,bgcolor="white",pad="0.2",nodesep="0.35",ranksep="0.45",label="Privacy policy boundaries",labelloc=t,fontname="DejaVu Sans",fontsize=17];
+node [shape=box,style="rounded,filled",fillcolor="#eef3f8",color="#415a77",fontname="DejaVu Sans",fontsize=11,margin="0.14,0.1"];
+edge [color="#415a77",fontname="DejaVu Sans",fontsize=9];
+printer [label="Printer local state / logs / job\nstatus"];
+optional [label="Optional collection/privacy\nsettings"];
+gateway [label="Cloud gateway / Dashboard / remote\nprinting"];
+cloud [label="Manufacturer services"];
+host [label="PreForm computer / host-mediated\npaths"];
+fence [label="Independent local-only network\nboundary"];
+printer -> optional [label=""];
+printer -> gateway [label="required status may include usage/identifiers",style=dashed];
+optional -> cloud [label="only if verified enabled path",style=dashed];
+gateway -> cloud [label="cloud mode retains residual information"];
+host -> cloud [label="printer-only blocking is insufficient",style=dashed];
+fence -> cloud [label="local-only blocks egress; removes cloud functions",style=dashed];
+}

@@ -1,0 +1,17 @@
+flowchart TD
+  q["QSPI: 4,194,304 bytes"]
+  qs["0x000000-0x0c0000: SPL + U-Boot"]
+  qe["0x0c0000-0x0c4000: active<br/>environment"]
+  qr["0x100000-0x400000: verified<br/>factory FF"]
+  p1["p1: 1,048,576 + 52,428,800 bytes"]
+  p2["p2: 53,477,376 + 104,857,600 bytes"]
+  p5["p5: 159,383,552 + 1,048,576,000<br/>bytes"]
+  p6["p6: 1,209,008,128 + 1,048,576,000<br/>bytes"]
+  p7["p7: 2,258,632,704 + 13,419,675,648<br/>bytes"]
+  q --> qs
+  q --> qe
+  q --> qr
+  p1 --> p2
+  p2 -->  |"extended/logical layout"| p5
+  p5 --> p6
+  p6 --> p7

@@ -1,0 +1,30 @@
+{
+  "source": "Historical acquisition-phase hardware observations and authenticated full acquisition. These records do not describe current normal-OS acceptance; no hardware access is part of the source build.",
+  "tested_version": "V2",
+  "v1_image": "hardware/qspi/build/form3_qspi_RESCUE.bin",
+  "v1_sha256": "337ac8fd1efc5e5d09da4fda9eda3b9c97509ab4c4d98e5299349368e8a8a097",
+  "confirmed": [
+    "Genuine Formlabs kernel accepts the external gzip initramfs",
+    "rdinit=/init works",
+    "V1 RAM load addresses work",
+    "QSPI sf read boot path works",
+    "Genuine Formlabs kernel boots successfully",
+    "eth0 exists and the Ethernet link works",
+    "Static IPv4 assignment 10.0.0.77/24 works",
+    "10.0.0.77 responds reliably to ICMP",
+    "V2 raw TCP no-PTY root shell works on the real printer",
+    "Root shell reported uid=0(root) gid=0(root)",
+    "eMMC user area is /dev/mmcblk0",
+    "/dev/mmcblk0 software read-only flag confirmed",
+    "Complete eMMC user area, boot0 and boot1 acquired",
+    "Independent source/device and received-image SHA256 hashes matched"
+  ],
+  "not_confirmed": [
+    "Exact cause of V1 telnet PTY/session failure",
+    "Normal-OS owner SSH login and maintenance UI deployment",
+    "Actual RPMB provisioning/use and active TEE sessions"
+  ],
+  "v2_image": "hardware/qspi/build-v2/form3_qspi_RESCUE_V2.bin",
+  "v2_sha256": "8a58a97cbb0bc5d52ada65debb7e195ee5935d1057a0b27096774feffdc59164",
+  "historical_v1_failure": "TCP 2323 initially accepted connections, but telnet closed immediately and later connections were refused. PTY/session creation failure is suspected; the exact cause is not confirmed."
+}

@@ -1,0 +1,12 @@
+flowchart TD
+  pi["Programmer: disconnected during<br/>wiring"]
+  clip["Clip: exact contacts unresolved"]
+  flash["Still-soldered QSPI"]
+  soc["Shared SOM rails / SoC / bus"]
+  off["Printer and peripherals physically<br/>unplugged"]
+  stop["STOP: unexplained power, heat or<br/>contention"]
+  pi -.->  |"reviewed voltage and wiring required"| clip
+  clip --> flash
+  flash -.->  |"backfeeding / bus contention possible"| soc
+  off -->  |"no printer power source"| soc
+  soc -.->  |"unresolved electrical effect"| stop

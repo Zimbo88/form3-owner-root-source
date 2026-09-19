@@ -1,0 +1,17 @@
+digraph G {
+graph [rankdir=TB,bgcolor="white",pad="0.2",nodesep="0.35",ranksep="0.45",label="Five distinct API domains",labelloc=t,fontname="DejaVu Sans",fontsize=17];
+node [shape=box,style="rounded,filled",fillcolor="#eef3f8",color="#415a77",fontname="DejaVu Sans",fontsize=11,margin="0.14,0.1"];
+edge [color="#415a77",fontname="DejaVu Sans",fontsize=9];
+preform [label="Computer: official PreFormServer\nLocal API"];
+cloud [label="Manufacturer cloud Web API"];
+formule [label="Printer native Formule TCP / USB"];
+ipc [label="Printer internal D-Bus / IPC"];
+panel [label="Authored owner panel1328"];
+client [label="Owner client / panel adapters"];
+client -> preform [label="host-side API; no root implication"];
+client -> cloud [label="Internet/account; separate from local owner API"];
+client -> formule [label="framing research; live reachability unknown",style=dashed];
+formule -> ipc [label="implementation-specific dispatch"];
+client -> panel [label="owner authentication"];
+panel -> ipc [label="no generic proxy; future individually reviewed adapter only",style=dashed];
+}

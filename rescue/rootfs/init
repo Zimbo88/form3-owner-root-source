@@ -1,0 +1,91 @@
+#!/bin/sh
+# PID 1: RAM-only rescue. This script never mounts an eMMC filesystem.
+export PATH=/bin:/sbin:/usr/bin:/usr/sbin
+export HOME=/root
+export PS1='form3-rescue# '
+umask 077
+warn() { printf '\n*** WARNING: %s ***\n\n' "$*"; }
+mkdir -p /proc /sys /dev /run /tmp /root
+mount -t proc -o nosuid,nodev,noexec proc /proc || warn 'proc mount failed'
+mount -t sysfs -o nosuid,nodev,noexec sysfs /sys || warn 'sysfs mount failed'
+if ! mount -t devtmpfs -o nosuid devtmpfs /dev; then
+    warn 'devtmpfs unavailable; using RAM tmpfs and mdev'
+    mount -t tmpfs -o mode=0755,nosuid tmpfs /dev || warn 'device tmpfs mount failed'
+    [ -c /dev/console ] || mknod /dev/console c 5 1
+    [ -c /dev/null ] || mknod /dev/null c 1 3
+fi
+mkdir -p /dev/pts /dev/shm
+mount -t devpts -o mode=0600,ptmxmode=0666,nosuid,noexec devpts /dev/pts || warn 'devpts failed: telnet may not work'
+[ -e /dev/ptmx ] || ln -s pts/ptmx /dev/ptmx
+mdev -s || warn 'mdev scan failed'
+hostname form3-rescue
+printf '\nFORM3 ROOT RESCUE\n\n'
+printf 'RESCUE V2: primary raw TCP shell on 2324; optional telnet diagnosis on 2323\n'
+uname -a
+printf '\nKernel command line:\n'
+cat /proc/cmdline
+printf '\nNetwork interfaces:\n'
+ip link show
+printf '\nBlock devices (kernel 1-KiB block counts):\n'
+cat /proc/partitions
+ip link set lo up || warn 'loopback setup failed'
+# No DHCP client, router discovery, gateway, DNS or forwarding.
+[ ! -w /proc/sys/net/ipv4/ip_forward ] || printf '0\n' > /proc/sys/net/ipv4/ip_forward
+for option in /proc/sys/net/ipv6/conf/all/disable_ipv6 /proc/sys/net/ipv6/conf/default/disable_ipv6; do
+    [ ! -w "$option" ] || printf '1\n' > "$option"
+done
+n=0
+while [ ! -e /sys/class/net/eth0 ] && [ "$n" -lt 30 ]; do sleep 1; n=$((n + 1)); done
+network_ok=0
+if ip link set eth0 up && ip -4 addr flush dev eth0 && ip addr add 10.0.0.77/24 dev eth0; then
+    network_ok=1
+else
+    warn 'eth0 setup failed; local console remains available'
+fi
+# Also remove any default route introduced by earlier kernel configuration.
+while ip -4 route del default 2>/dev/null; do :; done
+printf '\nIPv4 routes (no default gateway):\n'
+ip -4 route show
+printf '\nWaiting up to 30 seconds for eMMC...\n'
+n=0
+while [ ! -b /dev/mmcblk0 ] && [ "$n" -lt 30 ]; do
+    sleep 1
+    mdev -s
+    n=$((n + 1))
+done
+form3-readonly || warn 'eMMC software read-only protection incomplete; inspect before backup'
+printf '\nAvailable eMMC identity and health metadata:\n'
+for key in cid csd manfid oemid name serial date life_time pre_eol_info; do
+    item=/sys/class/block/mmcblk0/device/$key
+    if [ -r "$item" ]; then printf '%s: ' "$key"; cat "$item"; fi
+done
+printf '\nDetected block devices after settling:\n'
+cat /proc/partitions
+cat /etc/motd
+if [ "$network_ok" = 1 ]; then
+    # Start only after form3-readonly has been attempted. No PTY dependency.
+    form3-nc-listen > /run/form3-nc.log 2>&1 &
+    printf '%s\n' "$!" > /run/form3-nc.pid
+    n=0
+    while ! form3-nc-status > /run/form3-nc.status 2>&1 && [ "$n" -lt 5 ]; do
+        sleep 1
+        n=$((n + 1))
+    done
+    cat /run/form3-nc.status
+    if ! form3-nc-status >/dev/null 2>&1; then
+        warn 'primary nc listener not confirmed; inspect /run/form3-nc.log'
+    fi
+    # Optional diagnostic service. Its failure cannot terminate the nc listener.
+    telnetd -b 10.0.0.77:2323 -l /bin/sh || warn 'telnetd failed to start'
+fi
+# Remain PID 1, keep reaping/waiting and restart only the local shell on exit.
+# Never invoke normal firmware or automatically reboot.
+trap 'echo "Rescue remains running; use a deliberate manual poweroff if needed."' INT TERM HUP
+while :; do
+    if [ -c /dev/console ]; then
+        setsid cttyhack /bin/sh -i </dev/console >/dev/console 2>&1
+    else
+        /bin/sh -i
+    fi
+    sleep 1
+done

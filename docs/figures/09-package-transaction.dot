@@ -1,0 +1,23 @@
+digraph G {
+graph [rankdir=TB,bgcolor="white",pad="0.2",nodesep="0.35",ranksep="0.45",label="Package trust, transaction and rollback",labelloc=t,fontname="DejaVu Sans",fontsize=17];
+node [shape=box,style="rounded,filled",fillcolor="#eef3f8",color="#415a77",fontname="DejaVu Sans",fontsize=11,margin="0.14,0.1"];
+edge [color="#415a77",fontname="DejaVu Sans",fontsize=9];
+signer [label="Owner signing private key\nLAPTOP/offline only"];
+signed [label="Bounded signed package"];
+pin [label="Independently pinned public-key\nhash"];
+plan [label="Exact reviewed target + source\nhashes"];
+tx [label="Private write-ahead transaction"];
+files [label="Narrow allowlisted files +\nreadback"];
+done [label="Commit release pointer"];
+fail [label="Interruption or mismatch"];
+rollback [label="Explicit rollback; preserve\nbackups"];
+signer -> signed [label=""];
+signed -> plan [label=""];
+pin -> plan [label=""];
+plan -> tx [label="explicit --apply + device/plan pins"];
+tx -> files [label=""];
+files -> done [label=""];
+files -> fail [label=""];
+fail -> rollback [label=""];
+rollback -> tx [label="restore reviewed before state"];
+}

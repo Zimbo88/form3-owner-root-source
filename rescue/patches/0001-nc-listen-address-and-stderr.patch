@@ -1,0 +1,76 @@
+--- a/networking/nc.c
++++ b/networking/nc.c
+@@ -68,7 +68,7 @@
+ //usage:#endif
+ //usage:
+ //usage:#define nc_trivial_usage
+-//usage:	IF_NC_EXTRA("[-iN] [-wN] ")IF_NC_SERVER("[-l] [-p PORT] ")
++//usage:	IF_NC_EXTRA("[-iN] [-wN] ")IF_NC_SERVER("[-l] [-p PORT] [-s ADDR] ")
+ //usage:       "["IF_NC_EXTRA("-f FILE|")"IPADDR PORT]"IF_NC_EXTRA(" [-e PROG]")
+ //usage:#define nc_full_usage "\n\n"
+ //usage:       "Open a pipe to IP:PORT" IF_NC_EXTRA(" or FILE")
+@@ -79,6 +79,7 @@
+ //usage:     "\n		(use -ll with -e for persistent server)"
+ //usage:	)
+ //usage:     "\n	-p PORT	Local port"
++//usage:     "\n	-s ADDR	Local listen address (requires -l)"
+ //usage:	)
+ //usage:	IF_NC_EXTRA(
+ //usage:     "\n	-w SEC	Connect timeout"
+@@ -122,6 +123,7 @@
+ 	int sfd = sfd; /* for gcc */
+ 	int cfd = 0;
+ 	unsigned lport = 0;
++	const char *bind_addr = NULL;
+ 	IF_NOT_NC_SERVER(const) unsigned do_listen = 0;
+ 	IF_NOT_NC_EXTRA (const) unsigned wsecs = 0;
+ 	IF_NOT_NC_EXTRA (const) unsigned delay = 0;
+@@ -134,12 +136,14 @@
+ 		/* getopt32 is _almost_ usable:
+ 		** it cannot handle "... -e PROG -prog-opt" */
+ 		while ((opt = getopt(argc, argv,
+-			"" IF_NC_SERVER("lp:") IF_NC_EXTRA("w:i:f:e:") )) > 0
++			"" IF_NC_SERVER("lp:s:") IF_NC_EXTRA("w:i:f:e:") )) > 0
+ 		) {
+ 			if (ENABLE_NC_SERVER && opt == 'l')
+ 				IF_NC_SERVER(do_listen++);
+ 			else if (ENABLE_NC_SERVER && opt == 'p')
+ 				IF_NC_SERVER(lport = bb_lookup_port(optarg, "tcp", 0));
++			else if (ENABLE_NC_SERVER && opt == 's')
++				bind_addr = optarg;
+ 			else if (ENABLE_NC_EXTRA && opt == 'w')
+ 				IF_NC_EXTRA( wsecs = xatou(optarg));
+ 			else if (ENABLE_NC_EXTRA && opt == 'i')
+@@ -172,12 +176,13 @@
+ 		argc -= optind;
+ 		// -l and -f don't mix
+ 		if (do_listen && cfd) bb_show_usage();
++		if (bind_addr && !do_listen) bb_show_usage();
+ 		// File mode needs need zero arguments, listen mode needs zero or one,
+ 		// client mode needs one or two
+ 		if (cfd) {
+ 			if (argc) bb_show_usage();
+ 		} else if (do_listen) {
+-			if (argc > 1) bb_show_usage();
++			if (argc > 1 || (bind_addr && argc)) bb_show_usage();
+ 		} else {
+ 			if (!argc || argc > 2) bb_show_usage();
+ 		}
+@@ -194,7 +199,7 @@
+ 
+ 	if (!cfd) {
+ 		if (do_listen) {
+-			sfd = create_and_bind_stream_or_die(argv[0], lport);
++			sfd = create_and_bind_stream_or_die(bind_addr ? bind_addr : argv[0], lport);
+ 			xlisten(sfd, do_listen); /* can be > 1 */
+ #if 0  /* nc-1.10 does not do this (without -v) */
+ 			/* If we didn't specify a port number,
+@@ -240,7 +245,7 @@
+ 		/* child, or main thread if only one -l */
+ 		xmove_fd(cfd, 0);
+ 		xdup2(0, 1);
+-		/*xdup2(0, 2); - original nc 1.10 does this, we don't */
++		xdup2(0, 2); /* Rescue V2: stderr belongs to the client socket too. */
+ 		IF_NC_EXTRA(BB_EXECVP(execparam[0], execparam);)
+ 		IF_NC_EXTRA(bb_perror_msg_and_die("can't execute '%s'", execparam[0]);)
+ 	}

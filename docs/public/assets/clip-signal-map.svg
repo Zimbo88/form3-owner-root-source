@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="720" viewBox="0 0 1180 720" role="img" aria-labelledby="title desc">
+<title id="title">Conditional Pi 5 to flash signal map</title><desc id="desc">Recorded standard SPI relationships; signal direction from Pi MOSI to flash DI and from flash DO to Pi MISO. Pin 8 power is conditional and pins 3 and 7 have no approved connection in this reference.</desc>
+<rect width="1180" height="720" fill="#f6f7f9"/>
+<g font-family="DejaVu Sans, sans-serif" fill="#182c3b">
+<text x="40" y="50" font-size="26" >02 / SIGNALS, NOT WIRE COLOURS</text>
+<text x="40" y="84" font-size="17" >Historical table + documentation • electrical approval is still required</text>
+<rect x="35" y="115" width="375" height="442" rx="14" fill="#ffffff" stroke="#c4ced7"/>
+<rect x="770" y="115" width="375" height="442" rx="14" fill="#ffffff" stroke="#c4ced7"/>
+<text x="62" y="150" font-size="21" >PI 5 PHYSICAL HEADER</text>
+<text x="797" y="150" font-size="20" >CONDITIONAL 8-LEAD FLASH</text>
+<text x="62" y="206" font-size="19" >24 · GPIO8 / CE0</text>
+<text x="797" y="206" font-size="19" >1 · /CS</text>
+<path d="M410 201 H770" fill="none" stroke="#247390" stroke-width="3" />
+<path d="M740 201 l-12 -7 v14 Z" fill="#247390"/>
+<text x="62" y="267" font-size="19" >21 · GPIO9 / MISO</text>
+<text x="797" y="267" font-size="19" >2 · DO / IO1</text>
+<path d="M410 262 H770" fill="none" stroke="#247390" stroke-width="3" />
+<path d="M440 262 l12 -7 v14 Z" fill="#247390"/>
+<text x="62" y="328" font-size="19" >25 · GND</text>
+<text x="797" y="328" font-size="19" >4 · GND</text>
+<path d="M410 323 H770" fill="none" stroke="#526879" stroke-width="3" />
+<text x="62" y="389" font-size="19" >19 · GPIO10 / MOSI</text>
+<text x="797" y="389" font-size="19" >5 · DI / IO0</text>
+<path d="M410 384 H770" fill="none" stroke="#247390" stroke-width="3" />
+<path d="M740 384 l-12 -7 v14 Z" fill="#247390"/>
+<text x="62" y="450" font-size="19" >23 · GPIO11 / CLK</text>
+<text x="797" y="450" font-size="19" >6 · CLK</text>
+<path d="M410 445 H770" fill="none" stroke="#247390" stroke-width="3" />
+<path d="M740 445 l-12 -7 v14 Z" fill="#247390"/>
+<text x="62" y="511" font-size="19" >17 · 3.3 V, if approved</text>
+<text x="797" y="511" font-size="19" >8 · VCC, if compatible</text>
+<path d="M410 506 H770" fill="none" stroke="#dc702f" stroke-width="3" stroke-dasharray="8 7"/>
+<rect x="35" y="580" width="1110" height="99" rx="14" fill="#fff2e8" stroke="#c4ced7"/>
+<text x="59" y="616" font-size="21" >Pins 3 / IO2 and 7 / IO3: NO approved tie in this reference.</text>
+<text x="59" y="648" font-size="17" >Check exact part, mode, existing pulls and shared circuitry. Never improvise a reset short.</text>
+<text x="39" y="706" font-size="16" >Ground is a reference; supply approval must address backfeeding the whole SOM.</text>
+</g></svg>
