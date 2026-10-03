@@ -389,7 +389,7 @@
       "destination": "docs/public/CARTRIDGE_DECODING.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored offline decoder, synthetic tests or reproduction guide; no captured data, vendor key or identity. No device writer.",
-      "sha256": "c72c7de1b155ced1cc67f2aaa3b88f3aa97cc05921bbd5341d05234b0cfb5e0f",
+      "sha256": "ead30458bf318b82f892d88adb72231c06f189ad7d88da7529bd19b395d9617f",
       "source": "docs/public/CARTRIDGE_DECODING.md"
     },
     {
@@ -399,6 +399,14 @@
       "provenance": "Authored static/read-only metadata inspection, synthetic tests or generic reproduction guide; no keys or acquired cartridge data.",
       "sha256": "5b76a2927a2e3e22e10fb7b25d4ca7f4ec6e88647e51e201a39e3e3f4eb174ed",
       "source": "docs/public/CARTRIDGE_INSPECTION.md"
+    },
+    {
+      "category": "guide",
+      "destination": "docs/public/CARTRIDGE_RECONCILIATION.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored offline reconciliation model, synthetic fixtures or sanitized findings; no memory writer, secrets or vendor code.",
+      "sha256": "753083287509c013245807423db1681edd0bd9c6d9040da494f6c1ebc5f1db7a",
+      "source": "docs/public/CARTRIDGE_RECONCILIATION.md"
     },
     {
       "category": "guide",
@@ -850,6 +858,14 @@
     },
     {
       "category": "synthetic-test",
+      "destination": "tests/test_cartridge_reconciliation.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored offline reconciliation model, synthetic fixtures or sanitized findings; no memory writer, secrets or vendor code.",
+      "sha256": "9bbf70a83e6969ebfad64896db32bd3862d4a3e0aa6334e4d22b252ee752b286",
+      "source": "tests/test_cartridge_reconciliation.py"
+    },
+    {
+      "category": "synthetic-test",
       "destination": "tests/test_cpu_usage.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
@@ -1279,6 +1295,14 @@
       "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
       "sha256": "c16475c500dbf330611db0881742b3903edded7aa67798decd2a7b06ae77a0fd",
       "source": "tools/inspect_qt_resources.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/model_cartridge_reconciliation.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored offline reconciliation model, synthetic fixtures or sanitized findings; no memory writer, secrets or vendor code.",
+      "sha256": "1c31c06cd34e0d6150c1747270d7106a5255e03e30432f27476ab9dda4c83521",
+      "source": "tools/model_cartridge_reconciliation.py"
     },
     {
       "category": "authored-code",

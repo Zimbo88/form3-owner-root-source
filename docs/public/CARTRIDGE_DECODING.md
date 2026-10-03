@@ -119,3 +119,10 @@ restoration procedure. Material compatibility and filling-system health remain
 separate conditions. Retain original copies even if decoding fails; do not repair
 or overwrite them. The [envelope inspection guide](CARTRIDGE_INSPECTION.md) remains
 useful without access to any secret.
+
+## Next investigation: copy selection and mirrors
+
+See [Cartridge reconciliation](CARTRIDGE_RECONCILIATION.md) for the subsequent
+selected native load/merge tests and the synthetic offline model. Successful
+decoding alone does not establish how conflicting persistent states reconcile
+or make a native reset ready.
