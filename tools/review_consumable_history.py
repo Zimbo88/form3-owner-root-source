@@ -25,7 +25,13 @@ INDEX = 'consumable-state/snapshots.private.jsonl'
 HEX = re.compile(r'[a-f0-9]{64}')
 
 
-def review(session):
+def review(session, index_path=INDEX):
+    # A continuation is sealed by the original session manifest. Never accept
+    # arbitrary paths or use a sibling object's bytes as a substitute.
+    if not isinstance(index_path, str) or not re.fullmatch(
+            r'(?:continuations/[A-Za-z0-9_-]{1,128}/)?' + re.escape(INDEX), index_path):
+        raise ValueError('Expected root or named continuation snapshot index')
+    prefix = index_path[:-len(INDEX)]
     tree = SafeTree(session)
     try:
         manifest_raw = tree.read('SESSION_SHA256.json', 4 << 20)
@@ -52,7 +58,7 @@ def review(session):
                 raise ValueError('Capture integrity mismatch')
             return raw
 
-        index = read(INDEX, 16 << 20)
+        index = read(index_path, 16 << 20)
         if index and not index.endswith(b'\n'): raise ValueError('Truncated snapshot index')
         lines = index.splitlines()
         if not 1 <= len(lines) <= 10000: raise ValueError('Snapshot count bound')
@@ -78,7 +84,7 @@ def review(session):
                 sha = file.get('sha256')
                 if not isinstance(sha, str) or not HEX.fullmatch(sha): raise ValueError('Invalid object pin')
                 if sha not in objects:
-                    raw = read('consumable-state/objects/'+sha, 65536)
+                    raw = read(prefix+'consumable-state/objects/'+sha, 65536)
                     total += len(raw)
                     if len(objects) >= 4096 or total > 64 << 20: raise ValueError('Object budget')
                     if hashlib.sha256(raw).hexdigest() != sha: raise ValueError('Object name mismatch')
@@ -98,6 +104,7 @@ def review(session):
                     'source_sha256':sha, 'values':values, 'state':'HISTORICAL',
                     'measurement_time':None, 'physical_volume_proven':False})
         result = {'schema_version':1, 'state':'HISTORICAL',
+            'index_path':index_path,
             'manifest_sha256':hashlib.sha256(manifest_raw).hexdigest(),
             'index_sha256':hashlib.sha256(index).hexdigest(),
             'snapshots':len(snapshots), 'unique_objects':len(objects), 'verified_object_bytes':total,
@@ -130,11 +137,13 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--session',required=True);p.add_argument('--output',required=True)
     p.add_argument('--summary',required=True)
+    p.add_argument('--index', default=INDEX,
+                   help='Sealed root or continuations/NAME/consumable-state/snapshots.private.jsonl')
     a=p.parse_args();os.umask(0o077)
     target=Path(a.output).absolute()
     if 'research-private' not in target.parts or target.resolve().is_relative_to(Path(a.session).resolve()):
         raise ValueError('New private output outside captured session required')
-    result,summary=review(a.session)
+    result,summary=review(a.session,a.index)
     write_json(target,result);write_json(a.summary,summary)
     print(json.dumps(summary,sort_keys=True))
 

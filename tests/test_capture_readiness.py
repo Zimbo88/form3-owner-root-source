@@ -125,3 +125,35 @@ class ConsumableHistory(unittest.TestCase):
         result,_=history.review(self.root)
         self.assertNotIn('private-secret',json.dumps(result))
         self.assertEqual(len(result['records'][0]['observations']),1)
+
+    def continuation(self):
+        prefix='continuations/synthetic-reboot/'
+        for name,raw in list(self.files.items()):
+            path=self.root/(prefix+name);path.parent.mkdir(parents=True,exist_ok=True)
+            path.write_bytes(raw);self.files[prefix+name]=raw
+        self.seal()
+        return prefix+history.INDEX
+
+    def test_continuation_uses_parent_seal(self):
+        index=self.continuation()
+        result,summary=history.review(self.root,index)
+        self.assertEqual(result['index_path'],index)
+        self.assertEqual(summary['snapshots'],2)
+        self.assertEqual(result['records'][0]['changed_observations']['NumLayersPrinted'],1)
+
+    def test_continuation_has_no_root_object_fallback(self):
+        index=self.continuation()
+        name=next(k for k in self.files if k.startswith('continuations/') and '/objects/' in k)
+        (self.root/name).unlink()
+        with self.assertRaises((ValueError,OSError)):history.review(self.root,index)
+
+    def test_continuation_rejects_unsealed_corruption(self):
+        index=self.continuation()
+        (self.root/index).write_bytes(b'{}\n')
+        with self.assertRaises(ValueError):history.review(self.root,index)
+
+    def test_index_rejects_escape_and_arbitrary_paths(self):
+        for index in ('../'+history.INDEX,'/tmp/'+history.INDEX,
+                      'continuations/../'+history.INDEX,'other/'+history.INDEX,None):
+            with self.subTest(index=index),self.assertRaises(ValueError):
+                history.review(self.root,index)

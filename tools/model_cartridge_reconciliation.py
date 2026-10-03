@@ -72,6 +72,68 @@ def load_decision(a_valid, b_valid, a_blank=False, b_blank=False):
             'native_write_authorized': False, 'dispensing_authorized': False}
 
 
+def check_readback(requested, observed, write_error=False, read_error=False):
+    """Offline projection of writeRW's result; no I/O or write permission.
+
+    The model deliberately accepts only one reviewed 16-byte record, although
+    the native helper has a generic slice interface.
+    """
+    if type(requested) is not bytes or len(requested) != 16:
+        raise ValueError('Expected one synthetic 16-byte record')
+    if type(observed) is not bytes or len(observed) > 32:
+        raise ValueError('Readback fixture exceeds bound')
+    if type(write_error) is not bool or type(read_error) is not bool:
+        raise ValueError('Explicit error classification required')
+    if write_error:
+        result, stage = False, 'write_error'
+    elif read_error:
+        result, stage = False, 'read_error'
+    elif len(requested) != len(observed):
+        result, stage = False, 'length_mismatch'
+    else:
+        result = requested == observed
+        stage = 'match' if result else 'byte_mismatch'
+    return {'helper_success': result, 'stage': stage,
+            'physical_restore_proven': False, 'native_write_authorized': False}
+
+
+def simulate_flush(a_equal=False, b_equal=False, a_valid=True, b_valid=True,
+                   fail_copy=None, file_error=False):
+    """Selected native Flush branch with modeled I/O, NOT a transaction engine.
+
+    Inputs are synthetic classifications. Persistent failure of one selected
+    copy is modeled; transient failures, initial read errors, concurrent writers
+    and physical power loss are deliberately outside this projection.
+    """
+    if any(type(v) is not bool for v in
+           (a_equal, b_equal, a_valid, b_valid, file_error)):
+        raise ValueError('Explicit boolean classification required')
+    if fail_copy not in (None, 'A', 'B'):
+        raise ValueError('Unknown synthetic copy')
+    if (a_equal and not a_valid) or (b_equal and not b_valid):
+        raise ValueError('Inconsistent equal/valid classification')
+    events = ['file_attempt', 'read_A', 'read_B']
+    done = {'A': a_equal, 'B': b_equal}
+    order = ('B', 'A') if a_valid else ('A', 'B')
+    attempts = 0
+    while attempts < 2 and not all(done.values()):
+        copy = next(c for c in order if not done[c])
+        events.append('write_' + copy)
+        attempts += 1
+        if copy != fail_copy:
+            events.append('readback_' + copy)
+            done[copy] = True
+    return {'data_class': 'SYNTHETIC', 'events': events,
+            'modeled_copies_current': done,
+            'native_result_code': 3 if a_equal and b_equal else
+                                  (1 if all(done.values()) else 5),
+            'native_error_returned': not all(done.values()),
+            'file_error_modeled': file_error,
+            'all_store_commit_proven': False,
+            'owner_review': 'blocked_file_error' if file_error else 'incomplete',
+            'native_write_authorized': False, 'dispensing_authorized': False}
+
+
 def demo():
     zero = dict(zip(FIELDS, (0.0, 0, 0, 0)))
     used = dict(zip(FIELDS, (800.0, 1200, 90, 100)))
@@ -82,7 +144,11 @@ def demo():
                 'both_valid_B_not_preferred_by_larger_counter': load_decision(True, True),
                 'only_B_valid': load_decision(False, True),
                 'both_invalid': load_decision(False, False),
-                'invalid_and_blank': load_decision(False, False, a_blank=True)},
+                'invalid_and_blank': load_decision(False, False, a_blank=True),
+                'ordinary_changed_flush': simulate_flush(),
+                'first_copy_write_failure': simulate_flush(fail_copy='B'),
+                'second_copy_write_failure': simulate_flush(fail_copy='A'),
+                'filesystem_failure': simulate_flush(file_error=True)},
             'limitations': ['No cold-boot ordering or concurrency guarantee',
                             'No power-loss or restore test',
                             'No proof of physical remaining resin',

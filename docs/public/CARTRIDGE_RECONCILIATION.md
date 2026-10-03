@@ -126,3 +126,9 @@ This model applies no privacy policy and proves no cloud synchronization claim.
 Local-only operation requires independent network enforcement; renaming a
 cartridge is not privacy enforcement. No printer change or panel deployment was
 performed in this continuation.
+
+## Writeback continuation
+
+The subsequent [writeback failure investigation](CARTRIDGE_WRITEBACK.md) resolves
+selected file/B/A ordering, retries and partial failure behavior. It narrows the
+unknowns above but does not establish atomic restoration or authorize a reset.

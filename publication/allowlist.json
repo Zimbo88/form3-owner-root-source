@@ -405,8 +405,16 @@
       "destination": "docs/public/CARTRIDGE_RECONCILIATION.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored offline reconciliation model, synthetic fixtures or sanitized findings; no memory writer, secrets or vendor code.",
-      "sha256": "753083287509c013245807423db1681edd0bd9c6d9040da494f6c1ebc5f1db7a",
+      "sha256": "13bb1b7abe5e01bb35ed68757f995a7155afcc53dcd72171458da02e8344c7b4",
       "source": "docs/public/CARTRIDGE_RECONCILIATION.md"
+    },
+    {
+      "category": "guide",
+      "destination": "docs/public/CARTRIDGE_WRITEBACK.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic failure model or sanitized native-function findings; no vendor code, real consumable bytes, keys or device writer.",
+      "sha256": "ea237967a26c9eddbd749e3db38eb3b04f5e906430cc5a2bc7a509c422c7a1e3",
+      "source": "docs/public/CARTRIDGE_WRITEBACK.md"
     },
     {
       "category": "guide",
@@ -455,6 +463,14 @@
       "provenance": "Authored bench guide; conditional historical map and primary-documentation citations, no new hardware proof.",
       "sha256": "9bd108dd59f36928d0451cb0719467b302d63a976c193713d2e9e2b542a77a36",
       "source": "docs/public/PI5_CLIP_GUIDE.md"
+    },
+    {
+      "category": "guide",
+      "destination": "docs/public/PRINT_VOLUME_ACCOUNTING.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored sanitized consumption-accounting findings; no raw logs, identities or vendor code.",
+      "sha256": "e78f28ff7011b30c37fb3bd77f413a6bafbe657e661c911122e599d4b4043545",
+      "source": "docs/public/PRINT_VOLUME_ACCOUNTING.md"
     },
     {
       "category": "guide",
@@ -837,7 +853,7 @@
       "destination": "tests/test_capture_readiness.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored bounded read-only capture/review tool or synthetic safety fixture; no acquired records.",
-      "sha256": "1fe3003ea38df0ddeaa81c1790d68ea3f58e5156e4e839004f9f56fd0f577290",
+      "sha256": "f0635333ef2ef514a16b9616d3a9045703aae15519ace153d8254e39f6ff6f62",
       "source": "tests/test_capture_readiness.py"
     },
     {
@@ -863,6 +879,14 @@
       "provenance": "Authored offline reconciliation model, synthetic fixtures or sanitized findings; no memory writer, secrets or vendor code.",
       "sha256": "9bbf70a83e6969ebfad64896db32bd3862d4a3e0aa6334e4d22b252ee752b286",
       "source": "tests/test_cartridge_reconciliation.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_cartridge_writeback_model.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored synthetic failure model or sanitized native-function findings; no vendor code, real consumable bytes, keys or device writer.",
+      "sha256": "e9cc05ce89ac03c0f3620e4c6e4e7a53e00e0f2b9030d28093981e32b665c0fe",
+      "source": "tests/test_cartridge_writeback_model.py"
     },
     {
       "category": "synthetic-test",
@@ -1301,7 +1325,7 @@
       "destination": "tools/model_cartridge_reconciliation.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored offline reconciliation model, synthetic fixtures or sanitized findings; no memory writer, secrets or vendor code.",
-      "sha256": "1c31c06cd34e0d6150c1747270d7106a5255e03e30432f27476ab9dda4c83521",
+      "sha256": "64bca0380e7b1bb7df3ddf2a91380998be28e10f8c016afc3acbd824d47f96a0",
       "source": "tools/model_cartridge_reconciliation.py"
     },
     {
@@ -1373,7 +1397,7 @@
       "destination": "tools/review_consumable_history.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored bounded read-only capture/review tool or synthetic safety fixture; no acquired records.",
-      "sha256": "6f41c9301f0f4339c6d7ec1b0a250a91d8e0f1951e19da94f7ce398a748e4334",
+      "sha256": "3ee861ed84759664908ce7c16b90181049c598a8f5ce466250b0f9981cca369c",
       "source": "tools/review_consumable_history.py"
     },
     {
