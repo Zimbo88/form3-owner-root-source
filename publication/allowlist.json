@@ -386,6 +386,14 @@
     },
     {
       "category": "guide",
+      "destination": "docs/public/CARTRIDGE_INSPECTION.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored static/read-only metadata inspection, synthetic tests or generic reproduction guide; no keys or acquired cartridge data.",
+      "sha256": "d24a8a328a4ae85d3e982ff823408971d86fead9f1739c91d5def0e7a5d6f8ca",
+      "source": "docs/public/CARTRIDGE_INSPECTION.md"
+    },
+    {
+      "category": "guide",
       "destination": "docs/public/COMMAND_WALKTHROUGH.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Command-by-command own-device tutorial; explicit terminal, write, electrical and rollback gates. No device credentials.",
@@ -405,7 +413,7 @@
       "destination": "docs/public/LOG_REVIEW.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Offline private log review, evidence coverage and historical-panel instructions.",
-      "sha256": "034c5351efbb7f7f794cdff23458ddad8dfd00ca9a49672e2dd6c17816a7e8c8",
+      "sha256": "38135134fb99b1b963e68ddb536cecdaff26504ae5a1e5167a562fa2c23a525a",
       "source": "docs/public/LOG_REVIEW.md"
     },
     {
@@ -818,6 +826,14 @@
     },
     {
       "category": "synthetic-test",
+      "destination": "tests/test_cartridge_memory.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored static/read-only metadata inspection, synthetic tests or generic reproduction guide; no keys or acquired cartridge data.",
+      "sha256": "ebaa3fbe512dbbcabff542112a6a940324fb33ba0a0cc157113f18d166109b86",
+      "source": "tests/test_cartridge_memory.py"
+    },
+    {
+      "category": "synthetic-test",
       "destination": "tests/test_cpu_usage.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
@@ -1167,6 +1183,30 @@
       "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
       "sha256": "18422b9b812cb73a4a98557bf108dbcbc07b35f1450c9c311532f7f7e814c80e",
       "source": "tools/form3ctl.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/go_function_index.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored static/read-only metadata inspection, synthetic tests or generic reproduction guide; no keys or acquired cartridge data.",
+      "sha256": "75898746a699b0d9324b45df4252d31abe609886903fcf85abd0be9f5700ac13",
+      "source": "tools/go_function_index.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/inspect_cartridge_layout.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored static/read-only metadata inspection, synthetic tests or generic reproduction guide; no keys or acquired cartridge data.",
+      "sha256": "8ca0041127cc942e929c454568fd0b40235ab8321adbf580e25bdf0df9012609",
+      "source": "tools/inspect_cartridge_layout.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/inspect_cartridge_memory.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored static/read-only metadata inspection, synthetic tests or generic reproduction guide; no keys or acquired cartridge data.",
+      "sha256": "ceaa2b700685a4f294637881261b448c045317ace13e8747c9e074e0c9a0dfb8",
+      "source": "tools/inspect_cartridge_memory.py"
     },
     {
       "category": "authored-code",

@@ -163,3 +163,7 @@ Expected: three matching assets and `browser_acceptance: false`. This catches a
 truncated JavaScript response but does not run JavaScript, prove navigation or
 validate authentication. Continue with the separate browser fixture and supervised
 browser acceptance. No printer restart is needed to run these checks.
+
+For separately acquired cartridge data-area copies, see
+[read-only cartridge inspection](CARTRIDGE_INSPECTION.md). It does not provide a
+reset or claim that saved filesystem mirrors are complete chip backups.
