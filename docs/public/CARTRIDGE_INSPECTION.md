@@ -1,6 +1,6 @@
 # Inspect a copied cartridge record without changing it
 
-These laptop tools inspect a private copy and pinned firmware metadata. They do
+These envelope-only laptop tools inspect a private copy and pinned firmware metadata. They do
 not connect to a printer, decrypt with device keys, encode a reset or change a
 cartridge. They are useful for separating a filesystem mirror, a raw data-area
 backup, a decoded record and a proven restoration procedure.
@@ -55,3 +55,10 @@ not real cartridge data or keys. They test hash/size/type rejection, unequal cop
 unknown versions, plaintext shape and the limited monotonic model. They do not test
 physical writes, native checksum validation, chip recovery or printing. Run the
 standard disconnected suite described in [BUILD](BUILD.md).
+
+## Optional decoded inspection
+
+The separate [copied-memory decoder](CARTRIDGE_DECODING.md) now validates the
+reviewed C/0 + RW/1 format using privately supplied inputs. Its fixtures and
+selected-function checks are distinct from the envelope-only tests above. It
+exports selected usage values and comparisons, with no native write support.

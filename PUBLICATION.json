@@ -4,8 +4,8 @@
   "history_included": false,
   "kind": "UNSIGNED SOURCE REVIEW; not an installation package",
   "legal_clearance": false,
-  "producer_allowlist_sha256": "a61553d26076a875e0e07762a084ae4fae8f0e7d9c60f5ab073c2ab755266834",
-  "producer_commit": "d4abd1e0584a47e45e99e9f86fb35d4345034d95",
+  "producer_allowlist_sha256": "e1b2f2f929b9801f752c4b478e7d0d7fba6d1a8e5e5705be43d88241d3ab6809",
+  "producer_commit": "02505e2c4a14bb695d0c8b2bbf8a8e6b891bb322",
   "reviewed_files": [
     {
       "category": "notice",
@@ -393,10 +393,18 @@
     },
     {
       "category": "guide",
+      "destination": "docs/public/CARTRIDGE_DECODING.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored offline decoder, synthetic tests or reproduction guide; no captured data, vendor key or identity. No device writer.",
+      "sha256": "c72c7de1b155ced1cc67f2aaa3b88f3aa97cc05921bbd5341d05234b0cfb5e0f",
+      "source": "docs/public/CARTRIDGE_DECODING.md"
+    },
+    {
+      "category": "guide",
       "destination": "docs/public/CARTRIDGE_INSPECTION.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored static/read-only metadata inspection, synthetic tests or generic reproduction guide; no keys or acquired cartridge data.",
-      "sha256": "d24a8a328a4ae85d3e982ff823408971d86fead9f1739c91d5def0e7a5d6f8ca",
+      "sha256": "5b76a2927a2e3e22e10fb7b25d4ca7f4ec6e88647e51e201a39e3e3f4eb174ed",
       "source": "docs/public/CARTRIDGE_INSPECTION.md"
     },
     {
@@ -833,6 +841,14 @@
     },
     {
       "category": "synthetic-test",
+      "destination": "tests/test_cartridge_decode.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored offline decoder, synthetic tests or reproduction guide; no captured data, vendor key or identity. No device writer.",
+      "sha256": "cd3443beb848890bd438c08dfc16fb8b7db1c93fe11ac4c56a51d3404c337ab0",
+      "source": "tests/test_cartridge_decode.py"
+    },
+    {
+      "category": "synthetic-test",
       "destination": "tests/test_cartridge_memory.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored static/read-only metadata inspection, synthetic tests or generic reproduction guide; no keys or acquired cartridge data.",
@@ -1142,6 +1158,14 @@
       "provenance": "Local-only strict SSH profile creation from independently reviewed public host fingerprint; no connection or private-key content access.",
       "sha256": "1f87b47f0593a8f554ff80df4eb277108fe6b09a21b97cc51c1644129e0e451c",
       "source": "tools/create_owner_ssh_profile.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/decode_cartridge_memory.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored offline decoder, synthetic tests or reproduction guide; no captured data, vendor key or identity. No device writer.",
+      "sha256": "b999d92a34d16c443c3a9333dace479cd1293e586cc365f775d46d4657aadfed",
+      "source": "tools/decode_cartridge_memory.py"
     },
     {
       "category": "authored-code",
