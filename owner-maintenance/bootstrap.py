@@ -218,7 +218,7 @@ def atomic(path,data,mode=0o600):
         except FileNotFoundError:pass
 
 def release():
-    from package_format import unique_json,digest,canonical,PATHS
+    from package_format import unique_json,digest,canonical,PATHS,LEGACY_PATHS
     p=unique_json(trusted(BASE+'/current.json',4096))
     if set(p)!={'version','manifest_sha256'} or not re.match(r'^[0-9]+\.[0-9]+\.[0-9]+-[a-z0-9-]{1,24}$',p['version']):raise ValueError('Invalid release pointer')
     directory=BASE+'/releases/'+p['version']
@@ -226,7 +226,9 @@ def release():
     if digest(raw)!=p['manifest_sha256']:raise ValueError('Release manifest changed')
     m=unique_json(raw)
     if canonical(m)!=raw or m.get('version')!=p['version']:raise ValueError('Release manifest invalid')
-    for name in sorted(n for n in PATHS if n.startswith('panel/')):
+    if not {n for n in LEGACY_PATHS if n.startswith('panel/')} <= set(m['files']):raise ValueError('Incomplete panel release')
+    for name in sorted(n for n in m['files'] if n.startswith('panel/')):
+        if name not in PATHS:raise ValueError('Unknown panel file')
         if digest(trusted(directory+'/'+name))!=m['files'][name]['sha256']:raise ValueError('Panel file changed')
     return directory,p['version']
 
@@ -302,7 +304,7 @@ def supervise():
     with open('/proc/self/stat') as f:start=f.read().split()[21]
     atomic(RUN+'/supervisor.json',json.dumps({'pid':os.getpid(),'start':start}).encode())
     secondary=SecondaryLAN()
-    ssh=None;panel=None;previous=None;last_release=None;failures=0;panel_retry=PanelRetry()
+    ssh=None;panel=None;reset_broker=None;reset_retry=0;previous=None;last_release=None;failures=0;panel_retry=PanelRetry()
     try:
         while not stop[0]:
             try:
@@ -312,6 +314,16 @@ def supervise():
                 pending=os.path.exists(BASE+'/pending.json')
                 if pending and not os.path.exists(BASE+'/installed.json'):break
                 c=configuration();ip=address(c['interface']);policy=(ip,c['interface'],c['client_network'])
+                if reset_broker is not None and reset_broker.poll() is not None:
+                    reset_broker=None;reset_retry=time.monotonic()+30
+                if reset_broker is None and not pending and time.monotonic()>=reset_retry and not os.path.exists(BASE+'/cartridge-reset.disabled'):
+                    try:
+                        for name in ('cartridge_broker.py','cartridge_transaction.py','cartridge_codec.py'):
+                            trusted(BASE+'/bootstrap/'+name)
+                        reset_broker=subprocess.Popen([PYTHON,'-E','-B','-S',BASE+'/bootstrap/cartridge_broker.py',
+                            '--uid',str(c['uid']),'--gid',str(c['gid'])],stdin=subprocess.DEVNULL,
+                            stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,start_new_session=True)
+                    except (ValueError,OSError):reset_retry=time.monotonic()+60
                 if policy!=previous:
                     stop_process(panel);panel=None;stop_process(ssh);ssh=None
                     panel_retry.reset()
@@ -381,7 +393,14 @@ def supervise():
                 if stop[0]:break
                 time.sleep(.1)
     finally:
-        secondary.close();stop_process(panel);stop_process(ssh);os.close(lock)
+        secondary.close();stop_process(panel);stop_process(ssh)
+        if reset_broker is not None and reset_broker.poll() is None:
+            reset_broker.terminate()
+            # Do not SIGKILL an EEPROM transaction. The separate session can
+            # finish even if an operator stops the ordinary panel supervisor.
+            try:reset_broker.wait(timeout=2)
+            except subprocess.TimeoutExpired:pass
+        os.close(lock)
 
 def process_identity(pid):
     # No signal is sent on this path; a PID reused between observations is inert.

@@ -68,7 +68,7 @@ explains the final checks and what is deliberately excluded.
 root-command or actuator proxy. Source and proof labels are in the guides.*
 
 Unknown data is **UNAVAILABLE**. Recorded data is **HISTORICAL/CACHED**, not live.
-Native refill/reset, license issuance, automatic vendor privacy changes and panel
+A scoped [Clear electronic usage reset](docs/public/CARTRIDGE_PANEL_RESET.md) is available in the 0.5.13-review source. General refill/reset, license issuance, automatic vendor privacy changes and panel
 power controls remain disabled. No thermal, laser, motion, lid, overflow or watchdog
 protection is removed. A stock software-only first-root route remains unproved.
 

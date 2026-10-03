@@ -48,6 +48,16 @@ class InstallTests(unittest.TestCase):
     def install(self,fault=None):
         p=self.plan();r=ctl.apply_install(self.target,p,ctl.fingerprint(p),p['target']['device_id'],str(self.package),str(self.pub),str(self.owner),fault)
         return p,r
+    def test_legacy_package_verification_survives_extension(self):
+        legacy=self.path/'legacy.gz'
+        with mock.patch.object(pkg,'PATHS',pkg.LEGACY_PATHS):
+            pkg.build(str(self.source),'0.5.12-review','install',str(self.key),str(self.pub),str(legacy))
+        self.assertEqual(set(pkg.verify(str(legacy),str(self.pub),self.pin)['manifest']['files']),pkg.LEGACY_PATHS)
+    def test_partial_extension_refused_even_when_signed(self):
+        partial=self.path/'partial.gz'
+        with mock.patch.object(pkg,'PATHS',pkg.LEGACY_PATHS|{'panel/reset_client.py'}):
+            with self.assertRaises(ValueError):pkg.build(str(self.source),'0.5.13-review','install',str(self.key),str(self.pub),str(partial))
+        with self.assertRaises(ValueError):pkg.verify(str(partial),str(self.pub),self.pin)
     def test_plan_does_not_write(self):
         before=list(self.data.rglob('*'));p=self.plan();self.assertEqual(before,list(self.data.rglob('*')));self.assertEqual(p['target']['selected_slot'],6)
     def test_install_verify_uninstall_restores_account(self):

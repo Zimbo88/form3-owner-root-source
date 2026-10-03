@@ -85,6 +85,12 @@ class WLANRequests(unittest.TestCase):
         status,headers,raw=self.request('/api/login',{'secret':self.secret})
         self.assertEqual(status,200)
         return headers,{'Cookie':headers['Set-Cookie'].split(';')[0],'X-CSRF-Token':json.loads(raw)['csrf']}
+    def test_anonymous_wlan_session_cannot_reset(self):
+        self.store.save('settings.json',dict(ui.DEFAULT_SETTINGS,wlan_login_required=False))
+        code,headers,raw=self.request('/api/login',{})
+        self.assertEqual(code,200)
+        auth={'Cookie':headers['Set-Cookie'].split(';')[0],'X-CSRF-Token':json.loads(raw)['csrf']}
+        self.assertEqual(self.request('/api/cartridge-reset/prepare',{},auth)[0],403)
     def test_exact_private_ipv4_plain_http(self):
         self.assertEqual(self.manager.server.socket.getsockname(),('192.168.50.20',1328))
         self.assertEqual(self.manager.server.socket.family,socket.AF_INET)

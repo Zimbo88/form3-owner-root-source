@@ -15,7 +15,7 @@ class FrontendSession(unittest.TestCase):
 const vm=require('vm'),fs=require('fs'),assert=require('assert');
 const nodes=new Map();function node(id){if(!nodes.has(id))nodes.set(id,{hidden:false,textContent:'',dataset:{},listeners:{},append(){},replaceChildren(){},addEventListener(n,f){this.listeners[n]=f;}});return nodes.get(id);}
 const pending=[];const sandbox={console,Map,URL,Error,JSON,Promise,Number,String,Object,Array,Date,clearTimeout(){},setTimeout(){return 1;},window:{scrollTo(){}},document:{getElementById:node,createElement:t=>({dataset:{},append(){},addEventListener(){}}),querySelectorAll(){return [];}},fetch(path){return new Promise((resolve,reject)=>pending.push({path,resolve,reject}));}};
-vm.createContext(sandbox);vm.runInContext(fs.readFileSync(process.argv[1],'utf8'),sandbox);
+vm.createContext(sandbox);vm.runInContext(fs.readFileSync(require('path').join(require('path').dirname(process.argv[1]),'reset.js'),'utf8'),sandbox);vm.runInContext(fs.readFileSync(process.argv[1],'utf8'),sandbox);
 function response(value){return {ok:true,json:async()=>value};}
 (async()=>{
   // Prevent startup login; this fixture tests explicit refresh and logout races.

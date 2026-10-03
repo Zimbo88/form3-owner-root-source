@@ -25,7 +25,7 @@ measurements, code analysis and automated tests.
 | Original project logo | Authored geometry, private build and installed hash/readback | Latest original mark's appearance on a subsequent boot needs separate observation |
 | Local status | Proc/sysfs/version/storage adapters, explicit freshness | Five thermal channels are not GPU utilization or all physical heater/fan values |
 | Diagnostics | Bounded allowlisted local exports; logs can be plaintext | Missing histories/journals and error mentions do not prove original fault cause |
-| Materials | Estimates/history and independent owner ledger | No native counter reset, identity cloning or dispensing override |
+| Materials | Estimates/history, owner ledger and scoped Clear usage adjustment | No general cartridge support, identity cloning or dispensing override |
 | Privacy | Owner preference/model and explicit local-only boundary | Preview is not applied vendor policy; cloud compatibility/queue effects are not fully accepted |
 | Licenses | Read-only metadata where present | No manufacturer signing/issuance power and no fabricated activation |
 | A/B persistence | p7 owner files persist separately | Vendor upgrade may remove p6 hook, change version or select unsupported slot |
@@ -86,3 +86,7 @@ Run [setup](BUILD.md), review export checksums/manifest and record remaining gap
 before a release. Keep new test receipts separate from historical acceptance;
 excluded evidence tests are not passed tests. Re-run relevant physical acceptance
 only in a separately authorized supervised session, never from the build path.
+
+## Scoped Clear usage adjustment (0.5.13-review)
+
+[The new reset workflow](CARTRIDGE_PANEL_RESET.md) supersedes earlier blanket statements that no native usage adjustment is available. It is limited to legacy Clear FLGPCL02 and pinned 2.5.6-2773 components. It does not establish physical resin quantity, universal consumable compatibility or a motor inhibit.

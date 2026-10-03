@@ -37,7 +37,16 @@ class BrowserProvider(server.SampleProvider):
    'consumables':[dict(cartridge,material=field('White V4.1','DEMO','Synthetic fixture'))],
    'jobs':[],'sensors':[]}
   return r
-srv=server.make_server(BrowserProvider(),'browser-fixture-only-owner-secret',1328,store,bundle)
+class ResetFixture:
+ def __init__(self):self.state={'state':'AVAILABLE'};self.applies=0
+ def request(self,op,plan_id=None):
+  if op=='prepare':self.state={'state':'READY','plan_id':'a'*48,'preview':{'material':'FLGPCL02','nominal_ml':1000,'before':{'WriteCount':10,'EstimatedVolumeDispensed_ml':250},'after':{'WriteCount':11,'EstimatedVolumeDispensed_ml':0}}}
+  if op=='apply':
+   if plan_id!='a'*48:raise ValueError('Unexpected fixture plan')
+   self.applies+=1;self.state={'state':'COMPLETE','stages':{'synthetic_transaction':'PASS'},'usage':{'EstimatedVolumeDispensed_ml':0}}
+  return self.state
+reset_fixture=ResetFixture()
+srv=server.make_server(BrowserProvider(),'browser-fixture-only-owner-secret',1328,store,bundle,reset_client=reset_fixture)
 t=threading.Thread(target=srv.serve_forever,daemon=True);t.start()
 os.mkdir('/tmp/profile',0o700)
 open('/tmp/profile/user.js','w').write('user_pref("marionette.port",2828);\nuser_pref("browser.shell.checkDefaultBrowser",false);\nuser_pref("datareporting.healthreport.uploadEnabled",false);\nuser_pref("toolkit.telemetry.enabled",false);\nuser_pref("browser.startup.homepage_override.mstone","ignore");\nuser_pref("browser.newtabpage.enabled",false);\n')
@@ -120,9 +129,20 @@ try:
  if js('return document.getElementById("form-alias").value;')['value']!='Draft owner label':raise RuntimeError('Background refresh destroyed owner draft')
  js('document.getElementById("form-alias").value="Browser fixture";Array.from(document.querySelectorAll("button")).find(x=>x.textContent==="Save owner preferences").click();');time.sleep(.3)
  if store.settings()['display_alias']!='Browser fixture':raise RuntimeError('Settings UI write failed')
+ js('document.querySelector("nav [data-page=materials]").click();');time.sleep(.3)
+ js('Array.from(document.querySelectorAll("button")).find(b=>b.textContent==="Review cartridge reset").click();');time.sleep(.2)
+ js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==="Prepare a fresh preview").click();')
+ js('document.getElementById("form-reset-login").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(1.8)
+ if not js('return !!document.getElementById("form-reset-confirmation");')['value']:raise RuntimeError('Reset preview not rendered')
+ js('document.getElementById("form-reset-confirmation").value="RESET CLEAR USAGE";document.getElementById("form-reset-secret").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(.3)
+ if reset_fixture.applies!=1:raise RuntimeError('Synthetic apply not called exactly once')
+ if not js('return document.querySelector("dialog").textContent.includes("COMPLETE") && !document.querySelector("dialog").textContent.includes("browser-fixture-only-owner-secret");')['value']:raise RuntimeError('Reset result or redaction failed')
+ shot=command('WebDriver:TakeScreenshot',{'id':None,'full':False,'scroll':False})['value']
+ open('/result/reset-SYNTHETIC.png','wb').write(base64.b64decode(shot))
+ js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==="Close").click();')
  js('document.getElementById("logout").click();');time.sleep(.2)
  if not js('return document.getElementById("dashboard").hidden;')['value']:raise RuntimeError('Logout failed')
- print(json.dumps({'passed':True,'pages':results,'settings_saved':True,'unsaved_draft_preserved':True,'logout':True,'data':'DEMO ONLY','network_namespace':'loopback only','main_navigation_entries':5,'small_viewport':small_view,'mobile_no_horizontal_overflow':True,'gpu_utilization_unavailable':True,'firefox_content_sandbox_disabled':False}))
+ print(json.dumps({'passed':True,'pages':results,'cartridge_reset_browser_flow':'SYNTHETIC PASS; no hardware writes','settings_saved':True,'unsaved_draft_preserved':True,'logout':True,'data':'DEMO ONLY','network_namespace':'loopback only','main_navigation_entries':5,'small_viewport':small_view,'mobile_no_horizontal_overflow':True,'gpu_utilization_unavailable':True,'firefox_content_sandbox_disabled':False}))
 finally:
  if s:s.close()
  p.terminate()

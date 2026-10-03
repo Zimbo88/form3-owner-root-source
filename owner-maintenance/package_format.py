@@ -6,10 +6,13 @@ mandatory. An archive-provided hash or key is never an authentication authority.
 import gzip,hashlib,io,json,os,re,stat,subprocess,tarfile,tempfile
 
 LIMIT=16*1024*1024
-PATHS={'panel/lan_ipv4.py','bootstrap/lan_ipv4.py','panel/server.py','panel/panel_data.py','panel/formule_codec.py','panel/static/index.html',
+LEGACY_PATHS={'panel/lan_ipv4.py','bootstrap/lan_ipv4.py','panel/server.py','panel/panel_data.py','panel/formule_codec.py','panel/static/index.html',
        'panel/static/app.js','panel/static/style.css','bootstrap/bootstrap.py',
        'bootstrap/owner-maintenance.init','bootstrap/socket_launcher.py',
        'bootstrap/ownerctl.py','bootstrap/package_format.py'}
+RESET_PATHS={'bootstrap/cartridge_codec.py','bootstrap/cartridge_transaction.py',
+             'bootstrap/cartridge_broker.py','panel/reset_client.py','panel/static/reset.js'}
+PATHS=LEGACY_PATHS|RESET_PATHS
 
 def digest(raw):return hashlib.sha256(raw).hexdigest()
 def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=True,allow_nan=False).encode('ascii')
@@ -83,9 +86,16 @@ def verify(package,public_key,expected_signer,openssl=None):
         raise ValueError('Manifest/member disagreement')
     if not set(m['files']) or not set(m['files'])<=PATHS:raise ValueError('Invalid file set')
     if m['kind']=='panel' and any(not n.startswith('panel/') for n in m['files']):raise ValueError('Panel update cannot replace bootstrap')
-    required={n for n in PATHS if n.startswith('panel/')}
+    required={n for n in LEGACY_PATHS if n.startswith('panel/')}
     if not required<=set(m['files']):raise ValueError('Incomplete panel package')
-    if m['kind'] in ('install','maintenance') and set(m['files'])!=PATHS:raise ValueError('Incomplete install package')
+    if m['kind'] in ('install','maintenance') and not LEGACY_PATHS<=set(m['files']):raise ValueError('Incomplete install package')
+    if m['kind'] in ('install','maintenance') and RESET_PATHS & set(m['files']) and not RESET_PATHS <= set(m['files']):raise ValueError('Incomplete maintenance reset extension')
+    # Retain verification of existing pre-extension receipts/packages. New
+    # extensions must be complete per privilege boundary, never partial.
+    for prefix in ('panel/','bootstrap/'):
+        extension={n for n in RESET_PATHS if n.startswith(prefix)}
+        present=extension&set(m['files'])
+        if present and present!=extension:raise ValueError('Incomplete reset extension')
     for name,meta in m['files'].items():
         if not isinstance(meta,dict) or set(meta)!={'bytes','sha256'} or meta['bytes']!=len(blobs[name]) or meta['sha256']!=digest(blobs[name]):
             raise ValueError('Member content mismatch')

@@ -1,4 +1,4 @@
-# Owner Root maintenance panel — 0.5.9-review
+# Owner Root maintenance panel — 0.5.13-review
 
 An unprivileged panel on **port1328**, with five main navigation areas and related
 settings tabs. [Features and limits](../docs/public/LIMITS.md) are the current user-facing
@@ -81,3 +81,7 @@ verify/rollback. This package cannot modify bootstrap, SSH, native display, QSPI
 calibration or firmware. Keep independent SSH available if the panel fails.
 The [original artwork](native/signature-mark.svg) is shared by panel/boot/project,
 with native rendering and writes separately reviewed.
+
+## Explicit Clear usage adjustment
+
+[The panel workflow and recovery boundary](../docs/public/CARTRIDGE_PANEL_RESET.md) use a separate root UNIX-socket broker. This requires a signed maintenance update, not only a panel archive. The ordinary panel remains unprivileged. Only the reviewed legacy Clear format is supported; already-zero usage is not rewritten.

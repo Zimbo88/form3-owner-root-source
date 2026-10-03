@@ -4,8 +4,8 @@
   "history_included": false,
   "kind": "UNSIGNED SOURCE REVIEW; not an installation package",
   "legal_clearance": false,
-  "producer_allowlist_sha256": "39464a74594e52a3c5d812874ea7fb8c0cff07c0b52aa1bd1fff2e5a1edd9265",
-  "producer_commit": "6bb351dc5860e6fdaca450d3608eedc89683a09d",
+  "producer_allowlist_sha256": "6f9268c6c6ae736f60fd9ab4b1bf42ce0f6b7b59d896a5094ab7d04bbc6bbb74",
+  "producer_commit": "4c501b185d39ed81e67d3cc32f88dd8b80afd202",
   "reviewed_files": [
     {
       "category": "notice",
@@ -36,7 +36,7 @@
       "destination": "README.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "First-person public project introduction; curated navigation and explicit compatibility limits.",
-      "sha256": "e199b49f893e6c44149ff5842c6861b0b767920a09abff12253de05722473f06",
+      "sha256": "c23a9f99153f010f55a15692a14d0a1b65abadccb7aca793b0a5191840475cb9",
       "source": "PUBLIC_README.md"
     },
     {
@@ -60,7 +60,7 @@
       "destination": "VERSION",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Project version, distribution boundary or retained authorship/third-party notice.",
-      "sha256": "9233df1b69e7c010c954bfc267fa518603b6b558a9be91823940b2434cfb9866",
+      "sha256": "b3b13b546714e64193eb7d674e19d2041f920e437a0cd42d3de3d77389fb76ba",
       "source": "VERSION"
     },
     {
@@ -409,6 +409,14 @@
     },
     {
       "category": "guide",
+      "destination": "docs/public/CARTRIDGE_PANEL_RESET.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
+      "sha256": "2745afa1313985c20906bba6127717b3c270699515494cb777695ddec8cf5d48",
+      "source": "docs/public/CARTRIDGE_PANEL_RESET.md"
+    },
+    {
+      "category": "guide",
       "destination": "docs/public/CARTRIDGE_RECONCILIATION.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored offline reconciliation model, synthetic fixtures or sanitized findings; no memory writer, secrets or vendor code.",
@@ -436,7 +444,7 @@
       "destination": "docs/public/LIMITS.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored scoped reproduction guide; no private research records or recovered vendor source.",
-      "sha256": "bd588771f69c63cd2356ca79089b0dc17ec0c5ae189fb660922cb6a54532ca3c",
+      "sha256": "e855b022cb06b18e747a33780b38f8a5ed71899b6817bb4bf46a9333f6e44d4c",
       "source": "docs/public/LIMITS.md"
     },
     {
@@ -556,8 +564,32 @@
       "destination": "owner-maintenance/bootstrap.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
-      "sha256": "1f8e9e6e1d71d78cb602b1fb9823b981ae9928df601b9bdf71d8909cab9779c6",
+      "sha256": "438e4a2b48bb9f625005fa8b4e9768da76b7c1a12a1c28e3bda5dbd69c36313f",
       "source": "owner-maintenance/bootstrap.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "owner-maintenance/cartridge_broker.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
+      "sha256": "b58681df2d7ecce42bd3b230ed1973c6ef256d83f5da33cdeb4ff6b7a44af3f5",
+      "source": "owner-maintenance/cartridge_broker.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "owner-maintenance/cartridge_codec.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
+      "sha256": "1068ba93e77a7964cdccb5abf35a91a706620a05cad341d4dc74b9b225b1cb40",
+      "source": "owner-maintenance/cartridge_codec.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "owner-maintenance/cartridge_transaction.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
+      "sha256": "ab390ee96cb071e3980d7588a2ae502038a6c237d5459d39d4300f07c92a9c4d",
+      "source": "owner-maintenance/cartridge_transaction.py"
     },
     {
       "category": "authored-code",
@@ -588,7 +620,7 @@
       "destination": "owner-maintenance/package_format.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
-      "sha256": "ff7dd4776fdf1c2abf2e8651b1af885063bada707c5b28e7fae5bb4076fa8665",
+      "sha256": "7896ca01321876f34d386edd54f3f7df62df313fe96de214ae1d06ead5da1440",
       "source": "owner-maintenance/package_format.py"
     },
     {
@@ -604,7 +636,7 @@
       "destination": "owner-ui/README.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored standalone panel/read-adapter source or project documentation; no vendor payload.",
-      "sha256": "d4d0646b347242522f817117e0d16499b6237e1cdbe118481647a21e12562528",
+      "sha256": "935bff73bb4fb2d18f6400fb745b722b4d970f28246ad9266e7a84683df0fb09",
       "source": "owner-ui/README.md"
     },
     {
@@ -644,15 +676,23 @@
       "destination": "owner-ui/panel_data.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored standalone panel/read-adapter source or project documentation; no vendor payload.",
-      "sha256": "434f2b59cf5686ea024d756e0e35dc0524440568f90d0daa4ee0bfd1d0e98927",
+      "sha256": "6f412ea877d1a52de55822d15038d0621d6296732e6fe9a758503ad042403073",
       "source": "owner-ui/panel_data.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "owner-ui/reset_client.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
+      "sha256": "a836046152eafc9cfe7660349d682af1469ba27029a774f6839ebf56e10025c0",
+      "source": "owner-ui/reset_client.py"
     },
     {
       "category": "authored-code",
       "destination": "owner-ui/server.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored standalone panel/read-adapter source or project documentation; no vendor payload.",
-      "sha256": "b057162eb063a16eba50b430045fe93a6dbb233359ccbdc5b0f711f9a0eb6dd8",
+      "sha256": "16477c44fd24241f2bcc0177a7a17b58be1256f4aac7c327e8fc5033eb492b0d",
       "source": "owner-ui/server.py"
     },
     {
@@ -660,7 +700,7 @@
       "destination": "owner-ui/static/app.js",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored standalone panel/read-adapter source or project documentation; no vendor payload.",
-      "sha256": "5e5bef5c3b493327f9c32293694e3aace6f05e69dfcdac4b49fc7d7b08b35117",
+      "sha256": "fa54d6604137a90caeab15d50ddb4d7f6e51085fc01ac583696d2d6e777f1b30",
       "source": "owner-ui/static/app.js"
     },
     {
@@ -668,15 +708,23 @@
       "destination": "owner-ui/static/index.html",
       "license": "MIT authored geometry/code; Lato wordmark artwork, see rights guide",
       "provenance": "Authored panel/native geometry; orange wordmark uses credited Lato Light outlines, no manufacturer logo.",
-      "sha256": "b3ae534f0ff84f789d2319d2651b73677b7a0682a707197ec822265042371c39",
+      "sha256": "15472edbdefee4ac4fa139f9e1d1ab834a37933f8c21f5c6700d2860918a83e2",
       "source": "owner-ui/static/index.html"
+    },
+    {
+      "category": "authored-code",
+      "destination": "owner-ui/static/reset.js",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
+      "sha256": "82203b15234277ec4b8c49157b5f848c2135f05abcbbc846645afbb7ea482efa",
+      "source": "owner-ui/static/reset.js"
     },
     {
       "category": "authored-code",
       "destination": "owner-ui/static/style.css",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored standalone panel/read-adapter source or project documentation; no vendor payload.",
-      "sha256": "41b822a462e177d85c7cedb9cd4d789784db595fe8088f7dbb76d09df0826603",
+      "sha256": "35c22e0ece30b961849abe13c340590bb3139d336f2c3513fca87dd84e575bb9",
       "source": "owner-ui/static/style.css"
     },
     {
@@ -889,6 +937,46 @@
     },
     {
       "category": "synthetic-test",
+      "destination": "tests/test_cartridge_reset_broker.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
+      "sha256": "96e67f2c5de45788614ef2f47bc7c393a510904235cfb8fb1f3bbcc0d3f7210c",
+      "source": "tests/test_cartridge_reset_broker.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_cartridge_reset_client.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
+      "sha256": "c4ab077646fcef1ba3187384ed5ead0e0ce9172b3da30034aad8bacb17c172f4",
+      "source": "tests/test_cartridge_reset_client.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_cartridge_reset_codec.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
+      "sha256": "3779c15293fee7c854eacbbf51b6ef4f1ab240b5ccf81fbbd756c90c69072ae8",
+      "source": "tests/test_cartridge_reset_codec.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_cartridge_reset_http.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
+      "sha256": "4b6f07d15f570a356b1080000e81f4ca9ad4c73c8d42fb02057675243a68e1bd",
+      "source": "tests/test_cartridge_reset_http.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_cartridge_reset_transaction.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
+      "sha256": "31a9ebb44082e45f29f78e31847b598364bb61f6b0ef5581c47fb6e557d6169c",
+      "source": "tests/test_cartridge_reset_transaction.py"
+    },
+    {
+      "category": "synthetic-test",
       "destination": "tests/test_cartridge_writeback_model.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored synthetic failure model or sanitized native-function findings; no vendor code, real consumable bytes, keys or device writer.",
@@ -932,7 +1020,7 @@
       "destination": "tests/test_frontend_session.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
-      "sha256": "37749db471b6aa13c2ef3add61782e73d4899be385b042f7cb292e7ea9a4e745",
+      "sha256": "d81cd771c502f5c3b168d8684a0726d32d5f104ab86755e0f908aad60be86bea",
       "source": "tests/test_frontend_session.py"
     },
     {
@@ -972,7 +1060,7 @@
       "destination": "tests/test_owner_install.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
-      "sha256": "1bd4823ab0a89242e5cdf3410f35b851645a0a449d61111f36bbbb675edd5166",
+      "sha256": "6eae6481e05951726d6606555c48898d5439986063927c1269538bd871ce6f2f",
       "source": "tests/test_owner_install.py"
     },
     {
@@ -1092,7 +1180,7 @@
       "destination": "tests/test_wlan_owner.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
-      "sha256": "148e3176d9445a15eca940badd93a8521f848b465cb108a0d79d866b9ddf65aa",
+      "sha256": "ee35979067537e1da7eac20100164ce8b00d6a414906eac90837ac5a717091d5",
       "source": "tests/test_wlan_owner.py"
     },
     {
@@ -1204,7 +1292,7 @@
       "destination": "tools/decode_cartridge_memory.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored offline decoder, synthetic tests or reproduction guide; no captured data, vendor key or identity. No device writer.",
-      "sha256": "b999d92a34d16c443c3a9333dace479cd1293e586cc365f775d46d4657aadfed",
+      "sha256": "13f4790770d18801545af87e5ecc37c7ad8c650c3d48da5a8ef9666708233a03",
       "source": "tools/decode_cartridge_memory.py"
     },
     {
@@ -1460,10 +1548,10 @@
       "destination": "tools/test_panel_browser.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Disconnected browser driver with visibly synthetic data and disposable credentials.",
-      "sha256": "ee5154cf849b9abe8b0a5e728b2afdf34280923374d60e7776322383922e01dd",
+      "sha256": "6a0dff0eccadfce507b1d6a6cd1c2ecd6ee0382042421d9654dac3155bf7eae6",
       "source": "tools/test_panel_browser.py"
     }
   ],
   "schema": 1,
-  "version": "0.5.12-review"
+  "version": "0.5.13-review"
 }

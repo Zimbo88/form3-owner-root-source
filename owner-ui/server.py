@@ -38,6 +38,7 @@ from panel_data import (VERSION, CpuUsage, SafeTree, OwnerStore, HistoricalBundl
 import threading
 from http.server import BaseHTTPRequestHandler
 from urllib.parse import urlsplit
+from reset_client import ResetClient
 
 ROOT=Path(__file__).resolve().parents[1]
 ASSETS=Path(__file__).resolve().parent/'static'
@@ -220,7 +221,7 @@ def decorate_snapshot(data, bundle=None):
 
 def make_server(provider, token, port=1328, store=None, bundle=None, bind='127.0.0.1',
                 tls_context=None, interface=None, client_networks=None, listen_fd=None,
-                owner_lan_http=False, assignment=None):
+                owner_lan_http=False, assignment=None, reset_client=None):
     if len(token) < 24:
         raise ValueError('Access secret must contain at least 24 characters')
     if owner_lan_http:
@@ -350,7 +351,7 @@ def make_server(provider, token, port=1328, store=None, bundle=None, bind='127.0
             if not self.boundary():
                 return
             # Query strings are not used, including for authentication or file paths.
-            assets = {'/': ('index.html', 'text/html; charset=utf-8'), '/app.js': ('app.js', 'text/javascript; charset=utf-8'), '/style.css': ('style.css', 'text/css; charset=utf-8')}
+            assets = {'/': ('index.html', 'text/html; charset=utf-8'), '/app.js': ('app.js', 'text/javascript; charset=utf-8'), '/reset.js': ('reset.js', 'text/javascript; charset=utf-8'), '/style.css': ('style.css', 'text/css; charset=utf-8')}
             if self.path in assets:
                 name, kind = assets[self.path]
                 return self.reply(200, (ASSETS / name).read_bytes(), kind)
@@ -361,6 +362,12 @@ def make_server(provider, token, port=1328, store=None, bundle=None, bind='127.0
             if auth is None:
                 return
             try:
+                if self.path == '/api/cartridge-reset':
+                    if reset_client is None:
+                        return self.reply(200, {'state':'UNAVAILABLE','error':'Reviewed root helper not enabled in this runtime'})
+                    try:result=reset_client.request('status')
+                    except (ValueError,OSError):result={'state':'UNAVAILABLE','error':'Reviewed root helper unavailable; no write attempted'}
+                    return self.reply(200,result)
                 if self.path == '/api/power':
                     return self.reply(200, {'enabled':False,'state':'UNAVAILABLE',
                         'actions':['reboot','shutdown'],'reason':'Authoritative idle and safety state unavailable'})
@@ -389,7 +396,7 @@ def make_server(provider, token, port=1328, store=None, bundle=None, bind='127.0
                 return self.reply(503, {'error': 'Reviewed data unavailable or invalid; no fallback values'})
 
         def do_POST(self):
-            allowed = {'/api/login', '/api/logout', '/api/settings', '/api/refills', '/api/export', '/api/power'}
+            allowed = {'/api/login', '/api/logout', '/api/settings', '/api/refills', '/api/export', '/api/power', '/api/cartridge-reset/prepare', '/api/cartridge-reset/apply'}
             if self.path not in allowed:
                 return self.reply(405, {'error': 'No approved write action'})
             if not self.boundary(mutation=True):
@@ -421,6 +428,27 @@ def make_server(provider, token, port=1328, store=None, bundle=None, bind='127.0
                 session = self.authenticated(mutation=True)
                 if session is None:
                     return
+                if self.path.startswith('/api/cartridge-reset/'):
+                    if not session.get('authenticated'):
+                        return self.reply(403, {'error':'Owner login is required for a cartridge reset'})
+                    if reset_client is None:
+                        return self.reply(409, {'error':'Reviewed root helper is not enabled'})
+                    if self.path.endswith('/prepare'):
+                        if body:raise ValueError('Preview takes no device paths or settings')
+                        result=reset_client.request('prepare')
+                    else:
+                        if set(body)!={'plan_id','confirmation','secret'} or body.get('confirmation')!='RESET CLEAR USAGE':
+                            raise ValueError('Explicit usage reset confirmation required')
+                        now=time.monotonic()
+                        with lock:
+                            while failures and now-failures[0]>60:failures.popleft()
+                            if len(failures)>=6:
+                                return self.reply(429, {'error':'Authentication temporarily rate limited'})
+                            if not self.secret_ok(body.get('secret')):
+                                failures.append(now)
+                                return self.reply(403, {'error':'Re-enter the owner access secret'})
+                        result=reset_client.request('apply',body['plan_id'])
+                    return self.reply(409 if result.get('state')=='REFUSED' else 202,result)
                 if self.path == '/api/logout':
                     with lock:
                         sessions.pop(session['sid'], None)
@@ -523,9 +551,10 @@ def make_server(provider, token, port=1328, store=None, bundle=None, bind='127.0
 
 class SecondaryHTTP(object):
     """Independent bounded listener lifecycle; no primary socket or SSH ownership."""
-    def __init__(self, interface, provider, token, store=None, bundle=None):
+    def __init__(self, interface, provider, token, store=None, bundle=None, reset_client=None):
         self.interface = interface_name(interface)
         self.provider, self.token, self.store, self.bundle = provider, token, store, bundle
+        self.reset_client=reset_client
         self.current = None
         self.server = None
         self.worker = None
@@ -548,7 +577,7 @@ class SecondaryHTTP(object):
             try:
                 server = make_server(self.provider, self.token, 1328, self.store, self.bundle,
                                      observed[0], interface=self.interface,
-                                     owner_lan_http=True, assignment=observed)
+                                     owner_lan_http=True, assignment=observed,reset_client=self.reset_client)
                 worker = threading.Thread(target=server.serve_forever)
                 worker.daemon = True
                 worker.start()
@@ -628,7 +657,8 @@ def main():
     networks = [ipaddress.ip_network(x, strict=True) for x in a.allow_client_network]
     if a.interface and (not networks or any(n.version != 4 or n.prefixlen < 16 or not n.is_private for n in networks)):
         p.error('LAN requires narrow private IPv4 client networks; no IPv6 listener in this candidate')
-    secondary = SecondaryHTTP(a.owner_lan_http_interface, provider, token, store, bundle) if a.owner_lan_http_interface else None
+    reset_client=ResetClient() if a.live_host and not a.dev_http else None
+    secondary = SecondaryHTTP(a.owner_lan_http_interface, provider, token, store, bundle,reset_client) if a.owner_lan_http_interface else None
     current = None
     server = None
     worker = None
@@ -643,7 +673,7 @@ def main():
                         break  # Root supervisor must bind a fresh socket after DHCP changes.
                 current = address
                 if address:
-                    server = make_server(provider, token, a.port, store, bundle, address, context, a.interface, networks, a.listen_fd)
+                    server = make_server(provider, token, a.port, store, bundle, address, context, a.interface, networks, a.listen_fd,reset_client=reset_client)
                     if a.listen_fd is not None:
                         os.close(a.listen_fd)
                     worker = threading.Thread(target=server.serve_forever)
