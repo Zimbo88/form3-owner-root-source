@@ -138,6 +138,9 @@ def processes():
     return result
 
 
+EXPECTED_OWNER_VERSION = '0.5.8-review'
+
+
 def main():
     os.nice(10)
     resource.setrlimit(resource.RLIMIT_CORE,(0,0))
@@ -150,7 +153,7 @@ def main():
         raise ValueError('Expected reference normal-OS identity')
     if jread('/etc/formlabs/version.json').get('build',{}).get('name')!='2.5.6-2773':raise ValueError('Unsupported firmware')
     current=jread('/data/owner-maintenance/current.json')
-    if current.get('version')!='0.5.8-review' or os.path.exists('/data/owner-maintenance/pending.json'):raise ValueError('Unexpected owner state')
+    if current.get('version')!=EXPECTED_OWNER_VERSION or os.path.exists('/data/owner-maintenance/pending.json'):raise ValueError('Unexpected owner state')
     lock=threading.Lock();done=threading.Event();counts={'bytes':0,'events':0};children=[];start=time.monotonic()
     def emit(kind, payload):
         with lock:

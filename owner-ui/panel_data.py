@@ -1,6 +1,6 @@
 """Python 3.5-compatible bounded file adapters and owner-only state.
 
-No subprocess, D-Bus, device write, vendor setting write or external client.
+Bounded local files and passive allowlisted D-Bus signals only. No vendor writes.
 """
 from __future__ import division
 import datetime
@@ -11,9 +11,11 @@ import os
 import re
 import stat
 import threading
+import select
+import subprocess
 import time
 
-VERSION = '0.5.9-review'
+VERSION = '0.5.12-review'
 MAX_FILE = 2 * 1024 * 1024
 
 
@@ -74,7 +76,7 @@ class SafeTree(object):
             os.close(self.fd)
             self.fd = None
 
-    def read(self, relative, limit=MAX_FILE):
+    def read(self, relative, limit=MAX_FILE, with_info=False):
         parts = relative.split('/')
         if any(p in ('', '.', '..') for p in parts) or '\\' in relative:
             raise ValueError('Invalid relative path')
@@ -99,7 +101,8 @@ class SafeTree(object):
                     length += len(b)
                     if length > limit:
                         raise ValueError('Input exceeds limit')
-                return b''.join(chunks)
+                raw = b''.join(chunks)
+                return (raw, info) if with_info else raw
             finally:
                 os.close(f)
         finally:
@@ -567,3 +570,243 @@ def read_formule_capture(path, demo=False):
             'frames':len(frames),'status':status,'timestamp':None,'fresh':False,
             'safe_idle_proven':False,'live_connection':False,
             'note':'Copied Formule stream; no collection timestamp or current-state proof. Failed replies excluded.'}
+
+
+MATERIAL_NAMES = {'FLGPWH41': 'White V4.1', 'FLGPWH04': 'White',
+                  'FLGPCL04': 'Clear V4', 'FLGPCL05': 'Clear V5'}
+
+
+def material_code(value):
+    return value if isinstance(value, str) and re.match(r'^FL[A-Z0-9]{4,16}$', value) else None
+
+
+class PrinterFiles(object):
+    """Local prepared status, NOT an outbound request or measured safety state.
+
+    Only exact reviewed fields leave this adapter. Serial joins stay internal;
+    no raw map keys, job names, device identifiers or SecretKey reach the API.
+    Cached file mtimes are publication times, not sensor measurement times.
+    """
+    def __init__(self, tree):
+        self.tree = tree
+
+    def snapshot(self):
+        result = {'printer_state': field(), 'consumables': [], 'jobs': [],
+                  'tank_level': field(unit='mm'), 'job_layer': field(),
+                  'automatic_refill_pause': {'enabled': False, 'available': False,
+                      'reason': 'No verified pre-motor pause gate; panel polling cannot prevent motor actuation.'},
+                  'safe_idle_proven': False}
+        try:
+            raw, info = self.tree.read('data/printernet_client/ping.json', 512*1024, True)
+            status = strict_json(raw)['payload']['device_status']
+            if not isinstance(status, dict):
+                return result
+        except (OSError, ValueError, KeyError, TypeError):
+            return result
+        stamp = info.st_mtime
+        source = 'Local prepared gateway status; file mtime is publication time, not measurement time'
+        enum = status.get('status')
+        if enum not in ('IDLE', 'READY', 'PRINTING', 'PAUSED', 'PAUSING', 'PREPRINT',
+                        'PREPARING', 'ERROR', 'FINISHED', 'OFFLINE', 'BUSY'):
+            enum = None
+        result['printer_state'] = field(enum, 'CACHED', source, timestamp=stamp, max_age=60)
+        jobs = status.get('print_jobs')
+        if isinstance(jobs, list):
+            for index, job in enumerate(jobs[:64]):
+                if not isinstance(job, dict):
+                    continue
+                result['jobs'].append({'index': index+1, 'state': 'CACHED',
+                    'source': source, 'timestamp': stamp, 'current_job_proven': False,
+                    'material': material_code(job.get('material')),
+                    'layer_count': number(job.get('layer_count'), 0, 1000000),
+                    'layer_thickness_mm': number(job.get('layer_thickness_mm'), 0, 10),
+                    'volume_ml': number(job.get('volume_ml'), 0, 100000),
+                    'estimated_duration_ms': number(job.get('estimated_duration_ms'), 0, 1e12)})
+        carts = status.get('cartridges')
+        candidates = [('cartridge', c) for c in carts[:2]] if isinstance(carts, list) else []
+        if isinstance(status.get('tank'), dict):
+            candidates.append(('tank', status['tank']))
+        for kind, item in candidates:
+            if not isinstance(item, dict):
+                continue
+            present = item.get('type') == ('CARTRIDGE_PRESENT' if kind == 'cartridge' else 'TANK_PRESENT')
+            if not present:
+                continue  # Do not turn unknown or absent records into an inserted consumable.
+            code = material_code(item.get('material'))
+            view = {'kind': kind, 'fields': {}, 'native_reset_enabled': False,
+                    'estimated_remaining_ml': field(unit='mL')}
+            serial = item.get('serial')
+            if isinstance(serial, str) and re.match(r'^[A-Za-z0-9_-]{1,128}$', serial):
+                directory = 'Cartridges' if kind == 'cartridge' else 'Tanks'
+                try:
+                    data, meta = self.tree.read('data/'+directory+'/'+serial+'.json', 65536, True)
+                    view = consumable_view(data, kind, meta.st_mtime)
+                    for val in view['fields'].values():
+                        if val['value'] is not None:
+                            val['state'] = 'CACHED'
+                        val['source'] += '; persisted, measurement time unknown'
+                    if view['estimated_remaining_ml']['value'] is not None:
+                        view['estimated_remaining_ml']['state'] = 'CACHED'
+                    if kind == 'tank':
+                        level = view['fields']['LastResinLevel_mm']
+                        # Negative sentinels must not be presented as physical resin height.
+                        result['tank_level'] = field(number(level['value'], 0, 100), 'CACHED',
+                            'TankCartridgeDaemon LastResinLevel_mm; last saved reading, measurement age UNKNOWN',
+                            'mm', meta.st_mtime)
+                except (OSError, ValueError, TypeError):
+                    pass
+            view['material'] = field(MATERIAL_NAMES.get(code, code), 'CACHED', source+' / material', timestamp=stamp, max_age=60)
+            view['material_code'] = code
+            view['presence'] = field(True, 'CACHED', source+' / type', timestamp=stamp, max_age=60)
+            result['consumables'].append(view)
+        return result
+
+
+class PassivePrinterSignals(object):
+    """Fixed signal subscriptions, no device method calls or writable IPC.
+
+    Legacy eavesdrop fallback is permitted by the inspected system bus for the
+    unprivileged panel UID. BecomeMonitor denial alone does not imply no signals.
+    Pipe buffers, parser state, cache and reconnect rate are bounded. A disconnect
+    invalidates cached live values. No event grants safe-idle/dispense permission.
+    """
+    FILTERS = [
+        "type='signal',sender='com.formlabs.Sauron',path='/com/formlabs/Sauron',interface='com.formlabs.Sauron',member='statesChanged'",
+        "type='signal',sender='com.formlabs.Sauron',path='/com/formlabs/Sauron',interface='com.formlabs.Sauron',member='currentlyPrintingLayerChanged'",
+        "type='signal',sender='com.formlabs.CandyBus',interface='com.formlabs.Temperature',member='temperature'",
+        "type='signal',sender='org.freedesktop.DBus',interface='org.freedesktop.DBus',member='NameOwnerChanged',arg0='com.formlabs.Sauron'",
+        "type='signal',sender='org.freedesktop.DBus',interface='org.freedesktop.DBus',member='NameOwnerChanged',arg0='com.formlabs.CandyBus'"]
+    CHANNELS = {'/com/formlabs/momo/temperatures/'+n: n for n in ('Tower', 'ForceSense', 'Levelsense')}
+
+    def __init__(self):
+        self.lock = threading.Lock()
+        self.values = {}
+        self.stop = threading.Event()
+        self.worker = None
+        self.pending = b''
+
+    def clear(self):
+        with self.lock:
+            self.values.clear()
+
+    def accept(self, block, mono=None, wall=None):
+        if not isinstance(block, bytes) or len(block) > 65536:
+            return
+        try:
+            lines = block.decode('ascii').strip().splitlines()
+        except UnicodeError:
+            return
+        if not lines:
+            return
+        header = re.match(r'^signal time=[0-9.]+ sender=[:A-Za-z0-9_.-]+ -> destination=[^\r\n]{1,100} serial=[0-9]+ path=([^; ]+); interface=([^; ]+); member=([A-Za-z0-9_]+)$', lines[0])
+        if not header:
+            return
+        path, interface, member = header.groups()
+        if interface == 'org.freedesktop.DBus' and member == 'NameOwnerChanged':
+            self.clear()
+            return
+        body = '\n'.join(lines[1:])
+        key, value = None, None
+        if interface == 'com.formlabs.Temperature' and member == 'temperature' and path in self.CHANNELS:
+            match = re.match(r'^\s*struct \{\s*boolean (true|false)\s+double (-?[0-9.eE+]+)\s*\}\s*$', body)
+            if match:
+                key = 'temperature/'+self.CHANNELS[path]
+                try:
+                    value = number(float(match.group(2)), -50, 150) if match.group(1) == 'false' else None
+                except ValueError:
+                    pass
+        elif interface == 'com.formlabs.Sauron' and path == '/com/formlabs/Sauron':
+            if member == 'currentlyPrintingLayerChanged':
+                match = re.match(r'^\s*string "[A-Za-z0-9{}_-]{0,128}"\s+int32 ([0-9]{1,7})\s*$', body)
+                if match:
+                    key, value = 'job_layer', number(int(match.group(1)), 0, 1000000)
+            elif member == 'statesChanged':
+                match = re.match(r'^\s*string "[A-Za-z0-9{}_-]{0,128}"\s+array \[([\s\S]*)\]\s*$', body)
+                if match and len(match.group(1)) < 8192:
+                    values = re.findall(r'^\s*string "((?:HIGH_LEVEL|SAURON|PRINT|LEVELSENSE|PREHEAT|PR_ERROR)_[A-Z_0-9]{1,90})"\s*$', match.group(1), re.M)
+                    if 0 < len(values) <= 64:
+                        key, value = 'job_state', sorted(set(values))
+        if key is not None:
+            with self.lock:
+                self.values[key] = (value, time.monotonic() if mono is None else mono,
+                                    time.time() if wall is None else wall)
+
+    def snapshot(self, mono=None):
+        now = time.monotonic() if mono is None else mono
+        with self.lock:
+            values = dict(self.values)
+        result = {'sensors': []}
+        for key, (value, observed, stamp) in values.items():
+            limit = 10 if key.startswith('temperature/') else 60
+            fresh = 0 <= now-observed <= limit
+            view = field(value if fresh else None, 'LIVE',
+                'Passive system-bus '+key+'; no method call or safety clearance',
+                'C' if key.startswith('temperature/') else None, stamp)
+            view['fresh'] = bool(fresh and value is not None)
+            if key.startswith('temperature/'):
+                result['sensors'].append({'name': key.split('/')[1], 'celsius': view['value'], 'observation': view})
+            else:
+                result[key] = view
+        return result
+
+    def feed(self, chunk):
+        # dbus-monitor does NOT promise blank lines between messages.
+        # Complete the preceding frame at the next header; partial pipe reads
+        # must not manufacture truncated values. Temperature events bound latency.
+        self.pending += chunk
+        if len(self.pending) > 65536:
+            self.pending = b''
+            self.clear()
+            raise ValueError('Signal frame limit')
+        while True:
+            start = self.pending.find(b'signal time=')
+            if start < 0:
+                return
+            self.pending = self.pending[start:]
+            end = self.pending.find(b'\nsignal time=', 1)
+            if end < 0:
+                return
+            self.accept(self.pending[:end])
+            self.pending = self.pending[end+1:]
+
+    def start(self):
+        if self.worker is None:
+            self.worker = threading.Thread(target=self._run)
+            self.worker.daemon = True
+            self.worker.start()
+
+    def close(self):
+        self.stop.set()
+        if self.worker:
+            self.worker.join(4)
+        self.clear()
+
+    def _run(self):
+        while not self.stop.is_set():
+            process = None
+            try:
+                process = subprocess.Popen(['/usr/bin/dbus-monitor', '--system']+self.FILTERS,
+                    stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                    close_fds=True, env={'PATH':'/usr/bin:/bin', 'LC_ALL':'C'})
+                self.pending = b''
+                while not self.stop.is_set() and process.poll() is None:
+                    ready, _, _ = select.select([process.stdout], [], [], 1)
+                    if not ready:
+                        continue
+                    chunk = os.read(process.stdout.fileno(), 4096)
+                    if not chunk:
+                        break
+                    self.feed(chunk)
+            except (OSError, ValueError):
+                pass  # No raw messages, paths or credentials in service logs.
+            finally:
+                if process:
+                    if process.poll() is None:
+                        process.terminate()
+                        try:
+                            process.wait(timeout=2)
+                        except subprocess.TimeoutExpired:
+                            process.kill(); process.wait(timeout=1)
+                    process.stdout.close()
+                self.clear()
+            self.stop.wait(30)

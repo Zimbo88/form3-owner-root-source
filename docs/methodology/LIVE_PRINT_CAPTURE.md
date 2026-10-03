@@ -47,10 +47,12 @@ SSH stdin and are not installed on the printer. No keys or passwords are embedde
 : "${OWNER_SSH_CONFIG:?existing reviewed strict host-key-pinned SSH config}"
 : "${OWNER_SSH_ALIAS:?explicit alias in that config}"
 : "${PRINT_SESSION:?new path beneath research-private}"
+: "${OWNER_VERSION:?exact reviewed installed owner release, for example 0.5.12-review}"
 umask 077
 mkdir -m 700 -- "$PRINT_SESSION"
 python3 tools/record_print_session.py run --session "$PRINT_SESSION" \
-  --ssh-config "$OWNER_SSH_CONFIG" --ssh-alias "$OWNER_SSH_ALIAS" --seconds 43200
+  --ssh-config "$OWNER_SSH_CONFIG" --ssh-alias "$OWNER_SSH_ALIAS" \
+  --owner-version "$OWNER_VERSION" --seconds 43200
 ```
 
 The command stays running. A second laptop process can run the independent bounded
@@ -59,8 +61,16 @@ state snapshot recorder against the same session:
 ```sh
 # LAPTOP — also remains running; writes private laptop files only.
 python3 tools/record_print_state.py --session "$PRINT_SESSION" \
-  --ssh-config "$OWNER_SSH_CONFIG" --ssh-alias "$OWNER_SSH_ALIAS" --seconds 43200
+  --ssh-config "$OWNER_SSH_CONFIG" --ssh-alias "$OWNER_SSH_ALIAS" \
+  --owner-version "$OWNER_VERSION" --seconds 43200
 ```
+
+The explicit owner version is bound into each saved target source before sending.
+Firmware, kernel, selected slot and SSH host trust remain separately checked. The
+state companion retries only recognized transient transport failures, with a
+12-consecutive-failure limit and 5–30 second backoff. Authentication, host-key,
+identity or unknown failures stop it. `coverage.private.jsonl` records failed and
+resumed snapshots; reconnection cannot recover missed observations.
 
 Before tank insertion or print start, verify `status.json`: state `recording`,
 fresh saved-through time, received samples, running signal observer, and completed

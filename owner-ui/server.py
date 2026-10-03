@@ -34,7 +34,7 @@ except ImportError:
     from lan_ipv4 import interface_assignment, interface_name
 from panel_data import (VERSION, CpuUsage, SafeTree, OwnerStore, HistoricalBundle, ERROR_REFERENCE, field,
     strict_json, validate_settings, policy_preview, DEFAULT_SETTINGS, SETTINGS_CATALOG,
-    read_formule_capture, number, refill_preview)
+    read_formule_capture, number, refill_preview, PrinterFiles, PassivePrinterSignals)
 import threading
 from http.server import BaseHTTPRequestHandler
 from urllib.parse import urlsplit
@@ -43,6 +43,16 @@ ROOT=Path(__file__).resolve().parents[1]
 ASSETS=Path(__file__).resolve().parent/'static'
 SERVICES=['Formule','Palantir','Sauron','CandyBus','TankCartridgeDaemon','PrinterLegitimacyChecker',
           'richard-nixon','bonsoir','sshd','connmand','galvatron','fluent-bit','zerotier-one']
+
+def write_all(stream, data):
+    """Python 3.5 SocketIO.write may return a short count, including on assets."""
+    view = memoryview(data)
+    while view:
+        count = stream.write(view)
+        if not isinstance(count, int) or count <= 0 or count > len(view):
+            raise OSError('Incomplete HTTP write')
+        view = view[count:]
+
 
 class BoundedHTTPServer(ThreadingMixIn, HTTPServer):
     """Bound concurrent development requests and slow-client lifetime."""
@@ -87,8 +97,15 @@ class SampleProvider:
 
 class LinuxProvider:
     """Read-only adapter for Linux proc/sys and the recovered version-file convention."""
-    def __init__(self,root=Path('/')):
+    def __init__(self,root=Path('/'),passive=False):
         self.root=Path(root);self.tree=SafeTree(root);self.cpu_usage=CpuUsage()
+        self.printer_files=PrinterFiles(self.tree);self.signals=PassivePrinterSignals()
+        if passive and self.root == Path('/'):
+            try:version=strict_json(self.tree.read('etc/formlabs/version.json',65536))['build']['name']
+            except (OSError,ValueError,KeyError,TypeError):version=None
+            if version == '2.5.6-2773':self.signals.start()
+    def close(self):
+        self.signals.close();self.tree.close()
     def read(self,path):
         raw=self.tree.optional(path.lstrip('/'),65536)
         try:return raw.decode('utf-8').strip() if raw is not None else None
@@ -134,6 +151,9 @@ class LinuxProvider:
             comm=self.read(str(proc.relative_to(self.root)/'comm'))
             if comm:names.add(comm)
         result['services']=[{'name':n,'running':n[:15] in names} for n in SERVICES]
+        if result['firmware']['version']=='2.5.6-2773':
+            result['printer']=self.printer_files.snapshot()
+            result['printer'].update(self.signals.snapshot())
         return result
 
 
@@ -176,9 +196,15 @@ def decorate_snapshot(data, bundle=None):
     fields['gpu_usage']=field(source='No reviewed GPU utilization counter; GPU temperature is a separate reading',unit='%')
     fields['memory_total']=field(data['system'].get('memory_total_bytes'),state,'/proc/meminfo','bytes',now,30)
     data.setdefault('protocol_observation', {'state':'UNAVAILABLE','status':{},'safe_idle_proven':False,'live_connection':False})
+    printer=data.get('printer',{})
+    fields['printer_state']=printer.get('printer_state',field())
+    fields['job_state']=printer.get('job_state',field(source='No fresh passive Sauron state signal; prepared printer status is separate'))
+    fields['job_layer']=printer.get('job_layer',field())
+    fields['tank_level']=printer.get('tank_level',field(unit='mm'))
     data['fields'] = fields
     data['observed_at'] = now
     data['sensors'] = [dict(z, observation=field(z['celsius'], state, z.get('source', '/sys/class/thermal'), 'C', now, 30)) for z in data['thermal_zones']]
+    data['sensors'].extend(data.get('printer',{}).get('sensors',[]))
     data['package_version'] = VERSION
     data['settings_catalog'] = SETTINGS_CATALOG
     data['vendor_writes_enabled'] = False
@@ -225,6 +251,11 @@ def make_server(provider, token, port=1328, store=None, bundle=None, bind='127.0
         def log_message(self, *args):
             pass
 
+        def flush_headers(self):
+            if hasattr(self, '_headers_buffer'):
+                write_all(self.wfile, b''.join(self._headers_buffer))
+                self._headers_buffer = []
+
         def reply(self, status, body, kind='application/json', extra=None):
             if not isinstance(body, bytes):
                 body = json.dumps(body, sort_keys=True, allow_nan=False).encode('utf-8')
@@ -240,7 +271,7 @@ def make_server(provider, token, port=1328, store=None, bundle=None, bind='127.0
             self.close_connection = True
             try:
                 self.end_headers()
-                self.wfile.write(body)
+                write_all(self.wfile, body)
             except (BrokenPipeError, ConnectionResetError, TimeoutError):
                 pass
 
@@ -590,7 +621,8 @@ def main():
     store = OwnerStore(a.state)
     bundle = HistoricalBundle(a.bundle) if a.bundle else None
     token = read_secret(a.secret_file)
-    provider = LinuxProvider() if a.live_host else SampleProvider()
+    provider = LinuxProvider(passive=True) if a.live_host else SampleProvider()
+    live_provider = provider
     if a.capture_demo and not a.formule_capture:p.error('--capture-demo requires --formule-capture')
     if a.formule_capture:provider=CaptureProvider(provider,read_formule_capture(a.formule_capture,a.capture_demo))
     networks = [ipaddress.ip_network(x, strict=True) for x in a.allow_client_network]
@@ -627,6 +659,7 @@ def main():
             secondary.close()
         if server:
             server.shutdown();server.server_close()
+        if hasattr(live_provider,'close'):live_provider.close()
         store.tree.close()
         if bundle:
             bundle.tree.close()

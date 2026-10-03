@@ -1,11 +1,11 @@
 {
-  "excluded_tracked_file_count": 667,
+  "excluded_tracked_file_count": 672,
   "hardware_contact": false,
   "history_included": false,
   "kind": "UNSIGNED SOURCE REVIEW; not an installation package",
   "legal_clearance": false,
-  "producer_allowlist_sha256": "eb436921ed096661b65a97eab8d645dfa62b61dd159e11cfe2f4f3a031f779de",
-  "producer_commit": "78f8b88024c4090ed4386fa2cbeb28824f4499d0",
+  "producer_allowlist_sha256": "3012c44c1284a9fa1cdcb1ee45a409427dd6403624a240f3dbc80f4095fcaecb",
+  "producer_commit": "c1ee68815ec6dc423bc64fbae77a9ec1d3b0d158",
   "reviewed_files": [
     {
       "category": "notice",
@@ -60,7 +60,7 @@
       "destination": "VERSION",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Project version, distribution boundary or retained authorship/third-party notice.",
-      "sha256": "8b79e2afbf7f652a963464ac6f744e984fb4c86602110aad6fec8edf27853a69",
+      "sha256": "9233df1b69e7c010c954bfc267fa518603b6b558a9be91823940b2434cfb9866",
       "source": "VERSION"
     },
     {
@@ -380,7 +380,7 @@
       "destination": "docs/methodology/LIVE_PRINT_CAPTURE.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Passive acquisition method and explicitly bounded historical observation claims.",
-      "sha256": "be47ab349ace6688e62de8fc80194663ea7071281f1cc70148cb885c834a67d0",
+      "sha256": "14a4dbdcb2dcdcdacd7b30adee42dac164fb0a2f358d20086e8d7bb0c2d44292",
       "source": "docs/methodology/LIVE_PRINT_CAPTURE.md"
     },
     {
@@ -412,7 +412,7 @@
       "destination": "docs/public/LOG_REVIEW.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Offline private log review, evidence coverage and historical-panel instructions.",
-      "sha256": "de896336eb1e6b68472d9ad9c53ba4ce2c879b2374786d62e2a693751c9d96ea",
+      "sha256": "034c5351efbb7f7f794cdff23458ddad8dfd00ca9a49672e2dd6c17816a7e8c8",
       "source": "docs/public/LOG_REVIEW.md"
     },
     {
@@ -420,7 +420,7 @@
       "destination": "docs/public/NATIVE_DISPLAY.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored scoped reproduction guide; no private research records or recovered vendor source.",
-      "sha256": "72452a1fb38daf1aeb77e7581b1510232af8cb663ce677378fefabc96ed2485b",
+      "sha256": "c22b5c3a40cb062432d75ba60c3f490b2ef214d7ec8b500ee79a5cf89cd0bd3f",
       "source": "docs/public/NATIVE_DISPLAY.md"
     },
     {
@@ -604,7 +604,7 @@
       "destination": "owner-ui/panel_data.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored standalone panel/read-adapter source or project documentation; no vendor payload.",
-      "sha256": "ad250d6db3ac597f880625666804f3af5f0a535d07db6c2e40efcb339c83eb17",
+      "sha256": "434f2b59cf5686ea024d756e0e35dc0524440568f90d0daa4ee0bfd1d0e98927",
       "source": "owner-ui/panel_data.py"
     },
     {
@@ -612,7 +612,7 @@
       "destination": "owner-ui/server.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored standalone panel/read-adapter source or project documentation; no vendor payload.",
-      "sha256": "56118a77876394099272d3441597c8cfb711286dc2a514a027e9be2c4a7ec5ac",
+      "sha256": "b057162eb063a16eba50b430045fe93a6dbb233359ccbdc5b0f711f9a0eb6dd8",
       "source": "owner-ui/server.py"
     },
     {
@@ -620,7 +620,7 @@
       "destination": "owner-ui/static/app.js",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored standalone panel/read-adapter source or project documentation; no vendor payload.",
-      "sha256": "68a9f378c894767e2a052a4e14458014273115e556a38bd0355f20f15f3c1579",
+      "sha256": "5e5bef5c3b493327f9c32293694e3aace6f05e69dfcdac4b49fc7d7b08b35117",
       "source": "owner-ui/static/app.js"
     },
     {
@@ -817,6 +817,14 @@
     },
     {
       "category": "synthetic-test",
+      "destination": "tests/test_capture_readiness.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored bounded read-only capture/review tool or synthetic safety fixture; no acquired records.",
+      "sha256": "1fe3003ea38df0ddeaa81c1790d68ea3f58e5156e4e839004f9f56fd0f577290",
+      "source": "tests/test_capture_readiness.py"
+    },
+    {
+      "category": "synthetic-test",
       "destination": "tests/test_cpu_usage.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
@@ -865,10 +873,18 @@
     },
     {
       "category": "synthetic-test",
+      "destination": "tests/test_live_printer_readers.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored bounded read-only capture/review tool or synthetic safety fixture; no acquired records.",
+      "sha256": "38caa722a85f92528f608605d44340e5b4bc0dfc4e054b3143084050cdf6ab7b",
+      "source": "tests/test_live_printer_readers.py"
+    },
+    {
+      "category": "synthetic-test",
       "destination": "tests/test_native_clock_timezone.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
-      "sha256": "e940697d23a6a25b6815847bb4dd6383b3d63d592d1cd63583e62f0bd301162c",
+      "sha256": "e0ad357f05cf60a367369767db92f0e657e0abb49e8c2405e6f8fcc832757e08",
       "source": "tests/test_native_clock_timezone.py"
     },
     {
@@ -876,7 +892,7 @@
       "destination": "tests/test_native_display_transaction.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
-      "sha256": "ecb21e04ffb536a9ec848afa272c7c3da47e1d38eb933160a674a9af97f52bdb",
+      "sha256": "71d8147fa7632391b6545ab459cd957f2ab56451c33dab246f08af84e105ed91",
       "source": "tests/test_native_display_transaction.py"
     },
     {
@@ -894,6 +910,22 @@
       "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
       "sha256": "084beef49427271d480a4b33abb5176e47a3c74c3b10a8bc2086194e08fcb2ce",
       "source": "tests/test_owner_ui.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_panel_asset_check.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored bounded read-only capture/review tool or synthetic safety fixture; no acquired records.",
+      "sha256": "0bfce9d5e0977e75a9d60cb7be3d4819eb9bbd1f733ce011e5a4570031d1a7e5",
+      "source": "tests/test_panel_asset_check.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_post_print_review.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored bounded read-only capture/review tool or synthetic safety fixture; no acquired records.",
+      "sha256": "65002bddd5e063d263e97707f96ff2f96b31e1a985666ad1c57cc202265b624b",
+      "source": "tests/test_post_print_review.py"
     },
     {
       "category": "synthetic-test",
@@ -1012,7 +1044,7 @@
       "destination": "tools/build_native_clock_review.py",
       "license": "MIT for authored transformation; target matching expression is compatibility context, not relicensed vendor code",
       "provenance": "Authored clock recipe plus a short original binding expression for exact matching; this minimal context needs specific publication review.",
-      "sha256": "ca58f43bc4490da0b607d686378be103bf82c5c9c52ae058b2b0430c0a9321e9",
+      "sha256": "7e6cdfb1868fd3714546ec0ed2911475061b9659b4384d4dc197e84946788de3",
       "source": "tools/build_native_clock_review.py"
     },
     {
@@ -1073,6 +1105,22 @@
     },
     {
       "category": "authored-code",
+      "destination": "tools/capture_policy.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored bounded read-only capture/review tool or synthetic safety fixture; no acquired records.",
+      "sha256": "3c0a62a598f5f266477c1be59517ab7be394453fdb8b4a9d60507ebe6f0f5bae",
+      "source": "tools/capture_policy.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/check_panel_assets.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored bounded read-only capture/review tool or synthetic safety fixture; no acquired records.",
+      "sha256": "0edba52ef1f4da343a71271e95c43dfd57bd65c669613411d85d1fd225020330",
+      "source": "tools/check_panel_assets.py"
+    },
+    {
+      "category": "authored-code",
       "destination": "tools/create_owner_ssh_profile.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Local-only strict SSH profile creation from independently reviewed public host fingerprint; no connection or private-key content access.",
@@ -1129,6 +1177,14 @@
     },
     {
       "category": "authored-code",
+      "destination": "tools/inspect_diagnostic_databases.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored bounded read-only capture/review tool or synthetic safety fixture; no acquired records.",
+      "sha256": "a251649de99ee0387ee502d10867b4f26a4fbb12bcf5b2e58e7261414328a56f",
+      "source": "tools/inspect_diagnostic_databases.py"
+    },
+    {
+      "category": "authored-code",
       "destination": "tools/inspect_palantir_resources.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
@@ -1172,7 +1228,7 @@
       "destination": "tools/native_display_transaction.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
-      "sha256": "c796d9777d789a313821635e191d63bfaac584d8845a7a27ae3dc9bc9a42b06c",
+      "sha256": "32767a63e1dfc6024dff9761d0528af8e957923ece43bad6bdb7ee64a41b798c",
       "source": "tools/native_display_transaction.py"
     },
     {
@@ -1196,7 +1252,7 @@
       "destination": "tools/print_capture_agent.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Explicitly authorized passive reference recorder; no embedded credentials or printing commands.",
-      "sha256": "e14df9343dd2657e516f2d65873de2d919afea91053168c629c1e40f4b5df11e",
+      "sha256": "a449d650049063e26b3c25306a69e8a2a75c97e0f83ebd522da6ad1b34a3e114",
       "source": "tools/print_capture_agent.py"
     },
     {
@@ -1204,7 +1260,7 @@
       "destination": "tools/print_state_snapshot.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Read-only named filesystem mirror snapshot; no chip or counter writes.",
-      "sha256": "d7b44737187ffb52ccfe18d197cddc56e0e61d4725acce56988dc90158a06655",
+      "sha256": "b2c5294212a0c7036a9cec5fe5e63d3c224167ddc84575fd6406ef325ef799ab",
       "source": "tools/print_state_snapshot.py"
     },
     {
@@ -1212,7 +1268,7 @@
       "destination": "tools/record_print_session.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Bounded laptop recorder requiring an explicit existing pinned SSH configuration.",
-      "sha256": "b7a17326d8f4023c95eb44af647588fb8c71974170432d5b33ba0f383a8f7a37",
+      "sha256": "22cac87aa750fa3220b7bc2caf4f1f2a3200cf6b6bd390a2489e1339307fed37",
       "source": "tools/record_print_session.py"
     },
     {
@@ -1220,7 +1276,7 @@
       "destination": "tools/record_print_state.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Bounded private laptop mirror recorder; explicit authorized target only.",
-      "sha256": "0244d99e4b998b0e8802f9b896c290717498572761ec6dbeb02c316b2cd11176",
+      "sha256": "88408f7e2f99b6340b37cf1813b7db0e40942080784f66d8afc1c7e12a4be339",
       "source": "tools/record_print_state.py"
     },
     {
@@ -1230,6 +1286,22 @@
       "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
       "sha256": "70f771c43908aeff8730723b77d3da3bab9d78e03bc96e88725198700bc5f653",
       "source": "tools/rescue_common.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/review_consumable_history.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored bounded read-only capture/review tool or synthetic safety fixture; no acquired records.",
+      "sha256": "6f41c9301f0f4339c6d7ec1b0a250a91d8e0f1951e19da94f7ce398a748e4334",
+      "source": "tools/review_consumable_history.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/review_print_progress.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored bounded read-only capture/review tool or synthetic safety fixture; no acquired records.",
+      "sha256": "57fdebf38e9a09a5c8aebfcb3c20439f32c372b0ec87d2d8efae27602299e957",
+      "source": "tools/review_print_progress.py"
     },
     {
       "category": "authored-code",
@@ -1276,10 +1348,10 @@
       "destination": "tools/test_panel_browser.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Disconnected browser driver with visibly synthetic data and disposable credentials.",
-      "sha256": "c66534396d1bde26179c35a77cddacb101d2da7870907734ad3576d91abfb882",
+      "sha256": "ee5154cf849b9abe8b0a5e728b2afdf34280923374d60e7776322383922e01dd",
       "source": "tools/test_panel_browser.py"
     }
   ],
   "schema": 1,
-  "version": "0.5.9-review"
+  "version": "0.5.12-review"
 }

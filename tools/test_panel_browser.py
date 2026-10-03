@@ -11,7 +11,7 @@ CODE=r'''
 import sys,os,json,socket,subprocess,time,threading,base64
 sys.path.insert(0,'/work/owner-ui')
 import server
-from panel_data import OwnerStore,HistoricalBundle,consumable_view
+from panel_data import OwnerStore,HistoricalBundle,consumable_view,field
 os.mkdir('/tmp/state',0o700);store=OwnerStore('/tmp/state')
 os.mkdir('/tmp/bundle',0o700)
 cartridge=consumable_view(b'{"OriginalVolume_mL":1000,"EstimatedVolumeDispensed_ml":800}','cartridge')
@@ -29,7 +29,15 @@ open('/tmp/bundle/print_session.json','w').write(json.dumps({'schema_version':1,
     {'timestamp':1700000010,'kind':'task_signal','value':'finished'}]}))
 bundle=HistoricalBundle('/tmp/bundle')
 store.add_refill({'record_sha256':cartridge['record_sha256'],'quantity_ml':200,'same_material_asserted':True})
-srv=server.make_server(server.SampleProvider(),'browser-fixture-only-owner-secret',1328,store,bundle)
+class BrowserProvider(server.SampleProvider):
+ def snapshot(self):
+  r=super().snapshot()
+  r['printer']={'printer_state':field('IDLE','DEMO','Synthetic fixture'),
+   'tank_level':field(10.25,'DEMO','Synthetic last saved level','mm'),
+   'consumables':[dict(cartridge,material=field('White V4.1','DEMO','Synthetic fixture'))],
+   'jobs':[],'sensors':[]}
+  return r
+srv=server.make_server(BrowserProvider(),'browser-fixture-only-owner-secret',1328,store,bundle)
 t=threading.Thread(target=srv.serve_forever,daemon=True);t.start()
 os.mkdir('/tmp/profile',0o700)
 open('/tmp/profile/user.js','w').write('user_pref("marionette.port",2828);\nuser_pref("browser.shell.checkDefaultBrowser",false);\nuser_pref("datareporting.healthreport.uploadEnabled",false);\nuser_pref("toolkit.telemetry.enabled",false);\nuser_pref("browser.startup.homepage_override.mstone","ignore");\nuser_pref("browser.newtabpage.enabled",false);\n')
@@ -87,6 +95,8 @@ try:
   r=js('return {title:document.getElementById("page-title").textContent,children:document.getElementById("content").children.length,error:document.getElementById("error").textContent};')['value']
   if r['children']==0 or r['error']:raise RuntimeError('Page failed: '+page)
   if page=='diagnostics' and not js('return document.getElementById("content").textContent.includes("RESET_WHILE_PRINTING");')['value']:raise RuntimeError('Code reference missing')
+  if page=='materials' and not js('return document.getElementById("content").textContent.includes("10.25 mm") && document.getElementById("content").textContent.includes("White V4.1");')['value']:raise RuntimeError('Material/level fields not rendered')
+  if page=='materials' and not js('return Array.from(document.querySelectorAll("#content button")).some(b=>b.disabled && b.textContent==="Pre-dispense pause · unavailable") && document.getElementById("content").textContent.includes("This panel does not prevent automatic filling.");')['value']:raise RuntimeError('Unavailable pre-dispense warning missing')
   if page=='materials' and not js('return document.getElementById("content").textContent.includes("Read-only reconciliation preview");')['value']:
    raise RuntimeError('Refill preview not rendered')
   if page=='sensors' and not js('return document.getElementById("content").textContent.includes("Gaps >300 s");')['value']:
@@ -98,7 +108,7 @@ try:
    open('/result/'+page+'-DEMO.png','wb').write(base64.b64decode(shot))
  js('document.querySelector("nav [data-page=status]").click();')
  if js('return document.querySelectorAll("nav button").length;')['value']!=5:raise RuntimeError('Navigation not consolidated')
- if not js('return document.getElementById("content").textContent.includes("GPU activity: unavailable");')['value']:raise RuntimeError('Unknown GPU activity mislabeled')
+ if not js('return document.getElementById("content").textContent.includes("GPU activity and live fan RPM: unavailable");')['value']:raise RuntimeError('Unknown GPU activity mislabeled')
  command('WebDriver:SetWindowRect',{'width':390,'height':844});time.sleep(.2)
  small_view=js('return {width:window.innerWidth,height:window.innerHeight};')['value']
  if not js('return document.documentElement.scrollWidth<=window.innerWidth;')['value']:raise RuntimeError('Mobile horizontal overflow')

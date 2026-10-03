@@ -86,6 +86,10 @@ class NativeTransaction(unittest.TestCase):
     def test_factory_clock_profile_changes_only_pinned_resource(self):
         p=m.PROFILES['local-clock-factory']
         self.assertEqual(p,{m.RCC:(m.PINS[m.RCC][0],m.LOCAL_SHA,'clock.rcc',0o644)})
+    def test_printing_clock_profile_is_clock_only_and_pinned(self):
+        self.assertEqual(m.PROFILES['printing-clock'],{m.RCC:(m.LOCAL_SHA,m.PRINTING_CLOCK_SHA,'clock.rcc',0o644)})
+        self.assertEqual(len(m.PRINTING_CLOCK_SHA),64)
+
     def test_ready_clock_profiles_are_separate_and_clock_only(self):
         self.assertEqual(m.PROFILES['ready-clock'],{m.RCC:(m.LOCAL_SHA,m.READY_CLOCK_SHA,'clock.rcc',0o644)})
         self.assertEqual(m.PROFILES['ready-clock-factory'],{m.RCC:(m.PINS[m.RCC][0],m.READY_CLOCK_SHA,'clock.rcc',0o644)})

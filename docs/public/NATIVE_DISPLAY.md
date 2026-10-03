@@ -14,25 +14,22 @@ Reference: selected p6, Form 3, firmware 2.5.6-2773.
 |---|---|
 | Original RCC | `/usr/share/Formlabs/Palantir-Form3/Palantir.rcc` — `969cae93da58f0e2be6040b48eea071f678b12e55b592d4fd7298060d2e05150` |
 | Previously installed Idle-only clock RCC | `27ed8d7e10d26f4ce9d03888bd69fc2a022a4b88b4a3eb452a7c25e7249f10b4` |
-| Current Idle/Ready short-date candidate RCC (not installed) | `b184f0b135dc7752098eba1acef9aa543aeaeabef006e70a38b302917753207d` |
+| Previous Idle/Ready short-date candidate RCC | `b184f0b135dc7752098eba1acef9aa543aeaeabef006e70a38b302917753207d` |
+| Current Idle/Ready/Printing clock RCC | `60eba559ded4d4be0cde58f775872376e7e7168134acaef9a00bebf498ec7f45` |
 | Original splash executable | `/usr/bin/psplash-default` — `2d51b6ea8ea27612fb5ae6a830a702891c37944f42492ba6ebaaeed319aaac2f` |
 | Original Owner Root artwork splash | `9cbb2ed4bf85bacf40a2eadcb1997532f2b6bf0251164272a61d5b0ad11894ce` |
 
 Only the `qml/BaseScreen.qml` clock binding/fragment changes in the RCC; 560 other
 members remain identical. The authored `owner-ui/native/idle-clock.qmlinc` displays
-`Idle DD.MM.YY HH:mm` or `Ready DD.MM.YY HH:mm`, one space, no dot/UTC suffix.
-The original helper classifies Ready separately from Idle; the previous binding
-excluded Ready. The revised binding allows both when there is no active atom and
-no starting-print flag. Custom subtitles, active/paused prints and print startup
-retain their original text. These UI predicates do not prove mechanical safe idle.
-The Europe/Berlin rule is
-bounded/tested for 2020–2037; invalid dates are unavailable. This is not automatic
-international timezone selection. No global NTP/timezone, license time, status
-engine or safety decision is changed. I confirmed the local time and normal display
-operation on my printer for the previous Idle-only version; the Ready/short-year
-candidate has only offline validation so far. It was deliberately not installed
-or activated during the live print observation. Real header fit and target Qt
-rendering for this revision remain acceptance checks after the print is finished.
+`Idle DD.MM.YY HH:mm`, `Ready DD.MM.YY HH:mm` or `Printing DD.MM.YY HH:mm`,
+one space, no dot/UTC suffix. Printing is selected using the same active-atom,
+paused and pausing properties as the native status helper, not a translated label.
+Custom subtitles and paused/pausing/startup text retain priority. These predicates
+do not prove mechanical safe idle. The display-only Europe/Berlin rule is tested
+for 2020–2037; invalid time becomes unavailable. No global clock or license state
+changes. The current derivative was installed on the reference printer; the first
+printing-state visual fit check is still pending. The authored binding is tested
+with synthetic Printing/Paused/Pausing/custom-subtitle cases and Qt resource loading.
 
 The current symbol is original terminal/root geometry with orange `rooted` and
 geometric OWNER text. No manufacturer logo is reused. Source:

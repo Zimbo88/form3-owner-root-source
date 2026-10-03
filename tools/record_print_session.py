@@ -17,6 +17,7 @@ import selectors
 import signal
 import subprocess
 import time
+from capture_policy import bind_source
 
 MAX_RECORD = 2 << 20
 MAX_BYTES = 4 << 30
@@ -63,24 +64,25 @@ def validate_event(line):
     return event
 
 
-def run(base, config, alias, seconds):
+def run(base, config, alias, seconds, owner_version='0.5.8-review'):
     if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.-]{0,100}',alias):raise ValueError('Explicit SSH alias required')
     if not 60<=seconds<=24*3600:raise ValueError('Duration must be bounded to 1 minute–24 hours')
     config=Path(config).resolve(strict=True)
-    source=Path(__file__).with_name('print_capture_agent.py').read_bytes()
+    source=bind_source(Path(__file__).with_name('print_capture_agent.py').read_bytes(),owner_version)
     ast.parse(source.decode(),feature_version=(3,5))
     tools=base/'tools';tools.mkdir(exist_ok=True,mode=0o700)
     saved=tools/'print_capture_agent.accepted.py'
     with saved.open('xb') as f:f.write(source)
     # Preserve the host collector matching this session before running it.
     with (tools/'record_print_session.accepted.py').open('xb') as f:f.write(Path(__file__).read_bytes())
+    with (tools/'capture_policy.accepted.py').open('xb') as f:f.write(Path(__file__).with_name('capture_policy.py').read_bytes())
     raw=base/'raw';raw.mkdir(exist_ok=True,mode=0o700)
     (base/'metadata').mkdir(exist_ok=True,mode=0o700)
     status={'schema':1,'state':'starting','pid':os.getpid(),'started_utc':utc(),'deadline_seconds':seconds,
             'source_sha256':hashlib.sha256(source).hexdigest(),'bytes':0,'connections':0,'events':0,
             'event_counts':{},'coverage_gaps':0,'automatic_printer_writes':False,'printing_commands':False,
             'capture_scope':'selected regular logs, proc/sys snapshots and selected passive D-Bus signals'}
-    atomic(base/'metadata/capture-config.private.json',{'ssh_config':str(config),'ssh_alias':alias,'seconds':seconds,'max_bytes':MAX_BYTES})
+    atomic(base/'metadata/capture-config.private.json',{'ssh_config':str(config),'ssh_alias':alias,'seconds':seconds,'max_bytes':MAX_BYTES,'expected_owner_version':owner_version})
     start=time.monotonic();stop=False;sequence=0;last_write=0;identities=[]
     def request_stop(*_):
         nonlocal stop
@@ -122,7 +124,7 @@ def run(base, config, alias, seconds):
                             event=validate_event(line)
                             if not seen_identity:
                                 p=event['payload']
-                                if event['kind']!='identity' or p.get('uid')!=0 or p.get('firmware')!='2.5.6-2773' or p.get('kernel')!='4.9.65+' or p.get('selected_slot')!=6 or p.get('owner_version')!='0.5.8-review':
+                                if event['kind']!='identity' or p.get('uid')!=0 or p.get('firmware')!='2.5.6-2773' or p.get('kernel')!='4.9.65+' or p.get('selected_slot')!=6 or p.get('owner_version')!=owner_version:
                                     raise ValueError('Live identity invariant failed')
                                 seen_identity=True;status['state']='recording'
                                 identities.append({'connection':sequence,'boot_id':event['boot_id'],'host_utc':utc()})
@@ -184,9 +186,12 @@ def run(base, config, alias, seconds):
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('command',choices=('run','status','mark','stop'))
     p.add_argument('--session',required=True);p.add_argument('--ssh-config');p.add_argument('--ssh-alias')
+    p.add_argument('--owner-version',help='Exact installed owner release required for run; firmware/slot checks remain fixed')
     p.add_argument('--seconds',type=int,default=12*3600);p.add_argument('--event',choices=sorted(MARKERS));p.add_argument('--note',default='')
     args=p.parse_args();os.umask(0o077);base=session_path(args.session)
-    if args.command=='run':run(base,args.ssh_config,args.ssh_alias,args.seconds)
+    if args.command=='run':
+        if not args.owner_version:p.error('run requires --owner-version from the reviewed current installation')
+        run(base,args.ssh_config,args.ssh_alias,args.seconds,args.owner_version)
     elif args.command=='status':
         obj=json.loads((base/'status.json').read_text());obj['data_age_seconds']=time.monotonic()-obj.get('last_event_monotonic',time.monotonic())
         print(json.dumps(obj,indent=2,sort_keys=True))

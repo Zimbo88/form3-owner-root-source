@@ -93,3 +93,73 @@ mark deliberate Start/Cancel actions. Do not call a destructive error queue or r
 an undocumented “get” method merely because its name sounds read-only. Never
 disable a mixer, lid, thermal, overflow, motion or laser protection to fill a gap
 in the diagnosis.
+
+## Review a sealed full print and consumable mirror history
+
+For a session sealed with `SESSION_SHA256.json`, the bounded streaming reviewer
+handles up to 64 streams / 4 GiB / two million envelopes. It requires a matching
+seal for every consumed stream, checks chunk hashes, and correlates native task
+identifiers internally without publishing them. The shorter `analyze_print_session`
+workflow above is suitable for selected segments; do not silently omit later
+segments and call its output a complete-print review.
+
+```sh
+# LAPTOP — existing private sealed session; new output outside that session.
+: "${SEALED_SESSION:?absolute path to the sealed capture directory}"
+: "${REVIEW_PRIVATE:?new output directory beneath research-private}"
+umask 077
+mkdir -m 700 -- "$REVIEW_PRIVATE"
+python3 tools/review_print_progress.py --session "$SEALED_SESSION" \
+  --output "$REVIEW_PRIVATE/progress.json"
+python3 tools/review_consumable_history.py --session "$SEALED_SESSION" \
+  --output "$REVIEW_PRIVATE/consumables.json" \
+  --summary "$REVIEW_PRIVATE/consumables-summary.json"
+```
+
+Expected: verified stream/snapshot counts, boot-separated layer indices, matching
+finish observations, temperature aggregates and explicit omissions. A task finish
+is not a successful print. Zero recorded gap messages do not prove continuity.
+Consumable histories are filesystem mirrors, **not chip dumps**. The record's file
+mtime is not a proven resin measurement time; changes to stored usage do not prove
+physical volume. Outputs remain private even after identifier projection.
+
+Optional copied database inspection uses the exact reviewed schema and selects
+no job names, GUIDs, device IDs or arbitrary payloads:
+
+```sh
+# LAPTOP — bounded copies, never a live or mounted writable database.
+: "${DURATION_COPY:?private copied Durations_v1.sqlite main file}"
+: "${CONSUMABLE_DB_COPY:?private copied TankCartridgeDaemon_v1.sqlite main file}"
+python3 tools/inspect_diagnostic_databases.py "$DURATION_COPY" \
+  --kind durations --output "$REVIEW_PRIVATE/durations-summary.json"
+python3 tools/inspect_diagnostic_databases.py "$CONSUMABLE_DB_COPY" \
+  --kind consumables --output "$REVIEW_PRIVATE/events-summary.json"
+```
+
+Expected: schema-checked counts and bounded numeric summaries, not recovered models
+or counts of successful prints. Input is copied into temporary storage and opened
+immutable/query-only; no WAL/journal replay or repair occurs. A main file copied
+from a running producer may omit committed WAL data or lack transactional coherence.
+Changed schema, corrupt input, symlinks and limits fail closed. Do not “fix” the
+original to satisfy the parser.
+
+## Verify panel asset delivery separately
+
+After explicit authorization to contact a particular printer, this optional check
+uses only three GET requests. It never logs in, changes settings, follows redirects,
+uses an HTTP proxy or disables TLS validation. It requires an explicit private IPv4
+address on port 1328 and compares complete response bodies with the reviewed source.
+
+```sh
+# LAPTOP — supervised read-only check, not network discovery.
+: "${OWNER_PANEL_URL:?explicit reviewed http(s) private IPv4 URL on port 1328}"
+: "${REVIEW_PRIVATE:?private output directory}"
+python3 tools/check_panel_assets.py --url "$OWNER_PANEL_URL" \
+  --output "$REVIEW_PRIVATE/panel-assets.json"
+# For HTTPS, add --ca with the independently reviewed owner CA file.
+```
+
+Expected: three matching assets and `browser_acceptance: false`. This catches a
+truncated JavaScript response but does not run JavaScript, prove navigation or
+validate authentication. Continue with the separate browser fixture and supervised
+browser acceptance. No printer restart is needed to run these checks.

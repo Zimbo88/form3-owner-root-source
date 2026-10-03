@@ -11,7 +11,7 @@ from inspect_qt_resources import Resource,replace_members,private_destination,MA
 PIN='969cae93da58f0e2be6040b48eea071f678b12e55b592d4fd7298060d2e05150'
 MEMBER='qml/BaseScreen.qml'
 ORIGINAL='model.text_headerSubtitle !== "" ? model.text_headerSubtitle : PrinterStatusHelper.getLongPrinterStatus()'
-REPLACEMENT='model.text_headerSubtitle !== "" ? model.text_headerSubtitle : ownerClockAppend(PrinterStatusHelper.getLongPrinterStatus(), !atomWatcher.activeAtom && !orchestrator.isStartingPrint)'
+REPLACEMENT='model.text_headerSubtitle !== "" ? model.text_headerSubtitle : ownerClockAppend(PrinterStatusHelper.getLongPrinterStatus(), (!atomWatcher.activeAtom && !orchestrator.isStartingPrint) || (atomWatcher.activeAtom && !atomWatcher.activeAtom.isPrintPausing && !atomWatcher.activeAtom.isPaused))'
 
 def patch_qml(data,fragment):
     text=data.decode('utf-8');addition=fragment.decode('utf-8')
@@ -36,8 +36,8 @@ def build(data,fragment,output):
         'authored_fragment_sha256':hashlib.sha256(fragment).hexdigest(),
         'unchanged_members_verified':len(src.rows)-1,'clock_basis':'Europe/Berlin display-only conversion; current German DST rule; synchronization NOT established',
         'custom_subtitle_preserved':True,'display_only_idle_branch':False,
-        'display_states':['Idle','Ready'],'date_format':'DD.MM.YY HH:mm',
-        'active_atom_and_starting_print_excluded':True,'vendor_code_executed':False,
+        'display_states':['Idle','Ready','Printing'],'date_format':'DD.MM.YY HH:mm',
+        'paused_pausing_and_starting_print_excluded':True,'vendor_code_executed':False,
         'installed':False,'rollback':'Restore exact original RCC after separately approved installation; no install command generated',
         'open_gates':['Qt 5.9.6 target rendering','header width/localization on device','approved runtime source hash','atomic install/rollback transaction']}
     (dest/'manifest.json').write_text(json.dumps(report,sort_keys=True,indent=2)+'\n')

@@ -17,11 +17,15 @@ PINS={
 LIMIT=6*1024*1024
 LOCAL_SHA='27ed8d7e10d26f4ce9d03888bd69fc2a022a4b88b4a3eb452a7c25e7249f10b4'
 READY_CLOCK_SHA='b184f0b135dc7752098eba1acef9aa543aeaeabef006e70a38b302917753207d'
+PRINTING_CLOCK_SHA='60eba559ded4d4be0cde58f775872376e7e7168134acaef9a00bebf498ec7f45'
 RCC='usr/share/Formlabs/Palantir-Form3/Palantir.rcc'
 SPLASH='usr/bin/psplash-default'
 SIGNATURE_SHA='6e22950da068b060aa19872713757058b8656a422e18e919fc2e0e15840fecd5'
 OWNER_ROOT_SHA='9cbb2ed4bf85bacf40a2eadcb1997532f2b6bf0251164272a61d5b0ad11894ce'
-PROFILES={'owner-root-splash':{SPLASH:(SIGNATURE_SHA,OWNER_ROOT_SHA,'splash.bin',0o755)},
+PROFILES={'printing-clock':{RCC:(LOCAL_SHA,PRINTING_CLOCK_SHA,'clock.rcc',0o644)},
+ 'printing-clock-ready':{RCC:(READY_CLOCK_SHA,PRINTING_CLOCK_SHA,'clock.rcc',0o644)},
+ 'printing-clock-factory':{RCC:(PINS[RCC][0],PRINTING_CLOCK_SHA,'clock.rcc',0o644)},
+ 'owner-root-splash':{SPLASH:(SIGNATURE_SHA,OWNER_ROOT_SHA,'splash.bin',0o755)},
  'ready-clock':{RCC:(LOCAL_SHA,READY_CLOCK_SHA,'clock.rcc',0o644)},
  'ready-clock-factory':{RCC:(PINS[RCC][0],READY_CLOCK_SHA,'clock.rcc',0o644)},
  'owner-root-splash-factory':{SPLASH:(PINS[SPLASH][0],OWNER_ROOT_SHA,'splash.bin',0o755)},

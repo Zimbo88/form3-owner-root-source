@@ -31,13 +31,15 @@ class LocalClock(unittest.TestCase):
         cases=[
           [False,False,'Ready','', 'Ready 14.09.26 10:00'],
           [False,False,'Idle','', 'Idle 14.09.26 10:00'],
-          [True,False,'Printing','', 'Printing'],
+          [True,False,'Printing','', 'Printing 14.09.26 10:00'],
           [True,False,'Paused','', 'Paused'],
+          [True,False,'Pausing','', 'Pausing'],
+          [True,False,'Printing','Important warning', 'Important warning'],
           [False,True,'Ready','', 'Ready'],
           [False,False,'Ready','Important warning', 'Important warning']]
         code=source+'\nlet ownerClockEpochMs=Date.UTC(2026,8,14,8);\n'
         code+='for(const [active,starting,status,custom,want] of '+json.dumps(cases)+'){\n'
-        code+='const atomWatcher={activeAtom:active};const orchestrator={isStartingPrint:starting};const model={text_headerSubtitle:custom};const PrinterStatusHelper={getLongPrinterStatus:()=>status};\n'
+        code+='const atomWatcher={activeAtom:active?{isPrintPausing:status==="Pausing",isPaused:status==="Paused"}:null};const orchestrator={isStartingPrint:starting};const model={text_headerSubtitle:custom};const PrinterStatusHelper={getLongPrinterStatus:()=>status};\n'
         code+='const got=('+REPLACEMENT+');if(got!==want)throw Error(JSON.stringify({got,want}));}'
         r=subprocess.run(['node','-e',code],stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=10)
         self.assertEqual(r.returncode,0,r.stderr.decode())

@@ -15,6 +15,7 @@ import time
 ROOTS = ('/data/Cartridges', '/data/Tanks')
 DATABASES = ('Durations_v1.sqlite', 'TankCartridgeDaemon_v1.sqlite')
 MAX_TOTAL = 16 << 20
+EXPECTED_OWNER_VERSION = '0.5.8-review'
 
 
 def file_snapshot(path, limit):
@@ -81,7 +82,7 @@ def capture():
     return result
 
 
-def main():
+def identity():
     if os.getuid() != 0 or os.uname().machine != 'armv7l' or os.uname().release != '4.9.65+':
         raise ValueError('Unexpected reference printer context')
     fd = os.open('/proc/cmdline', os.O_RDONLY | os.O_NOFOLLOW)
@@ -91,7 +92,29 @@ def main():
         os.close(fd)
     if 'root=/dev/mmcblk0p6' not in cmdline or 'rdinit=/init' in cmdline:
         raise ValueError('Expected normal root slot')
-    print(json.dumps(capture(), sort_keys=True, allow_nan=False))
+    def read_json(path):
+        row = file_snapshot(path, 65536)
+        if not row['stable_metadata']:
+            raise ValueError('Changing target identity')
+        return json.loads(base64.b64decode(row['data_b64']).decode('utf-8'))
+    if read_json('/etc/formlabs/version.json').get('build', {}).get('name') != '2.5.6-2773':
+        raise ValueError('Unsupported firmware')
+    if (read_json('/data/owner-maintenance/current.json').get('version') != EXPECTED_OWNER_VERSION
+            or os.path.exists('/data/owner-maintenance/pending.json')):
+        raise ValueError('Unexpected owner state')
+    with open('/proc/sys/kernel/random/boot_id', 'r') as f:
+        boot = f.read(128).strip()
+    return {'uid':0, 'architecture':'armv7l', 'kernel':'4.9.65+', 'selected_slot':6,
+            'firmware':'2.5.6-2773', 'owner_version':EXPECTED_OWNER_VERSION, 'boot_id':boot}
+
+
+def main():
+    before = identity()
+    result = capture()
+    if identity() != before:
+        raise ValueError('Target context changed during snapshot')
+    result['identity'] = before
+    print(json.dumps(result, sort_keys=True, allow_nan=False))
 
 
 if __name__ == '__main__':
