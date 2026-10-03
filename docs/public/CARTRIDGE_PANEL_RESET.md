@@ -143,3 +143,28 @@ The protocol reconstruction and its exact binary/function references are in
 [decoding](CARTRIDGE_DECODING.md), [reconciliation](CARTRIDGE_RECONCILIATION.md)
 and [writeback](CARTRIDGE_WRITEBACK.md). Earlier reports that state writeback was
 not executed describe their historical milestone, not this subsequent transaction.
+
+### 2026-10-03 acceptance
+
+The signed 0.5.13 maintenance update was installed and verified on the reference
+printer. Direct WLAN HTTP login, status, CSRF rejection, logout and the real
+already-fresh preview passed. The panel ran as UID 65000; the local broker ran as
+root. The EEPROM hash remained unchanged and WriteCount remained 539. No further
+cartridge write or printer reboot was performed for this feature acceptance.
+WLAN owner SSH and the vendor Formule listener remained available. No primary
+Ethernet IPv4 address was assigned at this check, so primary HTTPS was not tested
+live; its policy and identity were preserved.
+
+The source suite passed 601 fixtures, the selected source edition passed 467, and
+39 synthetic tests passed under the genuine target Python 3.5.3. These are distinct
+scopes, not 1,107 unique hardware tests. An isolated Firefox session exercised the
+complete confirmation/apply/result flow against a synthetic broker. The actual
+browser-to-device write path has not been retested on another consumed cartridge.
+All 18 signed package member hashes match the canonical fixture-run source receipt.
+See the [sanitized acceptance receipt](../../analysis/owner/cartridge-panel-0.5.13.json).
+
+One superseded 0.5.5 panel release was transactionally archived to stay within the
+eight-release bound; its files and original transactions were preserved. p6 was
+briefly remounted writable for the existing owner hook and restored read-only
+before restarting only the owner supervisor. Current/prior release and rollback
+records remain available. No vendor service was stopped by this deployment.

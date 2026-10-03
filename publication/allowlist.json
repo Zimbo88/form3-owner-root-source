@@ -57,6 +57,14 @@
       "source": "VERSION"
     },
     {
+      "category": "compatibility-checksums",
+      "destination": "analysis/owner/cartridge-panel-0.5.13.json",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Sanitized acceptance results, source/package hashes and explicit hardware/test limits; no private receipts.",
+      "sha256": "2a98013d067ebd57f3193bf1ce26df98c901d99c2314d4bcba80b027844f8aa1",
+      "source": "analysis/owner/cartridge-panel-0.5.13.json"
+    },
+    {
       "category": "original-artwork",
       "destination": "assets/signature-brand.svg",
       "license": "MIT authored geometry; Lato wordmark artwork, see rights guide",
@@ -405,7 +413,7 @@
       "destination": "docs/public/CARTRIDGE_PANEL_RESET.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
-      "sha256": "2745afa1313985c20906bba6127717b3c270699515494cb777695ddec8cf5d48",
+      "sha256": "8910bf16036a8372ab78fb8cc9401c9a1cdefa746458d7721e473615099e3fab",
       "source": "docs/public/CARTRIDGE_PANEL_RESET.md"
     },
     {

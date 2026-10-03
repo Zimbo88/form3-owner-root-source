@@ -4,8 +4,8 @@
   "history_included": false,
   "kind": "UNSIGNED SOURCE REVIEW; not an installation package",
   "legal_clearance": false,
-  "producer_allowlist_sha256": "6f9268c6c6ae736f60fd9ab4b1bf42ce0f6b7b59d896a5094ab7d04bbc6bbb74",
-  "producer_commit": "4c501b185d39ed81e67d3cc32f88dd8b80afd202",
+  "producer_allowlist_sha256": "bbc1d3083404eaa3f2392e3cf74e9adf951c1c70f2277f822db931762615c177",
+  "producer_commit": "f38aa61a1073ae0aaa1552d2a3f6ca2d9bae60e0",
   "reviewed_files": [
     {
       "category": "notice",
@@ -62,6 +62,14 @@
       "provenance": "Project version, distribution boundary or retained authorship/third-party notice.",
       "sha256": "b3b13b546714e64193eb7d674e19d2041f920e437a0cd42d3de3d77389fb76ba",
       "source": "VERSION"
+    },
+    {
+      "category": "compatibility-checksums",
+      "destination": "analysis/owner/cartridge-panel-0.5.13.json",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Sanitized acceptance results, source/package hashes and explicit hardware/test limits; no private receipts.",
+      "sha256": "2a98013d067ebd57f3193bf1ce26df98c901d99c2314d4bcba80b027844f8aa1",
+      "source": "analysis/owner/cartridge-panel-0.5.13.json"
     },
     {
       "category": "original-artwork",
@@ -412,7 +420,7 @@
       "destination": "docs/public/CARTRIDGE_PANEL_RESET.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
-      "sha256": "2745afa1313985c20906bba6127717b3c270699515494cb777695ddec8cf5d48",
+      "sha256": "8910bf16036a8372ab78fb8cc9401c9a1cdefa746458d7721e473615099e3fab",
       "source": "docs/public/CARTRIDGE_PANEL_RESET.md"
     },
     {

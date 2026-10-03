@@ -1,0 +1,31 @@
+{
+  "browser": "Isolated Firefox; synthetic apply only",
+  "canonical_fixture_tests": 601,
+  "cartridge_writes_this_milestone": false,
+  "curated_fixture_tests": 467,
+  "limitations": [
+    "Only legacy Clear FLGPCL02/1000 mL on pinned p6 2.5.6-2773",
+    "Physical resin quantity unknown",
+    "No new cartridge write through browser during acceptance",
+    "Primary Ethernet IPv4 unavailable during final check; existing policy unchanged"
+  ],
+  "live_acceptance": [
+    "ownerctl verification",
+    "authenticated direct WLAN HTTP",
+    "CSRF rejection",
+    "logout rejection",
+    "actual Clear read-only preview: ALREADY_FRESH",
+    "EEPROM hash unchanged",
+    "panel unprivileged",
+    "WLAN SSH and Formule port retained",
+    "p6 root remounted read-only"
+  ],
+  "manifest_sha256": "2f5cd40c9c7de2340e48e8aaaeb2100f0c6f9f051288bb06508fe48f19a700ad",
+  "package_sha256": "08f8600fdbbfd49dba369149874667c0f515c19fbe548d49e2f6867c1b22e5ae",
+  "printer_reboot": false,
+  "private_receipts_committed": false,
+  "source_commit": "4c501b185d39ed81e67d3cc32f88dd8b80afd202",
+  "target_synthetic_tests": 39,
+  "tested_package_member_hashes_match": true,
+  "version": "0.5.13-review"
+}
