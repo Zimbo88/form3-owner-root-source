@@ -1,18 +1,18 @@
 digraph G {
-graph [rankdir=TB,bgcolor="white",pad="0.2",nodesep="0.35",ranksep="0.45",label="Stock factory network boot candidate",labelloc=t,fontname="DejaVu Sans",fontsize=17];
+graph [rankdir=TB,bgcolor="white",pad="0.2",nodesep="0.35",ranksep="0.45",label="Stock factory network boot\ncandidate",labelloc=t,fontname="DejaVu Sans",fontsize=17];
 node [shape=box,style="rounded,filled",fillcolor="#eef3f8",color="#415a77",fontname="DejaVu Sans",fontsize=11,margin="0.14,0.1"];
 edge [color="#415a77",fontname="DejaVu Sans",fontsize=9];
-gpio [label="Physical trigger: unresolved\nGPIO61 is NOT connector pin61"];
+gpio [label="Physical trigger: unresolved\nGPIO 61 is NOT connector pin 61"];
 ub [label="Unchanged factory U-Boot branch"];
 dhcp [label="Isolated DHCP service segment"];
 tftp [label="TFTP genuine kernel + DTB"];
-nfs [label="192.168.1.1:/srv/nfs\nexplicit NFS-root semantics"];
-init [label="Reviewed minimal init; RAM runtime\nwrites"];
-disk [label="eMMC read-only; no vendor startup"];
+nfs [label="192.168.1.1:/srv/nfs explicit\nNFS-root semantics"];
+init [label="Reviewed minimal init; RAM\nruntime writes"];
+disk [label="eMMC read-only; no vendor\nstartup"];
 gpio -> ub [label="reachability gate",style=dashed];
 ub -> dhcp [label=""];
-dhcp -> tftp [label="nonzero DHCP siaddr used by compiled fork; runtime untested"];
+dhcp -> tftp [label="nonzero DHCP siaddr used by\ncompiled fork; runtime untested"];
 tftp -> nfs [label=""];
-nfs -> init [label="preserve kernel network configuration"];
+nfs -> init [label="preserve kernel network\nconfiguration"];
 init -> disk [label=""];
 }

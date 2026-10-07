@@ -2,75 +2,94 @@
 
 ![Original Owner Root project mark](assets/signature-brand.svg)
 
-**Repair, preservation and local maintenance for the Formlabs Form 3.**
+Repair, preservation and local maintenance for a reference Formlabs Form 3:
+a protected acquisition route, separate authenticated root SSH/SFTP, and an
+unprivileged owner panel. This is an independent owner project, not manufacturer
+firmware or a universal Form 3 unlock.
 
-This project documents a route from a protected storage backup to local root,
-secure SSH and an independent maintenance panel. It includes the source, commands
-and recovery steps needed to understand the changes instead of treating them as
-a black box. Hardware work is intended for technically experienced users.
+## Status / compatibility
 
-I started it to repair my Form 3 when the manufacturer's repair route was no
-longer available to me. Encrypted
-support archives made independent diagnosis difficult. I obtained local root
-access, preserved the storage and built a maintenance panel around that work.
-Some local diagnostics are plaintext; root access does not decrypt every support
-archive or establish that the original fault is repaired.
+- **Source version:** [VERSION](VERSION). Reviewed target: **Form 3 / Daguerre,
+  selected p6, firmware 2.5.6-2773**, exact layout and file-hash gates.
+- **Hardware evidence:** historical Rescue/acquisition and normal owner access;
+  the 0.5.13 receipt confirms a narrower maintenance/panel acceptance. It does
+  not prove every current path, a fresh installation or another printer revision.
+  [Evidence matrix and unresolved acceptance](docs/public/EVIDENCE_STATUS.md).
+- **Required experience:** safe unpowered board work, chip/package identification,
+  multimeter checks, Linux terminals, SSH trust and backup/rollback review.
+  [Reference equipment and unknown versions](docs/public/REFERENCE_SETUP.md).
+- **Brick-relevant phase:** writing QSPI. Unknown chip suffix, voltage, shared rail,
+  layout or hash means **STOP**. The code does not adapt unknown hardware.
+- **Distribution:** authored code, transformation recipes, guides and checksums;
+  no vendor firmware, device dumps, keys or private logs. Inputs come from your
+  own authorized acquisition. A stock software-only first-root route is unproved.
 
-I share authored scripts, panel source, reviewed transformation recipes,
-instructions, original illustrations and checksums. **No original or modified
-manufacturer firmware, private keys, device records or complete rootfs is included.**
-You provide compatible inputs through your own authorized acquisition. This is
-an advanced-user project with explicit hardware and compatibility gates, not a
-universal one-click unlock.
+## Start here
 
-## From private research to a source release
+1. Read [ROOT_GUIDE](docs/public/ROOT_GUIDE.md) for the concept, limits and prerequisites.
+2. Audit [MODIFICATION_MAP](docs/public/MODIFICATION_MAP.md) before any write and
+   [PI5_CLIP_GUIDE](docs/public/PI5_CLIP_GUIDE.md) before touching the board.
+3. Follow **[COMMAND_WALKTHROUGH](docs/public/COMMAND_WALKTHROUGH.md)**: the single
+   canonical complete command sequence, with terminal labels, checks and recovery.
+   [OWNER_INSTALL](docs/public/OWNER_INSTALL.md) and [SECURE_SSH](docs/public/SECURE_SSH.md)
+   are deeper references, not additional parallel first-install procedures.
+4. Developing without hardware? Start with [BUILD](docs/public/BUILD.md).
 
-This project began as a private repair and research repository. This edition is a
-selected source release prepared from that work, with a new history rather than
-the original research archive. Private data, manufacturer binaries and material
-with unresolved copyright, confidentiality or other redistribution questions have
-been left out. Some research details may therefore be absent. Those exclusions
-are not a guarantee of legal clearance or universal hardware compatibility.
+### Enter at your verified state
 
-The visibility change is a separate maintainer decision; preparing this edition
-does not publish it automatically. The [release checklist](docs/public/RELEASE_CHECKLIST.md)
-explains the final checks and what is deliberately excluded.
-
-## Follow one path
-
-| Task | Guide |
+| Existing state | Next step |
 |---|---|
-| Follow the commands in order, from my own backup to root SSH | [Command walkthrough and exact change map](docs/public/COMMAND_WALKTHROUGH.md) |
-| Build and test the source without a printer | [Build, dependencies and test scope](docs/public/BUILD.md) |
-| Understand the chip clip and Pi 5 wiring before touching hardware | [Pin orientation, connection table and meter checks](docs/public/PI5_CLIP_GUIDE.md) |
-| Understand root, electrical checks, acquisition and recovery | [Root and acquisition guide](docs/public/ROOT_GUIDE.md) |
-| Install separate owner SSH/SFTP and the panel | [First installation, daily use, updates and rollback](docs/public/OWNER_INSTALL.md) |
-| Enroll secure root SSH and use it daily without repeated passwords | [Host trust, strict profile, SSH agent and SFTP acceptance](docs/public/SECURE_SSH.md) |
-| Review a saved print attempt and heater/fan history | [Offline private log review](docs/public/LOG_REVIEW.md) |
-| Build the native Idle clock and original boot/panel logo | [Display transformation recipes](docs/public/NATIVE_DISPLAY.md) |
-| Understand the publication boundary and credits | [Rights, provenance and release checks](docs/public/RIGHTS_AND_RELEASE.md) |
-| Check what is proved and what remains open | [Compatibility and coverage](docs/public/LIMITS.md) |
+| Unmodified printer | Prerequisites and read-only identification; do not skip electrical gates |
+| Verified own QSPI/eMMC backups | Check provenance/current target, then walkthrough's applicable state; do not reacquire or reflash just to start at page one |
+| Installed owner services | Verify current installation over pinned SSH; [ordinary use](docs/public/SECURE_SSH.md#7-daily-login-without-repeatedly-typing-a-passphrase) |
+| Updating owner software | [Signed package update](docs/public/OWNER_INSTALL.md#6-ordinary-updates-disable-and-recovery); preserve QSPI and SSH identity |
+| Interrupted installation | Preserve pending transaction/backups; [recovery reference](docs/public/OWNER_INSTALL.md#6-ordinary-updates-disable-and-recovery), never blind reinstall |
 
-## What the code provides
+### Installation phases
 
-- A pinned static ARMv7 RAM rescue build using the genuine kernel and DTB.
-- Read/CRC checks and a reference-specific QSPI image builder; no universal flash writer.
-- Separate owner SSH/SFTP on **2222**, with owner-generated keys and retained host trust.
-- An unprivileged maintenance panel on **1328**, current-interface address handling,
-  HTTPS and explicitly selected private-LAN HTTP, bounded APIs and diagnostic exports.
-- Typed owner preferences and a refill notebook; original lifetime counters remain separate.
-- Local touchscreen date/time and original project artwork built from your own pinned input.
-- Signed source packages, exact transaction plans, backups, verification and rollback.
+| Phase | What changes / recovery point |
+|---|---|
+| Read-only hardware identification | Nothing programmed; verify complete part, voltage and topology |
+| QSPI acquisition and verification | Three meaningful reads and independent originals; no write yet |
+| Temporary Rescue | Gated QSPI environment/reserve change; retain same-printer original for restoration |
+| eMMC backup | RAM root and protected reads; preserve user area and both boot areas |
+| Persistent owner installation | First approved writable p6/p7 mounts, then bounded account/hook/owner files with transactions |
+| Original QSPI restoration | Restore and fully read back the same printer's original image; p6/p7 owner files remain |
+| Normal-boot acceptance | Vendor boot plus independent SSH :2222 and panel :1328; verify on each target |
 
-![Owner-service privilege boundary](docs/figures/08-panel-privilege.svg)
+## Maintenance and optional features
 
-*Architecture diagram: the panel has bounded read adapters; it is not a generic
-root-command or actuator proxy. Source and proof labels are in the guides.*
+The source includes owner-signed **installation/update packages**, plan/verify/
+rollback tooling, source-labeled status and bounded diagnostic exports. Source
+review tarballs are unsigned. The primary panel uses HTTPS; deliberately selected
+private-LAN HTTP remains plaintext. Unknown data is UNAVAILABLE; saved observations
+are HISTORICAL/CACHED.
 
-Unknown data is **UNAVAILABLE**. Recorded data is **HISTORICAL/CACHED**, not live.
-A scoped [Clear electronic usage reset](docs/public/CARTRIDGE_PANEL_RESET.md) is available in the 0.5.13-review source. General refill/reset, license issuance, automatic vendor privacy changes and panel
-power controls remain disabled. No thermal, laser, motion, lid, overflow or watchdog
-protection is removed. A stock software-only first-root route remains unproved.
+- [Panel and limitations](owner-ui/README.md), [saved print diagnostics](docs/public/LOG_REVIEW.md).
+- [Optional local touchscreen clock and original artwork](docs/public/NATIVE_DISPLAY.md).
+- [Scoped legacy Clear usage adjustment](docs/public/CARTRIDGE_PANEL_RESET.md):
+  implemented and fixture-tested, read-only panel preview accepted on hardware;
+  separate earlier live-write evidence has a narrower provenance boundary.
+- [Research API/privacy/stock-root boundaries](docs/public/RESEARCH_BOUNDARIES.md).
+
+No generic actuator proxy, universal consumable reset, license issuer or automatic
+vendor privacy modification is provided. Panel power controls remain disabled.
+Root access does not establish a mechanical repair or safe printing condition.
+
+## Background and distribution
+
+I started this project to repair my Form 3 when the manufacturer's repair route
+was no longer available to me. Encrypted support archives made independent
+diagnosis difficult. Some local diagnostics are plaintext; root does not decrypt
+every support archive.
+
+This source edition was selected from private research. Manufacturer binaries,
+private data and material with unresolved redistribution questions are omitted;
+those omissions are not a guarantee of legal clearance. The
+[rights boundary](docs/public/RIGHTS_AND_RELEASE.md), [security policy](SECURITY.md)
+and [maintainer release checklist](docs/maintainer/RELEASE_CHECKLIST.md) explain
+what can be shared and what still needs review. Visibility is a separate maintainer
+decision; no tool here makes a private repository public.
 
 ## Why the demonstrated route works
 

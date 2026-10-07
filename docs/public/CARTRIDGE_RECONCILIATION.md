@@ -1,5 +1,9 @@
 # Cartridge copy selection and usage reconciliation
 
+> HISTORICAL RESULT: this report describes its named research tool and milestone.
+> The later [panel write implementation and acceptance](CARTRIDGE_PANEL_RESET.md#evidence-and-tests)
+> has a separate scope; see the [central evidence index](EVIDENCE_STATUS.md).
+
 This investigation explains why changing one counter and restarting is not a
 demonstrated refill transaction. The reusable tool is an **offline synthetic
 model**, not a memory writer, reset utility or permission to dispense. Identity,

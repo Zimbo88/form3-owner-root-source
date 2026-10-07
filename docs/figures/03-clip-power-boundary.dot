@@ -1,16 +1,16 @@
 digraph G {
-graph [rankdir=TB,bgcolor="white",pad="0.2",nodesep="0.35",ranksep="0.45",label="Clip and power boundary — NOT a pinout",labelloc=t,fontname="DejaVu Sans",fontsize=17];
+graph [rankdir=TB,bgcolor="white",pad="0.2",nodesep="0.35",ranksep="0.45",label="Clip and power boundary — NOT a\npinout",labelloc=t,fontname="DejaVu Sans",fontsize=17];
 node [shape=box,style="rounded,filled",fillcolor="#eef3f8",color="#415a77",fontname="DejaVu Sans",fontsize=11,margin="0.14,0.1"];
 edge [color="#415a77",fontname="DejaVu Sans",fontsize=9];
 pi [label="Programmer: disconnected during\nwiring"];
 clip [label="Clip: exact contacts unresolved"];
 flash [label="Still-soldered QSPI"];
 soc [label="Shared SOM rails / SoC / bus"];
-off [label="Printer and peripherals physically\nunplugged"];
+off [label="Printer and peripherals\nphysically unplugged"];
 stop [label="STOP: unexplained power, heat or\ncontention"];
-pi -> clip [label="reviewed voltage and wiring required",style=dashed];
+pi -> clip [label="reviewed voltage and wiring\nrequired",style=dashed];
 clip -> flash [label=""];
-flash -> soc [label="backfeeding / bus contention possible",style=dashed];
+flash -> soc [label="backfeeding / bus contention\npossible",style=dashed];
 off -> soc [label="no printer power source"];
 soc -> stop [label="unresolved electrical effect",style=dashed];
 }

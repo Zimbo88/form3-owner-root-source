@@ -4,13 +4,13 @@ node [shape=box,style="rounded,filled",fillcolor="#eef3f8",color="#415a77",fontn
 edge [color="#415a77",fontname="DejaVu Sans",fontsize=9];
 client [label="New owner client private key\nLAPTOP only"];
 pub [label="Owner public authorized key"];
-server [label="Separate sshd2222\npassword auth off; StrictModes on"];
+server [label="Separate sshd :2222 password\nauth off; StrictModes on"];
 host [label="Separate owner SSH host identity"];
-check [label="Isolated first-use enrollment;\nretain host fingerprint for later\ncontinuity"];
+check [label="Isolated first-use enrollment;\nretain host fingerprint for\nlater continuity"];
 vendor [label="Vendor CA / host identities\npreserved"];
 client -> server [label="prove possession"];
 pub -> server [label="explicit enrollment"];
 host -> server [label=""];
-check -> host [label="sole-peer TOFU before first login"];
+check -> host [label="sole-peer TOFU before first\nlogin"];
 vendor -> server [label="no vendor authorization reuse"];
 }

@@ -4,6 +4,7 @@
 External links are NOT fetched. Default fixture scope needs no proprietary evidence.
 An evidence run requires an explicit existing acquisition workspace.
 """
+from python35_grammar import parse as parse_target
 import argparse,ast,hashlib,json,os,re,subprocess,sys,xml.etree.ElementTree as ET
 from pathlib import Path
 from urllib.parse import unquote,urlsplit
@@ -49,7 +50,7 @@ def source_checks(root):
     target_files=[]
     for area in ('owner-ui','owner-maintenance'):
         for p in sorted((root/area).glob('*.py')):
-            try:ast.parse(p.read_text(),feature_version=(3,5));target_files.append(str(p.relative_to(root)))
+            try:parse_target(p.read_text());target_files.append(str(p.relative_to(root)))
             except SyntaxError:errors.append({'file':str(p.relative_to(root)),'reason':'Python3.5 grammar mismatch'})
     return {'passed':not errors,'errors':errors,'local_links_checked':links,'external_links_not_fetched':external,
             'historical_link_warnings':historical,'svg_files_checked':svg_count,'target_grammar_files':target_files,

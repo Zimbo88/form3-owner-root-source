@@ -111,3 +111,52 @@ The tarball is **unsigned source review only**. Create a separate installation p
 with your own independent signer only after review, as described in
 [installation](OWNER_INSTALL.md). Do not deploy synthetic fixture keys. Preserve the
 review package, source commit, tool versions and test receipts privately.
+
+## Public source checks
+
+These commands need only host Python 3.12+, Bash and Git. They use public authored
+source and synthetic temporary files: no sudo, QEMU, dnsmasq, printer, private
+runtime, pip dependencies or network service. Run from the clone root:
+
+```sh
+# LAPTOP — public CI equivalent; fresh output files, no device contact.
+python3 tools/developer_check.py --output build/source-only-review.json --source-only
+python3 tools/check_public_source.py --output build/public-source-review.json
+python3 -m unittest discover -s tests -p test_public_source.py
+python3 -m unittest discover -s tests -p test_public_export.py
+python3 -m unittest discover -s tests -p test_documentation_voice.py
+```
+
+Expected: no errors, matching generated checksums/allowlist/provenance, valid local
+paths and GitHub-style heading fragments, shell/Python snippet syntax, Python 3.5
+target grammar and safe described SVGs. Grammar alone is not runtime compatibility.
+The Markdown checker supports the syntax used in this repository, not every GitHub
+extension. See its tests for duplicate/Unicode headings and bounded local fixtures.
+
+| Check tier | Scope | What it cannot establish |
+|---|---|---|
+| Public CI [prepared workflow](../maintainer/ci/public-source.yml.example) | Source/metadata/docs and selected standard-library tests; activation pending | Hardware or isolated full application acceptance |
+| Full developer fixture suite (command above under Dependencies) | Synthetic application/authentication/transaction tests inside disconnected namespaces | Actual flash/bus/power behavior |
+| Evidence-dependent / target / hardware acceptance | Explicit private inputs or separately supervised device observations | Results for a different source/version without rebinding |
+
+While editing, `python3 tools/check_public_source.py --editing` deliberately skips
+metadata and reports `release_check: false`. It is not a green release receipt.
+Use the [maintainer export procedure](../maintainer/RELEASE_CHECKLIST.md#source-changes-and-generated-metadata)
+after the source commit. CI never uses that bypass. External link availability is
+reviewed separately and is non-blocking: upstream outages must not disguise local
+link or checksum failures. Generated reports stay ignored in `build/`.
+
+### Hosted CI activation pending
+
+The workflow is supplied as an **inactive template**. GitHub rejected the reviewed
+workflow upload on 2026-10-07 because the available OAuth credential lacked the
+`workflow` scope. No hosted run is claimed. Repository Actions remains disabled;
+the commands above have passed locally, including in a fresh clone.
+
+A maintainer with suitable existing GitHub authorization can move
+`docs/maintainer/ci/public-source.yml.example` to
+`.github/workflows/public-source.yml`, update the reviewed allowlist entry, and
+follow the [metadata regeneration procedure](../maintainer/RELEASE_CHECKLIST.md#source-changes-and-generated-metadata).
+Then enable Actions for this repository with read-only token permissions and the
+exact pinned checkout action, push, and inspect the actual run. Do not bypass
+GitHub authorization or substitute a local result for hosted CI acceptance.

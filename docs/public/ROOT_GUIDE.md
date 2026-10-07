@@ -3,18 +3,18 @@
 For commands in chronological order, use the [command walkthrough](COMMAND_WALKTHROUGH.md).
 This chapter provides the electrical/architecture explanation and the additional-device profile gate.
 
-**Tutorial route:** this chapter → [first persistent installation](OWNER_INSTALL.md)
-→ [secure root SSH, SFTP and daily login](SECURE_SSH.md). Read the three chapters
-before the first write. They describe one chronological route, not three alternative
-installers. The source-only build/test entry is [BUILD](BUILD.md).
+**Reading roles:** this chapter explains the concept and prerequisites;
+[COMMAND_WALKTHROUGH](COMMAND_WALKTHROUGH.md) contains the complete execution
+sequence. [OWNER_INSTALL](OWNER_INSTALL.md) and [SECURE_SSH](SECURE_SSH.md) explain
+transaction and trust details when needed. [BUILD](BUILD.md) is the host setup path.
 
-| Milestone | What I have afterward | Required saved proof |
+| Milestone | Resulting state | Required saved proof |
 |---|---|---|
-| Identify and read my QSPI | My own unmodified boot backup | Part/power measurements, three reads, sizes/hashes/CRCs |
+| Identify and read own QSPI | Own unmodified boot backup | Part/power measurements, three reads, sizes/hashes/CRCs |
 | Build and deliberately boot rescue | Temporary root **in RAM** | Unchanged bootloader code, reviewed image diff, full flash readback |
 | Acquire eMMC and boot areas | Recovery evidence before persistent changes | Source/receiver sizes and SHA256, failed reads retained |
 | Plan/install owner services | Separate owner startup and authorization files | Exact device/slot/version, signatures, before/after files and transaction |
-| Return to my original QSPI | Normal manufacturer boot with owner services | My original hash plus new complete readback |
+| Return to own original QSPI | Normal manufacturer boot with owner services | Own original hash plus new complete readback |
 | Enroll and test SSH | Authenticated root access, reusable key, file exchange | Independently established host pin; rejection and SFTP tests |
 
 An already rooted printer starts at its applicable milestone. Do not repeat a
@@ -31,6 +31,10 @@ I opened my Form 3, removed its SOM and used a clip on the still-soldered QSPI c
 I did not remove the flash or solder UART. The prior route into the boot chain is
 credited in [rights and credits](RIGHTS_AND_RELEASE.md). I do not claim that these
 observations certify a different board, flash suffix or programmer arrangement.
+
+This chapter is the conceptual reference. Execute the [command walkthrough](COMMAND_WALKTHROUGH.md),
+not multiple guides in parallel. Review the [modification map](MODIFICATION_MAP.md)
+and [evidence index](EVIDENCE_STATUS.md) before the first write.
 
 ## 1. Understand the boot and storage boundaries
 
@@ -73,10 +77,10 @@ closeups did not establish the complete suffix or shared-rail behavior. A previo
 flashrom `-c` choice is not part identification. **No board-specific flash wiring/write profile is approved until these facts are resolved.**
 The walkthrough shows conditional manual CLI shapes; typed acknowledgements cannot replace measurements.
 
-Consult [flashrom in-system guidance](https://www.flashrom.org/user_docs/in_system.html),
-[Pi programmer guidance](https://www.flashrom.org/user_docs/raspberry_pi.html),
+Consult [flashrom in-system guidance](https://raw.githubusercontent.com/flashrom/flashrom/8e36840a2894f73187e225d9da51bbdfff582a6c/doc/user_docs/in_system.rst),
+[Pi programmer guidance](https://raw.githubusercontent.com/flashrom/flashrom/8e36840a2894f73187e225d9da51bbdfff582a6c/doc/user_docs/raspberry_pi.rst),
 [official Pi header documentation](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html)
-and the [Winbond datasheet index](https://winbond.com/hq/support/documentation/?__locale=en).
+and the [Winbond datasheet index](https://www.winbond.com/hq/support/documentation/?__locale=en).
 Use the identified part's datasheet; do not generalize a candidate part's voltage
 or IO2/IO3/WP/HOLD/RESET requirements to an unread suffix. Physical header position
 and BCM GPIO number are different. Wire color is not a contact identity.
@@ -116,15 +120,7 @@ independently re-established contact as appropriate. Preserve full logs, tool ve
 frequency, wiring/power notes and failed reads. Do not substitute three copies of one
 read. The following tool analyzes files only:
 
-```sh
-# LAPTOP — existing preserved regular files; guarded variables cannot run unset.
-: "${READ1:?first independent full read}"
-: "${READ2:?second independent full read}"
-: "${READ3:?third independent full read}"
-: "${READ_REPORT:?new local JSON report path}"
-python3 tools/inspect_qspi_reads.py --read "$READ1" --read "$READ2" \
-  --read "$READ3" --output "$READ_REPORT"
-```
+Follow the corresponding phase of the [canonical command walkthrough](COMMAND_WALKTHROUGH.md).
 
 Expected: three distinct inodes, 4,194,304 bytes each, identical content, bounded SPL
 header, U-Boot header/payload CRCs, active environment CRC and nonblank boot regions.
@@ -168,14 +164,7 @@ Follow [host setup](BUILD.md) and provide your own matching authenticated input.
 The `--factory` option reads it in place; evidence does not need to be moved into
 the clone. No downloads happen if authentication fails.
 
-```sh
-# LAPTOP — source build only, new ignored outputs. Inputs must match the reviewed profile.
-: "${FACTORY_COPY:?path to authenticated matching local factory file}"
-python3 tools/build_rescue.py --factory "$FACTORY_COPY" --offline \
-  --output-dir build/rescue-v2
-python3 tools/build_qspi_rescue.py --factory "$FACTORY_COPY" \
-  --initramfs build/rescue-v2/form3-rescue.cpio.gz --output-dir build/qspi-review
-```
+Follow the corresponding phase of the [canonical command walkthrough](COMMAND_WALKTHROUGH.md).
 
 Expected: static ARMv7 BusyBox verified with file/readelf; newc+gzip payload under
 3 MiB, genuine boot chain preserved, valid environment CRCs and exact 4 MiB output.
@@ -206,24 +195,9 @@ does not have a dry-run plan subcommand. Review its source and `--apply` separat
 inspect actual routes, forwarding and bridges before target contact. The raw shell
 is unauthenticated and must remain on the physically isolated cable.
 
-```sh
-# PI — only on the reviewed isolated link. No prompt/local echo may be visible.
-nc 10.0.0.77 2324
-```
+Follow the corresponding phase of the [canonical command walkthrough](COMMAND_WALKTHROUGH.md).
 
-Then, **inside that connected terminal**:
-
-```sh
-# RESCUE — identify before any further operation.
-printf 'FORM3-RESCUE-IDENTITY\n'
-id
-uname -a
-cat /proc/cmdline
-blockdev --getro /dev/mmcblk0
-blockdev --getsize64 /dev/mmcblk0
-cat /proc/partitions
-cat /proc/mounts
-```
+The command walkthrough separates the Pi shell from the connected Rescue shell.
 
 Expected: root UID, ARMv7, `rdinit=/init`, software read-only `1`, reference user area
 15,678,308,352 bytes and no eMMC filesystem mounted. A Pi hostname/wrong architecture,
@@ -232,14 +206,7 @@ Do not assume V2 has Python/tar/chmod/cp/grep; inspect BusyBox applets first.
 
 Start the receiver on LAPTOP before sending:
 
-```sh
-# LAPTOP — trusted existing Pi SSH alias, new image basename and exact size.
-: "${FORM3_PI_SSH:?already authenticated Pi SSH alias}"
-: "${ACQUISITION_NAME:?new basename ending .img}"
-: "${EXPECTED_BYTES:?exact blockdev byte count}"
-export FORM3_PI_SSH
-bash scripts/receive_emmc_via_pi.sh "$ACQUISITION_NAME" "$EXPECTED_BYTES"
-```
+Follow the corresponding phase of the [canonical command walkthrough](COMMAND_WALKTHROUGH.md).
 
 `rescue/rootfs/bin/form3-backup` supports only the user area and boot0/boot1, hashes
 the same source stream and rejects RPMB. Its reference BusyBox tee pipeline was slow;
@@ -254,35 +221,18 @@ were each 4,194,304 bytes and identical in the reference acquisition. No fsck, j
 replay, write test, RPMB, EXT_CSD or provisioning is part of acquisition. At this
 point, proceed to [installation](OWNER_INSTALL.md), not a whole-eMMC restore.
 
-### The sender side, one device at a time
+### Acquisition completion gate
 
-For each row start a **new** receiver invocation on LAPTOP first, with a distinct
-`.img` basename and the exact measured byte count. Wait for its listener-ready
-message, then run the corresponding command in the identified RESCUE shell:
-
-| Image | RESCUE command | Reference size, not a substitute for measurement |
-|---|---|---|
-| Complete eMMC user area | `form3-backup /dev/mmcblk0 10.0.0.1 9000` | 15,678,308,352 bytes |
-| Boot area 0 | `form3-backup /dev/mmcblk0boot0 10.0.0.1 9000` | 4,194,304 bytes |
-| Boot area 1 | `form3-backup /dev/mmcblk0boot1 10.0.0.1 9000` | 4,194,304 bytes |
-
-Before each transfer require `blockdev --getro DEVICE` to print `1`, use
-`blockdev --getsize64 DEVICE`, and check that no eMMC filesystem is mounted. Here
-`DEVICE` means the literal device from that row, not an unreviewed wildcard.
-The commands read raw blocks; the internal hash covers the same byte stream sent
-to the receiver. No filesystem is needed and RPMB is not part of the list.
-
-Save the sender's `Source stream complete`, byte count and SHA256 alongside the
-receiver receipt. If either side is short, exits unsuccessfully or differs, retain
-the failed image and retry only to a **new** filename after understanding why.
-Receiver `.incomplete` removal means its transfer/length checks completed; when no
-expected source hash was supplied, independent hash comparison is still pending.
-The two boot areas being equal on this printer does not justify skipping either
-acquisition on another printer. Make an independent backup before installation.
+The canonical procedure acquires the user area and both boot areas separately,
+with distinct new filenames and measured sizes. Equality of the two reference
+boot-area images is not a reason to omit either one. Keep partial/failed captures.
+A receiver completion marker establishes its transfer checks; only independent
+source/receiver hashes and lengths establish matching acquisition. Preserve
+those receipts and an independent backup before installation.
 
 ## Continue to normal owner access
 
-Temporary root ends with rescue. Use [installation](OWNER_INSTALL.md) to inspect
+Temporary root ends with rescue. Use [walkthrough phases 9–19](COMMAND_WALKTHROUGH.md#9-laptop--create-independent-owner-keys-and-a-signed-install-package) to inspect
 the current selected slot/journal, prepare your independent package signer/client
 key, review the p6/p7 file plan, and restore your original QSPI after verification.
 Then use [secure SSH](SECURE_SSH.md) for first host trust, public-key-only root,

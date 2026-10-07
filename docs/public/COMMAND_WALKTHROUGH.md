@@ -8,13 +8,62 @@ Read the complete page once before connecting hardware. Execute one numbered
 step at a time; **a failure stops that step, not a reason to paste the next block**.
 
 The demonstrated installation was on Form 3, selected **p6 / 2.5.6-2773**. The
-current source is **0.5.9-review**, tested offline but not yet installed on my
-printer. It does not make another firmware/board automatically compatible.
+source version is defined by [VERSION](../../VERSION). Historical installation
+and later limited acceptance are separated in [Evidence status](EVIDENCE_STATUS.md).
+Neither makes another firmware/board automatically compatible.
 The current rescue builder requires the reference factory SHA256; another hash
 needs [profile engineering](ROOT_GUIDE.md#4-a-different-factory-hash-profile-engineering-not-pin-removal).
 Do not replace my hash with yours merely to suppress a failure.
 
+## Navigation
+
+- [0. Terminals, variables and what changes](#0-terminals-variables-and-what-changes)
+- [1. LAPTOP — choose the source and private workspace](#1-laptop--choose-the-source-and-private-workspace)
+- [2. PI — establish the management prerequisite](#2-pi--establish-the-management-prerequisite)
+- [3. PHYSICAL / PI — identify the chip and acquire three reads](#3-physical--pi--identify-the-chip-and-acquire-three-reads)
+- [4. LAPTOP — build the RAM rescue and see the exact patch](#4-laptop--build-the-ram-rescue-and-see-the-exact-patch)
+- [5. LAPTOP / PI — stage the reviewed rescue image](#5-laptop--pi--stage-the-reviewed-rescue-image)
+- [6. PHYSICAL / PI — deliberate rescue programming and complete readback](#6-physical--pi--deliberate-rescue-programming-and-complete-readback)
+- [7. PI — configure and verify the isolated rescue cable](#7-pi--configure-and-verify-the-isolated-rescue-cable)
+- [8. PI to RESCUE — identify the shell, then back up all three devices](#8-pi-to-rescue--identify-the-shell-then-back-up-all-three-devices)
+- [9. LAPTOP — create independent owner keys and a signed install package](#9-laptop--create-independent-owner-keys-and-a-signed-install-package)
+- [10. LAPTOP / PI / RESCUE — transfer the small public installation inputs](#10-laptop--pi--rescue--transfer-the-small-public-installation-inputs)
+- [11. RESCUE — read-only mounts and the genuine runtime](#11-rescue--read-only-mounts-and-the-genuine-runtime)
+- [12. RESCUE — inspect journal flags and produce the read-only plan](#12-rescue--inspect-journal-flags-and-produce-the-read-only-plan)
+- [13. RESCUE — separate writable-filesystem / recovery decision](#13-rescue--separate-writable-filesystem--recovery-decision)
+- [14. RESCUE — fresh exact plan, install, verify and save rollback](#14-rescue--fresh-exact-plan-install-verify-and-save-rollback)
+- [15. PHYSICAL / PI — return once to this printer's own original QSPI](#15-physical--pi--return-once-to-this-printers-own-original-qspi)
+- [16. PI — DHCP on the isolated cable for the first normal boot](#16-pi--dhcp-on-the-isolated-cable-for-the-first-normal-boot)
+- [17. LAPTOP — acquire the normal owner SSH host key through the Pi](#17-laptop--acquire-the-normal-owner-ssh-host-key-through-the-pi)
+- [18. LAPTOP — create the strict profile, then log in](#18-laptop--create-the-strict-profile-then-log-in)
+- [19. LAPTOP — complete acceptance and make daily use simple](#19-laptop--complete-acceptance-and-make-daily-use-simple)
+
+## Phase map
+
+| Steps | QSPI state | eMMC state | Required recovery point |
+|---|---|---|---|
+| 0–5 | Original | Unchanged by these steps | Three verified QSPI reads and independent protected original before proceeding |
+| 6–8 | Temporary Rescue after gated write | Protected reads only | Original QSPI plus complete Rescue readback; then matched eMMC/boot-area backups |
+| 9–12 | Temporary Rescue | Read-only/no replay inspection | Full acquisitions, affected-file backup, fresh target/plan and filesystem decision |
+| 13–14 | Temporary Rescue | **Writable mounts can replay journals; owner files then persist** | Working-device recovery decision plus exact file transaction/rollback and readbacks |
+| 15 | Same-printer original restored | Owner p6/p7 files remain | Original-QSPI readback, installed-file verification, private rollback receipts |
+| 16–19 | Original normal boot | Vendor/owner normal state writes | Isolated first trust, pinned SSH and recovery access; acceptance is a new target observation |
+
+Already installed? Enter via verify/update/recovery in [OWNER_INSTALL](OWNER_INSTALL.md#6-ordinary-updates-disable-and-recovery).
+Existing backups permit a later entry only after their provenance and the current
+device state are verified. A partial installation is not a fresh install.
+
 ## 0. Terminals, variables and what changes
+
+**Current state:** No hardware action yet.
+
+**What will change:** Establish terminal/context labels.
+
+**EXPECTED:** Correct target and privileges understood.
+
+**STOP CONDITION:** Unknown context.
+
+**RECOVERY:** Unchanged device.
 
 | Label | Where to type | Shell / privilege |
 |---|---|---|
@@ -48,6 +97,16 @@ this logical file list. The panel, logo and clock are optional; root does not
 require those display modifications.
 
 ## 1. LAPTOP — choose the source and private workspace
+
+**Current state:** Original QSPI; no eMMC change.
+
+**What will change:** Create laptop private workspace and inspect source.
+
+**EXPECTED:** Reviewed source and bounded local outputs.
+
+**STOP CONDITION:** Wrong source or existing private output.
+
+**RECOVERY:** Unchanged device.
 
 Use the reviewed source export or its clean source-edition clone. A public copy
 must contain the reviewed selection, not the producer's private research history.
@@ -87,6 +146,16 @@ archives where available; no downloaded printer firmware is required for fixture
 
 ## 2. PI — establish the management prerequisite
 
+**Current state:** Device untouched.
+
+**What will change:** Prepare authenticated Pi/tool access.
+
+**EXPECTED:** Known host and reviewed tool availability.
+
+**STOP CONDITION:** Unverified Pi identity or missing tools.
+
+**RECOVERY:** Device unchanged; retain existing host pin.
+
 Use an existing Pi management SSH alias, here **`form3-pi`**. This is a placeholder
 alias for **your** Pi, not a discoverable printer name. Configure and verify its
 host fingerprint through the physical Pi console before relying on it. A newly
@@ -117,6 +186,16 @@ It does not copy a private laptop key to the Pi.
 
 ## 3. PHYSICAL / PI — identify the chip and acquire three reads
 
+**Current state:** Original QSPI; all device power removed for wiring.
+
+**What will change:** Read QSPI only.
+
+**EXPECTED:** Three meaningful equal reads and independent backup.
+
+**STOP CONDITION:** Any electrical/identity/read discrepancy.
+
+**RECOVERY:** Original untouched.
+
 Complete the [measurement table](ROOT_GUIDE.md#2-physical-resolve-the-electrical-gate-before-connecting-a-clip)
 first. My documented route removed the SOM and clipped the still-soldered flash;
 it did not need a soldered UART. That does not establish another board's pinout.
@@ -144,7 +223,7 @@ The upstream Linux-SPI syntax is `linux_spi:dev=DEVICE,spispeed=KHZ`; the comple
 string is **one quoted argument**, not a shell command. Determine the actual
 SPI device from the Pi configuration. Enable the Pi SPI controller using the
 appropriate Pi OS procedure *before* attaching the clip; do not guess a header
-pin from `/dev/spidev` numbering. [Upstream Pi instructions](https://github.com/flashrom/flashrom/blob/main/doc/user_docs/raspberry_pi.rst).
+pin from `/dev/spidev` numbering. [Upstream Pi instructions](https://raw.githubusercontent.com/flashrom/flashrom/8e36840a2894f73187e225d9da51bbdfff582a6c/doc/user_docs/raspberry_pi.rst).
 
 After confirmed power/orientation/contact checks, run **each** separate read:
 
@@ -185,6 +264,16 @@ image. Protect the retained reads with `chmod 444` and make an independent backu
 
 ## 4. LAPTOP — build the RAM rescue and see the exact patch
 
+**Current state:** Own original QSPI backed up.
+
+**What will change:** Build private Rescue derivative.
+
+**EXPECTED:** Exact allowed byte differences and CRC/hash gates.
+
+**STOP CONDITION:** Unknown input hash/layout.
+
+**RECOVERY:** Protected original.
+
 ```sh
 # LAPTOP — reads the local factory copy, never a programmer.
 export FACTORY_COPY="$OWNER_PRIVATE/qspi-reads/read1.bin"
@@ -214,6 +303,16 @@ application or eMMC filesystem is patched by this build.
 
 ## 5. LAPTOP / PI — stage the reviewed rescue image
 
+**Current state:** QSPI still original.
+
+**What will change:** Copy candidate to Pi.
+
+**EXPECTED:** Size/hash equality.
+
+**STOP CONDITION:** Transfer discrepancy.
+
+**RECOVERY:** Protected original; no programming.
+
 ```sh
 # LAPTOP — public checksum, private device-derived image transfer.
 scp -p build/tutorial-qspi-01/form3_qspi_RESCUE_V2.bin \
@@ -233,6 +332,16 @@ test "$(stat -c %s rescue-reviewed.bin)" = 4194304 || exit 1
 image from a different printer or pass the factory hash as the rescue hash.
 
 ## 6. PHYSICAL / PI — deliberate rescue programming and complete readback
+
+**Current state:** Original backed up; hardware gates passed.
+
+**What will change:** Program temporary Rescue QSPI.
+
+**EXPECTED:** Complete readback matches planned image; then verified Rescue context.
+
+**STOP CONDITION:** Any readback mismatch or no verified Rescue boot.
+
+**RECOVERY:** Same-printer original through reviewed clip route; failure branch below.
 
 This block is the **manual write boundary**, not a runnable project installer.
 Only after step 3's electrical gate, successful three-read review, image validation
@@ -259,7 +368,7 @@ sha256sum rescue-reviewed.bin rescue-readback.bin
 ```
 
 No `--force`, separate erase, partial-layout shortcut or verification suppression.
-[Upstream flashrom operation semantics](https://github.com/flashrom/flashrom/blob/main/doc/classic_cli_manpage.rst).
+[Upstream flashrom operation semantics](https://raw.githubusercontent.com/flashrom/flashrom/8e36840a2894f73187e225d9da51bbdfff582a6c/doc/classic_cli_manpage.rst).
 **Mismatch:** preserve files/logs, keep printer power off, resolve the programming
 problem. Do not try normal boot to see whether a mismatch happens to work.
 
@@ -267,7 +376,34 @@ problem. Do not try normal boot to see whether a mismatch happens to work.
 restoring the SOM, heatspreader and enclosure. Restore only the printer's intended
 connections, attach the isolated Ethernet cable, then power on deliberately.
 
+### Rescue does not boot: do not continue
+
+**STOP CONDITION:** the expected identified Rescue shell in step 8 cannot be
+established after programming. **DO NOT CONTINUE. Do not mount eMMC writable or
+install owner files.** A correct readback alone does not prove successful boot.
+
+**RECOVERY:** safely remove printer and programmer power before reconnecting the
+clip. Preserve every original, failed read and write log. Repeat the already
+reviewed electrical/part/orientation gates, then use the step 6 readback operation
+with **new filenames** to read the QSPI again and compare against the planned
+Rescue image. Never overwrite original reads or invent a new accepted hash.
+If recovery is needed, use the same verified programmer and this printer's own
+original image under the [step 15 restore gate](#15-physical--pi--return-once-to-this-printers-own-original-qspi).
+That section's expected-Rescue pre-read must still match; if it does not, retain
+the discrepancy and stop for a separately reviewed recovery decision instead of
+bypassing the gate. No normal boot or eMMC change is authorized by a failed readback.
+
 ## 7. PI — configure and verify the isolated rescue cable
+
+**Current state:** Temporary Rescue planned/booting.
+
+**What will change:** Configure only isolated Pi service link.
+
+**EXPECTED:** Expected route and independent isolation.
+
+**STOP CONDITION:** Unexpected route/bridge/forwarding/peer.
+
+**RECOVERY:** QSPI original retained; eMMC untouched.
 
 ```sh
 # LAPTOP — transfer one authored Pi helper, no automatic execution.
@@ -300,6 +436,16 @@ the selected rescue protocol, not the printer's normal home-LAN addressing.
 
 ## 8. PI to RESCUE — identify the shell, then back up all three devices
 
+**Current state:** Verified Rescue RAM root.
+
+**What will change:** Read and acquire eMMC plus boot areas.
+
+**EXPECTED:** Source/receiver size and hash match; all protected.
+
+**STOP CONDITION:** Wrong identity, mounted eMMC or protection mismatch.
+
+**RECOVERY:** Original QSPI and retained acquisition files.
+
 ```sh
 # PI — open RESCUE C. A visible prompt/local echo is not guaranteed.
 nc 10.0.0.77 2324
@@ -325,10 +471,10 @@ done
 printf '\nFORM3 RESCUE CHECK COMPLETE\n'
 ```
 
-**Expected:** UID0, armv7l, Formlabs model, `rdinit=/init`, 15,678,308,352-byte
+**Expected:** UID 0, armv7l, Formlabs model, `rdinit=/init`, 15,678,308,352-byte
 user area, all listed protection flags `1`, and no eMMC mount. Confirm the applets;
 there is no rescue `scp`, `tar`, `cp`, `chmod` or Python. A wrong context stops.
-Retain the eth0 MAC privately for step16; it is not a public example value.
+Retain the eth0 MAC privately for step 16; it is not a public example value.
 
 For the large image, the reference `tee`-based backup was slow. The successful
 fast route uses direct block streaming plus a separate source hash while the
@@ -393,6 +539,16 @@ must agree. A `.sha256` file alone only checks the saved image against itself.
 
 ## 9. LAPTOP — create independent owner keys and a signed install package
 
+**Current state:** Rescue; eMMC protected.
+
+**What will change:** Generate separate local owner keys and signed package.
+
+**EXPECTED:** Independent signer pin and verified package.
+
+**STOP CONDITION:** Existing keys, signature or input mismatch.
+
+**RECOVERY:** All originals and no persistent install.
+
 Use the private directory from step 1; do not recreate or overwrite it. These are
 **your new keys**. The SSH client key and package signer have different roles.
 
@@ -445,6 +601,16 @@ or panel listener is enabled by this initial config. Do not broaden it to concea
 a routing problem.
 
 ## 10. LAPTOP / PI / RESCUE — transfer the small public installation inputs
+
+**Current state:** Rescue RAM with capacity checked.
+
+**What will change:** Transfer small authored/public inputs to new RAM files.
+
+**EXPECTED:** Every length/hash matches.
+
+**STOP CONDITION:** Partial transfer or insufficient RAM.
+
+**RECOVERY:** Protected backups; preserve failed RAM file.
 
 Obtain `RESCUE_RUNTIME_SHA256SUMS` from the reviewed source export. In a clean Git
 clone, `python3 tools/export_public_source.py --output build/tutorial-source-01`
@@ -500,6 +666,16 @@ may be connected. Check `/proc/meminfo`; do not stream a rootfs into RAM.
 
 ## 11. RESCUE — read-only mounts and the genuine runtime
 
+**Current state:** Rescue; no vendor init.
+
+**What will change:** Inspect p6/p7 read-only; verify genuine runtime.
+
+**EXPECTED:** Exact mounted runtime and supported target.
+
+**STOP CONDITION:** Dirty/untrusted/unexpected filesystem or runtime.
+
+**RECOVERY:** No replay; original backups retained.
+
 Inspect `/proc/mounts` again. If either device is already mounted or vendor
 processes are running, stop and inspect; do not mount over an existing tree.
 
@@ -544,8 +720,18 @@ Never run vendor init, Sauron or a vendor updater from this mounted runtime.
 
 ## 12. RESCUE — inspect journal flags and produce the read-only plan
 
+**Current state:** Read-only target view.
+
+**What will change:** Inspect ext4 flags and generate plan/backups.
+
+**EXPECTED:** Known recovery state and complete private before-images.
+
+**STOP CONDITION:** Pending install or unresolved recovery.
+
+**RECOVERY:** Unchanged inspection view; no write permission implied.
+
 This prints only filesystem header flags, not UUIDs or device secrets. The ext4
-header is at byte1024; `s_state` is at0x3a and incompatibility flags at0x60.
+header is at byte 1024; `s_state` is at 0x3a and incompatibility flags at 0x60.
 [Kernel field definitions](https://docs.kernel.org/filesystems/ext4/super.html).
 This is **not fsck**, a checksum validation or a whole-filesystem health proof.
 
@@ -647,6 +833,16 @@ basename in all three places. Hash/size equality is required each time.
 
 ## 13. RESCUE — separate writable-filesystem / recovery decision
 
+**Current state:** Plan provisional until recovery settled.
+
+**What will change:** If approved, permit working p6/p7 journal/metadata writes.
+
+**EXPECTED:** Fresh post-recovery view; rebuilt plan.
+
+**STOP CONDITION:** Unresolved errors, unexpected block state.
+
+**RECOVERY:** Independent eMMC/affected-file backups; stop for recovery review.
+
 This is the first authorized persistent **eMMC** write boundary. The printer must
 still be in the identified rescue with no vendor stack. Backups must be valid and
 the named real devices must match step11. Do not execute this against loop devices
@@ -657,7 +853,7 @@ arbitrary damaged journal as recoverable.
 For the approved clean-filesystem path, or a **separately approved normal journal
 replay only**, use normal ext4 mounts without `noload`. The kernel may replay its
 journal and writes mount metadata. That is a persistent operation even before
-ownerctl changes a file. [Kernel mount semantics](https://www.kernel.org/doc/html/latest/admin-guide/ext4.html).
+ownerctl changes a file. [Kernel mount semantics](https://www.kernel.org/doc/html/v6.12/admin-guide/ext4.html).
 
 ```sh
 # RESCUE — PERSISTENT STORAGE GATE. Approval string is a human gate, not a health test.
@@ -692,6 +888,16 @@ give the new plan/archive a distinct filename. Only after this review may the
 same normal writable mounts above be used for installation.
 
 ## 14. RESCUE — fresh exact plan, install, verify and save rollback
+
+**Current state:** Fresh reviewed writable working p6/p7.
+
+**What will change:** Install only plan-bound owner files then verify.
+
+**EXPECTED:** Committed transaction, matching readback, no pending marker.
+
+**STOP CONDITION:** Apply/verify mismatch.
+
+**RECOVERY:** Matching transaction rollback; protect/unmount as below.
 
 After any approved recovery/remount, verify runtime hashes **again before execution**.
 The same `owner_python` function still applies in this terminal. Generate a fresh
@@ -746,7 +952,7 @@ The following is derived from `owner-maintenance/ownerctl.py::apply_install` and
 
 | Partition/path | Action and reason |
 |---|---|
-| p6 `/etc/passwd` | Append `owner-maint` non-login account, free UID/GID in64900–65000, `/bin/false`; preserve existing root entry |
+| p6 `/etc/passwd` | Append `owner-maint` non-login account, free UID/GID in 64900–65000, `/bin/false`; preserve existing root entry |
 | p6 `/etc/group` | Append matching group; no password/shadow modification |
 | p6 `/etc/init.d/owner-maintenance` | New executable hash-pinned nonblocking supervisor hook |
 | p6 `/etc/rc5.d/S98owner-maintenance` | New relative symlink to the hook; does not replace S99boot-ok |
@@ -823,7 +1029,17 @@ bytes; it must refuse unrelated later edits. No blanket deletion or shadow resto
 
 ## 15. PHYSICAL / PI — return once to this printer's own original QSPI
 
-Prepare step16's independent network isolation **before the next normal boot**.
+**Current state:** Verified owner install; temporary Rescue QSPI.
+
+**What will change:** Restore own original QSPI.
+
+**EXPECTED:** Full original-image readback.
+
+**STOP CONDITION:** Any electrical/readback mismatch.
+
+**RECOVERY:** Both original and Rescue copies retained; no blind normal boot.
+
+Prepare step 16's independent network isolation **before the next normal boot**.
 After closing rescue mounts and confirming no active printer action, issue `poweroff`
 in RESCUE. Wait for halt and physically remove printer power; OS poweroff is not
 electrical isolation. Re-enter the same approved clip/SOM/power arrangement.
@@ -869,15 +1085,25 @@ sshd. No rescue boot environment is needed for ordinary owner SSH afterward.
 
 ## 16. PI — DHCP on the isolated cable for the first normal boot
 
+**Current state:** Original QSPI; persistent owner files.
+
+**What will change:** Prepare isolated DHCP and supervised normal boot.
+
+**EXPECTED:** Verified lease/sole peer; all paths isolated.
+
+**STOP CONDITION:** Saved WLAN/IPv6/USB or route isolation unresolved.
+
+**RECOVERY:** Retained clip/Rescue and installer rollback.
+
 Normal ConnMan needs a lease; it does not inherit rescue's static address. This
-example keeps Pi eth0 at10.0.0.1/24, matching the initial owner client allowlist.
+example keeps Pi eth0 at 10.0.0.1/24, matching the initial owner client allowlist.
 Printer WLAN must be independently prevented from joining an upstream network;
 include other Ethernet, USB, IPv6, bridges, routing and host relays in that check.
 If this cannot be established, **do not use first-use host trust on that setup**.
 
 The Pi WLAN management path may remain only with forwarding/bridging disabled
 and independently verified. No router change or printer Wi-Fi secret is required
-by these commands. Check that management routes do not overlap10.0.0.0/24.
+by these commands. Check that management routes do not overlap 10.0.0.0/24.
 Retain the printer eth0 MAC privately from the already identified rescue's
 `cat /sys/class/net/eth0/address` **before shutting rescue down**; do not publish it.
 
@@ -930,6 +1156,16 @@ renewal will need it or an explicitly reviewed replacement network later.
 
 ## 17. LAPTOP — acquire the normal owner SSH host key through the Pi
 
+**Current state:** Normal OS on isolated service segment.
+
+**What will change:** Enroll owner SSH host trust on laptop.
+
+**EXPECTED:** One correlated server fingerprint.
+
+**STOP CONDITION:** Unexpected or changed identity.
+
+**RECOVERY:** Do not overwrite existing trusted pin.
+
 ```sh
 # LAPTOP — actual isolated lease; validate before embedding it in a remote command.
 read -r -p 'Verified isolated normal-printer IPv4 from the Pi lease: ' PRINTER_HOST
@@ -956,6 +1192,16 @@ the existing fingerprint instead of performing new TOFU. No scan of the home LAN
 
 ## 18. LAPTOP — create the strict profile, then log in
 
+**Current state:** Original QSPI; owner SSH authorized.
+
+**What will change:** Verify normal root and concurrent sessions.
+
+**EXPECTED:** Correct kernel/slot/build and ownerctl verify.
+
+**STOP CONDITION:** Wrong context or failed verify.
+
+**RECOVERY:** Retained independent recovery route.
+
 ```sh
 # LAPTOP — local profile creation only; never overwrites known-hosts/default keys.
 read -r -p 'Independently accepted SHA256:... owner host fingerprint: ' OWNER_HOST_FINGERPRINT
@@ -970,7 +1216,7 @@ ssh -F "$OWNER_SSH_PROFILE" form3-owner
 ```
 
 The helper validates the public-key encoding/fingerprint and creates only
-`owner-known-hosts` and `owner-ssh.conf`, mode0600. The profile selects root:2222,
+`owner-known-hosts` and `owner-ssh.conf`, mode 0600. The profile selects root:2222,
 your named key, strict stable host-key alias, no passwords/agent forwarding and
 the independently pinned Pi jump. It does not connect or configure the printer.
 
@@ -986,12 +1232,22 @@ cat /etc/formlabs/version.json
 /usr/bin/ssh-keygen -lf /data/owner-maintenance/ssh/host_ed25519.pub -E sha256
 ```
 
-**Expected:** UID0, genuine4.9.65+, `root=/dev/mmcblk0p6`, no `rdinit=/init`,
+**Expected:** UID 0, genuine4.9.65+, `root=/dev/mmcblk0p6`, no `rdinit=/init`,
 firmware2.5.6-2773, valid installation and the retained host fingerprint. This is
 normal root access. Open a second pinned SSH session and keep both functioning.
 It is not proof the printer's original mechanical/printing fault was repaired.
 
 ## 19. LAPTOP — complete acceptance and make daily use simple
+
+**Current state:** Normal owner SSH verified.
+
+**What will change:** Negative auth and RAM-only SFTP tests.
+
+**EXPECTED:** Wrong key refused; roundtrip hashes match.
+
+**STOP CONDITION:** Transport failure mistaken for auth result.
+
+**RECOVERY:** Existing working SSH session remains.
 
 Perform the [wrong-key rejection and RAM-only SFTP roundtrip](SECURE_SSH.md#6-acceptance-reject-wrong-credentials-and-test-sftp)
 before declaring installation complete. For the Pi topology, the wrong-key test

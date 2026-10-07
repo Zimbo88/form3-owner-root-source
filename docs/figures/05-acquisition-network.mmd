@@ -1,10 +1,10 @@
 flowchart TD
-  printer["Form 3 Rescue V2<br/>10.0.0.77/24"]
-  pi["Pi service Ethernet<br/>10.0.0.1/24"]
-  wifi["Pi separate Wi-Fi + authenticated<br/>SSH"]
+  printer["Form 3 Rescue V2 10.0.0.77/24"]
+  pi["Pi service Ethernet 10.0.0.1/24"]
+  wifi["Pi separate Wi-Fi +<br/>authenticated SSH"]
   laptop["Laptop new private image file"]
   hash["Exact size + independent<br/>source/receiver SHA256"]
-  printer -->  |"isolated direct Ethernet / nc stream"| pi
-  pi -->  |"stdout through SSH; no 16GB Pi storage"| wifi
+  printer --> |"isolated direct Ethernet / nc<br/>stream"| pi
+  pi --> |"stdout through SSH; no 16 GB Pi<br/>storage"| wifi
   wifi --> laptop
   laptop --> hash

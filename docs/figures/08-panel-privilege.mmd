@@ -1,14 +1,16 @@
 flowchart TD
-  sysv["Nonblocking owner SysV supervisor"]
+  sysv["Nonblocking owner SysV<br/>supervisor"]
   socket["Narrow root socket launcher"]
   drop["Bind physical interface; drop<br/>groups/UID/GID"]
-  panel["Unprivileged owner panel1328"]
-  browser["Owner browser; explicit LAN login<br/>policy"]
+  panel["Unprivileged owner panel :1328"]
+  browser["Owner browser; explicit LAN<br/>login policy"]
   inputs["Allowlisted proc/sys + reviewed<br/>private summaries"]
-  writes["Owner settings only; bounded<br/>atomic state"]
+  writes["Owner settings; bounded<br/>atomic state"]
+  broker["Root local UNIX-socket broker"]
   sysv --> socket
   socket --> drop
   drop --> panel
-  browser -->  |"HTTPS or opt-in LAN HTTP / Host / Origin / session / CSRF"| panel
-  inputs -->  |"source and freshness labels"| panel
+  browser --> |"HTTPS or opt-in LAN HTTP / Host<br/>/ Origin / session / CSRF"| panel
+  inputs --> |"source and freshness labels"| panel
   panel --> writes
+  panel --> |"Clear reset: reauthentication<br/>and typed requests only"| broker

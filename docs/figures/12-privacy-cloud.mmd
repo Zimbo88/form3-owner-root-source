@@ -1,13 +1,13 @@
-flowchart TD
+flowchart LR
   printer["Printer local state / logs / job<br/>status"]
   optional["Optional collection/privacy<br/>settings"]
-  gateway["Cloud gateway / Dashboard / remote<br/>printing"]
+  gateway["Cloud gateway / Dashboard /<br/>remote printing"]
   cloud["Manufacturer services"]
   host["PreForm computer / host-mediated<br/>paths"]
   fence["Independent local-only network<br/>boundary"]
   printer --> optional
-  printer -.->  |"required status may include usage/identifiers"| gateway
-  optional -.->  |"only if verified enabled path"| cloud
-  gateway -->  |"cloud mode retains residual information"| cloud
-  host -.->  |"printer-only blocking is insufficient"| cloud
-  fence -.->  |"local-only blocks egress; removes cloud functions"| cloud
+  printer -.-> |"required status may include<br/>usage/identifiers"| gateway
+  optional -.-> |"only if verified enabled path"| cloud
+  gateway --> |"cloud mode retains residual<br/>information"| cloud
+  host -.-> |"printer-only blocking is<br/>insufficient"| cloud
+  fence -.-> |"local-only blocks egress;<br/>removes cloud functions"| cloud

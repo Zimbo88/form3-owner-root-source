@@ -1,14 +1,14 @@
 flowchart TD
-  gpio["Physical trigger: unresolved<br/>GPIO61 is NOT connector pin61"]
+  gpio["Physical trigger: unresolved<br/>GPIO 61 is NOT connector pin 61"]
   ub["Unchanged factory U-Boot branch"]
   dhcp["Isolated DHCP service segment"]
   tftp["TFTP genuine kernel + DTB"]
-  nfs["192.168.1.1:/srv/nfs<br/>explicit NFS-root semantics"]
-  init["Reviewed minimal init; RAM runtime<br/>writes"]
-  disk["eMMC read-only; no vendor startup"]
-  gpio -.->  |"reachability gate"| ub
+  nfs["192.168.1.1:/srv/nfs explicit<br/>NFS-root semantics"]
+  init["Reviewed minimal init; RAM<br/>runtime writes"]
+  disk["eMMC read-only; no vendor<br/>startup"]
+  gpio -.-> |"reachability gate"| ub
   ub --> dhcp
-  dhcp -->  |"nonzero DHCP siaddr used by compiled fork; runtime untested"| tftp
+  dhcp --> |"nonzero DHCP siaddr used by<br/>compiled fork; runtime untested"| tftp
   tftp --> nfs
-  nfs -->  |"preserve kernel network configuration"| init
+  nfs --> |"preserve kernel network<br/>configuration"| init
   init --> disk

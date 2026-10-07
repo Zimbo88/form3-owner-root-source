@@ -1,17 +1,39 @@
-# Private material, execution and disclosure policy
+# Security policy
 
-This review repository remains PRIVATE until an explicit publication decision.
-The public source candidate contains only individually reviewed authored source,
-guides and metadata; the private producer retains separate research history. Never upload raw eMMC/QSPI/rootfs, private keys, tokens, shadow hashes,
-logs/jobs/models, packet captures, unique identities or raw proprietary decompilation.
-`research-private/` and `build/` are ignored; do not recursively stage them. A private
-repository is not an appropriate secret store.
+## Reporting a vulnerability
 
-Distribution is limited to authored scripts/patch recipes, independent panel code,
-instructions and hashes with reviewed supporting material. Never distribute rebuilt
-vendor resources or binary deltas carrying vendor bytes. See the
-[source-only boundary](docs/public/RIGHTS_AND_RELEASE.md); an input hash
-is not an ownership check or legal clearance.
+Do not put sensitive details, credentials, exploit inputs or device data in public
+issues, discussions or pull requests. If this repository's Security tab offers
+**Report a vulnerability**, use that private GitHub channel with the affected
+source commit/version, a concise impact statement and a bounded synthetic
+reproducer. Do not test other owners' devices or use recovered vendor credentials.
+
+If that option is unavailable, open only a minimal public request for a private
+reporting channel, without exploit details or attachments, and wait for the
+maintainer to establish one. No email address or response-time guarantee is
+asserted here. Private vulnerability reporting was **not confirmed** during the
+2026-10-05 review: the repository API returned 404 while the repository was private.
+Maintainer action: enable and verify it before public release using
+[GitHub's instructions](https://docs.github.com/en/code-security/how-tos/report-and-fix-vulnerabilities/configure-vulnerability-reporting/configure-for-a-repository).
+
+## Supported review scope
+
+[VERSION](VERSION) identifies the current source review. The supported target
+checks remain p6 / 2.5.6-2773; this is not a promise of ongoing security updates
+for the manufacturer's old runtime. Older releases are historical evidence, not
+an implied supported security branch. See [Evidence status](docs/public/EVIDENCE_STATUS.md).
+
+## Private material
+
+Never upload eMMC/QSPI/rootfs dumps, private keys, tokens, password hashes,
+logs/jobs/models, packet captures, unique identifiers or raw proprietary
+extractions. JSON field names and filenames can themselves contain secrets.
+Ignored directories and private repository visibility are not secret storage.
+
+Only reviewed authored source, patch recipes, guides and metadata belong here.
+No rebuilt vendor resources or binary deltas carrying vendor bytes are distributed.
+[The rights boundary](docs/public/RIGHTS_AND_RELEASE.md) grants no legal clearance
+or ownership proof merely because an input hash matches.
 
 ## Execution boundaries
 
@@ -29,16 +51,13 @@ TLS-verification bypass, cloned identity or safety override is supported. Unknow
 native control semantics stay disabled. Current target libraries are old; compatibility
 is not a claim that they are maintained. Restrict exposure and review acceptance.
 
-## Review and reporting
 
-Run staged-content format scanning and a local known-secret dictionary check without
-printing values, inspect the actual staged diff, and review binary assets/metadata.
-Scan the entire new history before publishing; regexes alone are not proof of absence.
-A clean-clone fixture test must work without private artifacts. Preserve original
-history privately and record skipped/non-restorable migration metadata explicitly.
+## Maintainer handling
 
-Potential security findings remain private for owner review. Record a bounded offline
-reproducer and precise affected input/version where available; do not publish an
-exploit, contact a vendor, authenticate with found credentials or forge an attestation.
-Any later disclosure needs separate approval and a reviewed recipient/channel. A
-blocked automatic safety review is recorded, not bypassed by another worker.
+Keep raw reports outside Git, minimize identifying data and agree on disclosure
+with the reporter through the established private channel. Review a bounded
+reproducer without executing untrusted vendor startup or reaching cloud services.
+Publish only a sanitized advisory after assessment; no fake attestations or
+manufacturer credentials belong in a reproducer. Audit both Git history and
+GitHub-hosted attachments before a visibility change. Pattern scanners reduce
+mistakes but cannot guarantee the absence of secrets.

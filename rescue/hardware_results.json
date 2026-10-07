@@ -26,5 +26,11 @@
   ],
   "v2_image": "hardware/qspi/build-v2/form3_qspi_RESCUE_V2.bin",
   "v2_sha256": "8a58a97cbb0bc5d52ada65debb7e195ee5935d1057a0b27096774feffdc59164",
-  "historical_v1_failure": "TCP 2323 initially accepted connections, but telnet closed immediately and later connections were refused. PTY/session creation failure is suspected; the exact cause is not confirmed."
+  "historical_v1_failure": "TCP 2323 initially accepted connections, but telnet closed immediately and later connections were refused. PTY/session creation failure is suspected; the exact cause is not confirmed.",
+  "scope": {
+    "phase": "historical acquisition and Rescue V1/V2 only",
+    "not_confirmed_is_phase_local": true,
+    "later_evidence_index": "docs/public/EVIDENCE_STATUS.md",
+    "current_source_hardware_acceptance": false
+  }
 }

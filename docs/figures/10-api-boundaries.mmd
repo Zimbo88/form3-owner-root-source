@@ -1,13 +1,13 @@
-flowchart TD
+flowchart LR
   preform["Computer: official PreFormServer<br/>Local API"]
   cloud["Manufacturer cloud Web API"]
   formule["Printer native Formule TCP / USB"]
   ipc["Printer internal D-Bus / IPC"]
-  panel["Authored owner panel1328"]
+  panel["Authored owner panel :1328"]
   client["Owner client / panel adapters"]
-  client -->  |"host-side API; no root implication"| preform
-  client -->  |"Internet/account; separate from local owner API"| cloud
-  client -.->  |"framing research; live reachability unknown"| formule
-  formule -->  |"implementation-specific dispatch"| ipc
-  client -->  |"owner authentication"| panel
-  panel -.->  |"no generic proxy; future individually reviewed adapter only"| ipc
+  client --> |"host-side API; no root<br/>implication"| preform
+  client --> |"Internet/account; separate from<br/>local owner API"| cloud
+  client -.-> |"Framing research; not all<br/>methods accepted"| formule
+  formule --> |"implementation-specific dispatch"| ipc
+  client --> |"owner authentication"| panel
+  panel -.-> |"no generic proxy; future<br/>individually reviewed adapter<br/>only"| ipc

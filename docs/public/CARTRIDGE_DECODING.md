@@ -1,5 +1,9 @@
 # Decode a private cartridge backup, without writing a cartridge
 
+> HISTORICAL RESULT: this report describes its named research tool and milestone.
+> The later [panel write implementation and acceptance](CARTRIDGE_PANEL_RESET.md#evidence-and-tests)
+> has a separate scope; see the [central evidence index](EVIDENCE_STATUS.md).
+
 This laptop-only decoder makes a copied consumable record inspectable. It does
 not turn an empty cartridge into a physically full supply, remove a material
 mismatch, authorize dispensing or establish safe restoration. No manufacturer

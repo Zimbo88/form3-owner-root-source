@@ -1,8 +1,8 @@
-# Owner maintenance lifecycle — 0.5.9-review source
+# Owner maintenance lifecycle
 
 Current executable source supports the inspected **p6 / 2.5.6-2773** target. Prior
 reference-owner hardware acceptance includes normal SSH/SFTP, panel and reboot
-return. The [current release receipt](../docs/public/LIMITS.md) separates
+return. The [evidence index](../docs/public/EVIDENCE_STATUS.md) separates
 new source changes from actual deployment. Start with [readiness](../docs/public/LIMITS.md)
 and [first install](../docs/public/OWNER_INSTALL.md), not an old milestone's version.
 
@@ -32,7 +32,7 @@ privately; every new owner must enroll their own, preserving vendor identity.
 The root SysV hook returns without waiting for networking, keeping S99boot-ok and
 vendor startup independent. The supervisor validates owner files/configuration,
 manages only owner listeners/rules and uses bounded retries. Separate owner sshd
-uses the existing vendor7.5p1 executable with owner host/client-key authorization,
+uses the existing vendor 7.5p1 executable with owner host/client-key authorization,
 no password login and internal-SFTP. No manufacturer CA or host key is reused.
 
 The primary socket launcher verifies/binds eligible physical IPv4, drops groups,
@@ -65,7 +65,7 @@ python3 owner-maintenance/ownerctl.py --help
 Expected: explicit contexts/arguments and apply gates. The [one test path](../docs/public/BUILD.md)
 runs disconnected synthetic corruption, authentication, permission and interruption
 cases. Actual ARM and earlier VM results have narrower, separate scopes. Target
-Python3.5/OpenSSL compatibility does not mean those old libraries are maintained.
+Python 3.5/OpenSSL compatibility does not mean those old libraries are maintained.
 
 For a future live update preserve an independent pinned SSH session, current
 package/config/identity pins, exact plan and rollback copy. Reject unsupported

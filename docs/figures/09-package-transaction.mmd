@@ -11,9 +11,9 @@ flowchart TD
   signer --> signed
   signed --> plan
   pin --> plan
-  plan -->  |"explicit --apply + device/plan pins"| tx
+  plan --> |"explicit --apply + device/plan<br/>pins"| tx
   tx --> files
   files --> done
   files --> fail
   fail --> rollback
-  rollback -->  |"restore reviewed before state"| tx
+  rollback --> |"restore reviewed before state"| tx

@@ -1,14 +1,14 @@
-# Owner Root maintenance panel — 0.5.13-review
+# Owner Root maintenance panel
 
-An unprivileged panel on **port1328**, with five main navigation areas and related
+An unprivileged panel on **port 1328**, with five main navigation areas and related
 settings tabs. [Features and limits](../docs/public/LIMITS.md) are the current user-facing
-catalog. [Acceptance](../docs/public/LIMITS.md) distinguishes reference-owner
+catalog. [Acceptance](../docs/public/EVIDENCE_STATUS.md) distinguishes reference-owner
 hardware observations, current source/fixture tests and pending installation.
 
 ## Runtime and security
 
-Target code deliberately uses Python3.5 standard-library-compatible constructs.
-Existing genuine ARM Python3.5.3/glibc2.26/OpenSSL1.0.2o and normal-device results
+Target code deliberately uses Python 3.5 standard-library-compatible constructs.
+Existing genuine ARM Python 3.5.3/glibc 2.26/OpenSSL 1.0.2o and normal-device results
 are documented separately from host/VM fixtures. They do not imply that old
 libraries are maintained or that another Linux kernel/firmware is compatible.
 No runtime dependency was added for the original SVG logo or transparent sidebar.
@@ -85,3 +85,9 @@ with native rendering and writes separately reviewed.
 ## Explicit Clear usage adjustment
 
 [The panel workflow and recovery boundary](../docs/public/CARTRIDGE_PANEL_RESET.md) use a separate root UNIX-socket broker. This requires a signed maintenance update, not only a panel archive. The ordinary panel remains unprivileged. Only the reviewed legacy Clear format is supported; already-zero usage is not rewritten.
+
+![Panel process and narrow privileged broker](../docs/figures/08-panel-privilege.svg)
+
+*SOURCE architecture: the web process remains unprivileged. Explicit Clear usage
+requests use the separately authenticated local broker; there is no arbitrary
+command or actuator proxy. Historical hardware acceptance is scoped in the evidence index.*

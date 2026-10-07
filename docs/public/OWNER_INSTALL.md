@@ -10,12 +10,14 @@ needs the separately gated [root/acquisition route](ROOT_GUIDE.md). The code per
 only the reviewed p6 / 2.5.6-2773 target, fresh boot selection and no pending flip.
 Read the whole sequence, including recovery, before a persistent change.
 
-This is tutorial chapter 2. Chapter 1 covers the temporary RAM root and backups;
-chapter 3 provides the [complete SSH enrollment and acceptance procedure](SECURE_SSH.md).
+This is an installer reference. Follow the [canonical walkthrough](COMMAND_WALKTHROUGH.md)
+for first installation; [SECURE_SSH](SECURE_SSH.md) explains trust and daily use.
 The panel, native clock and artwork are optional additions, not prerequisites for
 an authenticated root shell. The installer never supplies its own initial root.
 
 ## 1. LAPTOP: source review and independent owner authority
+
+**Commands:** [walkthrough phase 9](COMMAND_WALKTHROUGH.md#9-laptop--create-independent-owner-keys-and-a-signed-install-package).
 
 Run [build/tests](BUILD.md). Keep evidence, current affected-file backups and accepted
 source receipts independently. `VERSION` identifies the source; source tarballs
@@ -23,42 +25,12 @@ and synthetic fixture signatures provide no installation authority.
 
 Create a **new** private directory and named keys after reviewing the choice:
 
-```sh
-# LAPTOP — local files only; never overwrite default SSH identities.
-umask 077
-: "${OWNER_PRIVATE:?new private deployment directory, outside the clone}"
-[ ! -e "$OWNER_PRIVATE" ] || { printf 'STOP: directory already exists\n'; exit 1; }
-mkdir -m 700 -- "$OWNER_PRIVATE"
-ssh-keygen -t ed25519 -f "$OWNER_PRIVATE/owner-client-ed25519" -C 'owner-maintenance'
-openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 \
-  -out "$OWNER_PRIVATE/owner-package-signing.pem"
-openssl pkey -in "$OWNER_PRIVATE/owner-package-signing.pem" -pubout \
-  -out "$OWNER_PRIVATE/owner-package-public.pem"
-sha256sum "$OWNER_PRIVATE/owner-package-public.pem"
-ssh-keygen -lf "$OWNER_PRIVATE/owner-client-ed25519.pub"
-```
-
 Choose a client-key passphrase and use a local SSH agent for convenient daily login.
 The package signer is a **separate** authority and remains on the laptop/offline
 storage. Its generated file is protected by the private directory/umask; safeguard
 that unencrypted signing file accordingly. Do not deploy test keys, copy any private
 client/signer key to the printer, overwrite existing keys or reuse vendor credentials.
 Retain the public PEM hash independently rather than trusting a key inside a package.
-
-```sh
-# LAPTOP — independent pin entered from the preceding reviewed public fingerprint.
-: "${OWNER_PRIVATE:?private deployment directory}"
-: "${OWNER_SIGNER_PIN:?independently retained public PEM SHA256}"
-: "${INSTALL_PACKAGE:?new private .tar.gz output path}"
-OWNER_VERSION=$(cat VERSION)
-python3 tools/build_owner_package.py build --kind install --version "$OWNER_VERSION" \
-  --signing-key "$OWNER_PRIVATE/owner-package-signing.pem" \
-  --public-key "$OWNER_PRIVATE/owner-package-public.pem" \
-  --signer-sha256 "$OWNER_SIGNER_PIN" --package "$INSTALL_PACKAGE"
-python3 tools/build_owner_package.py verify --package "$INSTALL_PACKAGE" \
-  --public-key "$OWNER_PRIVATE/owner-package-public.pem" --signer-sha256 "$OWNER_SIGNER_PIN"
-sha256sum "$INSTALL_PACKAGE"
-```
 
 Expected: independently pinned RSA/SHA256 signature, permitted paths and exact
 package/manifest hashes. New output is required; collision or signature failure
@@ -74,6 +46,8 @@ configuration later; signed maintenance/config transactions are separate operati
 
 ## 2. RESCUE: current state, journal decision and runtime verification
 
+**Commands:** [walkthrough phase 11](COMMAND_WALKTHROUGH.md#11-rescue--read-only-mounts-and-the-genuine-runtime).
+
 Confirm root, model/ARM architecture, `rdinit=/init`, actual eMMC capacity, partition
 layout and read-only flags. Identify the current selected slot from a **fresh** active
 U-Boot environment, not the old acquisition. Inspect mounts before adding any:
@@ -81,14 +55,6 @@ never silently remount an existing filesystem or replay/repair an original image
 
 The reviewed inspection shape uses sibling mounts `/mnt/owner-slot` and
 `/mnt/owner-data`, so `/data` is not accidentally hidden beneath another tree:
-
-```sh
-# RESCUE — ONLY after device/partition/read-only checks and confirming these are unmounted.
-mkdir -p /mnt/owner-slot /mnt/owner-data
-mount -t ext4 -o ro,noload,nodev,nosuid /dev/mmcblk0p6 /mnt/owner-slot
-mount -t ext4 -o ro,noload,nodev,nosuid,noexec /dev/mmcblk0p7 /mnt/owner-data
-cat /proc/mounts
-```
 
 The deliberately executable p6 inspection mount is only for the verified genuine
 loader/Python/OpenSSL; p7 stays noexec. No vendor startup/site/installer is run.
@@ -103,27 +69,7 @@ files**, using a bounded reviewed transfer. Verify complete sizes/hashes before
 execution. Keep private signing/client keys on LAPTOP. Never stream a transfer into
 a block device or exceed available RAM. The raw transport is physically isolated.
 
-For clarity, a single-file bootstrap transfer has two terminals. First make the
-reviewed source available on PI through its already pinned management SSH/SFTP
-connection. Check size/hash there against LAPTOP. Then, in the identified RESCUE
-shell, receive into a **new** RAM filename with a deadline:
-
-```sh
-# RESCUE — isolated service cable only; use a NEW filename on every retry.
-[ ! -e /run/ownerctl.py ] || { printf 'STOP: RAM destination exists\n'; exit 1; }
-umask 077
-timeout 60 nc -l -p 9001 > /run/ownerctl.py
-wc -c < /run/ownerctl.py
-sha256sum /run/ownerctl.py
-```
-
-While that listener waits, send the already reviewed file from the second terminal:
-
-```sh
-# PI — ./ownerctl.py is the verified authored source copy, not a firmware binary.
-# 10.0.0.77 is the reviewed Rescue V2 protocol address, not normal WLAN addressing.
-nc -w 10 10.0.0.77 9001 < ./ownerctl.py
-```
+The [phase 10 transfer](COMMAND_WALKTHROUGH.md#10-laptop--pi--rescue--transfer-the-small-public-installation-inputs) uses two terminals: a bounded receiver to a new RAM filename and a sender on the pinned Pi management connection. Both size and hash must match LAPTOP.
 
 Do not infer completion from a timeout or connection closure: both the printed
 length and SHA256 must equal the independently retained LAPTOP values. The raw
@@ -157,21 +103,7 @@ checks content using BusyBox. Missing, changed or unexpectedly escaping paths st
 runtime execution; the trusted manifest does not grant permission to substitute a
 newer runtime. Do not globally change PATH/loader configuration.
 
-Define a temporary invocation for the already verified runtime:
-
-```sh
-# RESCUE — verified mounted binaries only; no Python site/startup or bytecode writes.
-owner_python() {
-  PYTHONHOME=/mnt/owner-slot/usr \
-    /mnt/owner-slot/lib/ld-linux-armhf.so.3 \
-    --library-path /mnt/owner-slot/lib:/mnt/owner-slot/usr/lib \
-    /mnt/owner-slot/usr/bin/python3.5 -B -S "$@"
-}
-owner_python /run/capture_owner_bootenv.py --output /run/owner-active-env-review.bin
-owner_python /run/ownerctl.py preflight --context rescue \
-  --slot-root /mnt/owner-slot --data-root /mnt/owner-data \
-  --boot-env /run/owner-active-env-review.bin
-```
+Phase 11 defines the explicit loader invocation for the verified runtime; it does not run vendor site/startup code.
 
 The capture selects the unique `uboot environment` MTD character device and verifies
 its identity and active 16 KiB CRC. It writes only a new RAM capture. Expected
@@ -181,18 +113,9 @@ transaction means verify/review it, not blindly repeat first installation.
 
 ## 3. RESCUE: exact plan, backup and deliberate apply
 
-With reviewed RAM filenames and independent signer pin:
+**Commands:** [walkthrough phase 14](COMMAND_WALKTHROUGH.md#14-rescue--fresh-exact-plan-install-verify-and-save-rollback).
 
-```sh
-# RESCUE — plan reads target state and writes only the new RAM report.
-: "${OWNER_SIGNER_PIN:?independent signer public PEM hash}"
-owner_python /run/ownerctl.py plan --context rescue \
-  --slot-root /mnt/owner-slot --data-root /mnt/owner-data \
-  --boot-env /run/owner-active-env-review.bin --package /run/owner-install.tar.gz \
-  --public-key /run/owner-package-public.pem --signer-sha256 "$OWNER_SIGNER_PIN" \
-  --owner-key /run/owner-client.pub --config /run/owner-service.json \
-  --output /run/owner-plan.json
-```
+Plan with reviewed RAM filenames and the independently retained signer pin.
 
 Copy the plan and current affected-file backups privately to LAPTOP. The plan wraps
 `plan` and its canonical `plan_hash`; the plan hash is **not** a raw hash of the
@@ -220,22 +143,7 @@ Only then repeat with `install`, the same context/boot/package/public/owner inpu
 Guard these variables with `: "${PLAN_HASH:?}"` and `: "${DEVICE_ID:?}"` first.
 Run `ownerctl verify` through the same loader/context immediately afterward.
 
-The explicit apply shape, **only after that separate filesystem/write decision**, is:
-
-```sh
-# RESCUE — PERSISTENT WRITE. This is not part of read-only preparation.
-: "${PLAN_HASH:?exact reviewed canonical plan hash}"
-: "${DEVICE_ID:?exact reviewed target fingerprint}"
-owner_python /run/ownerctl.py install --context rescue \
-  --slot-root /mnt/owner-slot --data-root /mnt/owner-data \
-  --boot-env /run/owner-active-env-review.bin --package /run/owner-install.tar.gz \
-  --public-key /run/owner-package-public.pem --owner-key /run/owner-client.pub \
-  --plan /run/owner-plan.json --plan-hash "$PLAN_HASH" --device-id "$DEVICE_ID" \
-  --apply --output /run/owner-install-result.json
-owner_python /run/ownerctl.py verify --context rescue \
-  --slot-root /mnt/owner-slot --data-root /mnt/owner-data \
-  --boot-env /run/owner-active-env-review.bin --output /run/owner-verify-result.json
-```
+Use phase 14 only after that separate filesystem/write decision.
 
 The apply re-verifies package, signer pin from the reviewed plan and current target;
 it cannot silently turn a read-only mount into a writable one. Failure is a stop.
@@ -248,6 +156,8 @@ stop and resolve the matched transaction, not repeat installation. Close mounts,
 sync and restore the deliberate protection state under the reviewed procedure.
 
 ## 4. PHYSICAL: return to the same printer's original QSPI
+
+**Commands:** [walkthrough phase 15](COMMAND_WALKTHROUGH.md#15-physical--pi--return-once-to-this-printers-own-original-qspi).
 
 ![Rescue-to-normal sequence](../figures/06-rescue-normal.svg)
 
@@ -267,8 +177,10 @@ can write logs/state even when observation commands are read-only.
 
 ## 5. NORMAL PRINTER/LAPTOP: first trust, then panel
 
-Follow the expanded [secure SSH chapter](SECURE_SSH.md) for exact first-enrollment,
-strict reusable profile, wrong-key test, RAM SFTP roundtrip and DHCP-change steps.
+**Commands:** [walkthrough phase 18](COMMAND_WALKTHROUGH.md#18-laptop--create-the-strict-profile-then-log-in).
+
+Follow walkthrough phases 17–19 for first enrollment and acceptance.
+The [SSH reference](SECURE_SSH.md) explains trust, daily use and DHCP changes.
 The summary below explains how those SSH steps fit panel enrollment.
 
 Determine the current address from the isolated DHCP lease/local identity evidence.
@@ -289,7 +201,7 @@ sftp -F /dev/null -i "$OWNER_KEY" -P 2222 -o IdentitiesOnly=yes \
   -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$OWNER_KNOWN_HOSTS" root@"$PRINTER_HOST"
 ```
 
-Verify actual kernel, UID0, two concurrent sessions, wrong-key/password rejection,
+Verify actual kernel, UID 0, two concurrent sessions, wrong-key/password rejection,
 SFTP RAM roundtrip/hash, installed version/slot and vendor startup. Retain one SSH
 session during panel enrollment. Absence of rescue ports 2323/2324 matters. Process
 presence or the UI Idle string alone is not an authoritative safe-to-act signal.
@@ -300,7 +212,7 @@ The certificate must match its key, validity and actual current private-IP SAN;
 verify it using the explicitly retained owner CA/leaf. Review then apply with that
 plan/hash/device fingerprint. Enrollment does not change vendor TLS or SSH identity.
 Secrets never belong in URLs, terminal transcripts or Git. Do not bypass certificate
-validation. Verify HTTPS1328, authentication, CSRF, unprivileged UID and SSH survival.
+validation. Verify HTTPS :1328, authentication, CSRF, unprivileged UID and SSH survival.
 
 Optional WLAN HTTP is plaintext and explicitly scoped to the current eligible
 private interface/subnet; no wildcard/IPv6/router exposure. The reference build

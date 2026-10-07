@@ -1,5 +1,9 @@
 # Cartridge writeback ordering and failure results
 
+> HISTORICAL RESULT: this report describes its named research tool and milestone.
+> The later [panel write implementation and acceptance](CARTRIDGE_PANEL_RESET.md#evidence-and-tests)
+> has a separate scope; see the [central evidence index](EVIDENCE_STATUS.md).
+
 This continuation tests selected native writeback control flow using synthetic
 memory only. It does not write a consumable, generate a replacement chip image,
 change identity/material/date or prove a working refill/reset procedure.

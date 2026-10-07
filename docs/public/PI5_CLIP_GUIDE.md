@@ -87,11 +87,12 @@ before a read. The diagram deliberately leaves those two connections unresolved.
 
 *Blue: standard SPI signal relationship. Grey: ground reference. Dashed orange:
 conditional supply after electrical review. The diagram does not approve backfeeding
-the SOM. There is no connection to Pi physical pins2/4 (5 V).*
+the SOM. There is no connection to Pi physical pins 2/4 (5 V).*
 
-Winbond's [product selection guide](https://www.winbond.com/export/sites/winbond/product-selection-guide/file/2019-PSG.pdf)
-distinguishes W25Q32JV's 2.7–3.6-V family from W25Q32JW's 1.7–1.95-V family. A
-shared `W25Q32` prefix or flashrom device choice therefore cannot establish voltage.
+The linked **Winbond W25Q32JV Rev I** datasheet specifies that particular family's
+supply range. It does not identify the fitted suffix or authorize another W25Q32
+variant. Obtain the exact part/package datasheet from [Winbond documentation](https://www.winbond.com/hq/support/documentation/?__locale=en).
+A shared `W25Q32` prefix or flashrom device choice cannot establish voltage.
 An incompatible low-voltage part needs a separately validated programmer/level
 interface; this direct Pi reference is not its connection recipe.
 
@@ -141,7 +142,7 @@ Do not use current mode across a supply, continuity on powered hardware, a mains
 probe point, deliberate discharge shorts or guessed regulator/reset bridges.
 Pi GPIO inputs must not receive 5 V. A multimeter does not check SPI waveform
 quality. Three equal reads establish repeatability/content, not power safety.
-[flashrom's in-system guidance](https://raw.githubusercontent.com/flashrom/flashrom/main/doc/user_docs/in_system.rst)
+[flashrom's in-system guidance](https://raw.githubusercontent.com/flashrom/flashrom/8e36840a2894f73187e225d9da51bbdfff582a6c/doc/user_docs/in_system.rst)
 explains why shared power and an attached controller can interfere with a clip.
 This guide does not prescribe simultaneous printer and programmer power.
 
@@ -173,7 +174,7 @@ power decision have passed; printer power remains disconnected.
 The archived read used `linux_spi:dev=/dev/spidev0.0,spispeed=500` and flashrom's
 `W25Q32JV` definition. This is **historical configuration, not a default that the
 build scripts silently select**. `spispeed` is in kHz. Reuse it only when actual
-chip/controller/wiring review supports it. The [flashrom Pi instructions](https://raw.githubusercontent.com/flashrom/flashrom/main/doc/user_docs/raspberry_pi.rst)
+chip/controller/wiring review supports it. The [flashrom Pi instructions](https://raw.githubusercontent.com/flashrom/flashrom/8e36840a2894f73187e225d9da51bbdfff582a6c/doc/user_docs/raspberry_pi.rst)
 describe the programmer syntax. No read/write command belongs before that review.
 
 ## 6. Continue only when the physical record is complete
@@ -190,3 +191,20 @@ retain every file and stop before printer power. Do not move a powered clip.
 Before reassembly, remove **all** Pi/clip conductors and programmer power; restore
 the SOM and its original heatspreader/contact arrangement. This chapter adds no
 new measurement, successful hardware operation or universal compatibility claim.
+
+## Reference versions and measurement diagram
+
+The flashrom links are pinned to commit
+`8e36840a2894f73187e225d9da51bbdfff582a6c` (v1.6.0 source documentation),
+not a claim that v1.6.0 was used in the historical acquisition. Generic upstream
+advice about reset lines, powered boards or auxiliary pins is **not** a Form 3
+procedure and does not replace the unpowered/shared-rail gates above.
+The Winbond-authored Rev I datasheet is linked at its revision-specific distributor
+mirror; the PDF is not redistributed here. [Reference setup](REFERENCE_SETUP.md)
+lists measured versus unknown tool versions.
+
+![Meter relationships, not verified board contact locations](../figures/04-measurement-points.svg)
+
+*Conceptual measurement map. G/V/contact labels require physical identification;
+this is not a new measured pinout. Follow the power-state and stop-condition table
+above. A multimeter does not validate SPI signal timing.*
