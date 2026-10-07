@@ -71,6 +71,9 @@ are HISTORICAL/CACHED.
   implemented and fixture-tested, read-only panel preview accepted on hardware;
   separate earlier live-write evidence has a narrower provenance boundary.
 - [Research API/privacy/stock-root boundaries](docs/public/RESEARCH_BOUNDARIES.md).
+- [Material settings and OMM research](docs/public/MATERIAL_SETTINGS_RESEARCH.md):
+  desktop findings compared with existing evidence, profile conflicts and a bounded
+  offline comparator; no license activation or general settings writer.
 
 No generic actuator proxy, universal consumable reset, license issuer or automatic
 vendor privacy modification is provided. Panel power controls remain disabled.

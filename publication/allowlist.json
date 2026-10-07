@@ -53,7 +53,7 @@
       "destination": "README.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "First-person public project introduction; curated navigation and explicit compatibility limits.",
-      "sha256": "9968310b758cc546e92b73dea0d6d3f57bea98f0654f688e5941169e534bcf50",
+      "sha256": "f74d7082894e2765b1f8c3fe3c3b0400c52411487bc0a1f82903935869b3d7c4",
       "source": "README.md"
     },
     {
@@ -79,6 +79,14 @@
       "provenance": "Project version, distribution boundary or retained authorship/third-party notice.",
       "sha256": "b3b13b546714e64193eb7d674e19d2041f920e437a0cd42d3de3d77389fb76ba",
       "source": "VERSION"
+    },
+    {
+      "category": "compatibility-checksums",
+      "destination": "analysis/material-settings/profile-comparison-2.5.6.json",
+      "license": "MIT authored report/tool; referenced vendor material rights retained",
+      "provenance": "Sanitized file hashes, aggregate counts and conflicting material codes from bundled profiles; no full profiles or private jobs.",
+      "sha256": "8d6386dbd6e36265d6ca4fd63921bb056a738bdb52a5dbbac569b8edbfbb1c72",
+      "source": "analysis/material-settings/profile-comparison-2.5.6.json"
     },
     {
       "category": "compatibility-checksums",
@@ -421,7 +429,7 @@
       "destination": "docs/maintainer/ci/public-source.yml.example",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored inactive public-source CI template; GitHub workflow upload permission is still required for activation.",
-      "sha256": "0cea116198501ff9d64d4b709e9c35d8b6db11a0ec39a0a6f3c7b72a0327c5db",
+      "sha256": "21a49a5603f12674b08fa2c181475d413d03059070de510af1ec43825842c636",
       "source": "docs/maintainer/ci/public-source.yml.example"
     },
     {
@@ -437,7 +445,7 @@
       "destination": "docs/public/BUILD.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored scoped reproduction guide; no private research records or recovered vendor source.",
-      "sha256": "ff0a4a16beaecd8f006b8c66443fdb06e80af2dd8081ddbffbbcc56b527c6501",
+      "sha256": "431ed8661a77b403b3061995ea9daac43489a83c3445a731d02da876f9e9f2f3",
       "source": "docs/public/BUILD.md"
     },
     {
@@ -511,6 +519,14 @@
       "provenance": "Offline private log review, evidence coverage and historical-panel instructions.",
       "sha256": "38135134fb99b1b963e68ddb536cecdaff26504ae5a1e5167a562fa2c23a525a",
       "source": "docs/public/LOG_REVIEW.md"
+    },
+    {
+      "category": "guide",
+      "destination": "docs/public/MATERIAL_SETTINGS_RESEARCH.md",
+      "license": "MIT authored report/tool; referenced vendor material rights retained",
+      "provenance": "Authored reconciliation of owner handoff and pinned evidence; raw cryptographic constants and vendor extracts excluded.",
+      "sha256": "0e55a05182056c6bfb717a24a7db1ea5b1366ae11e0e0a12f6697f3c1ae4ffad",
+      "source": "docs/public/MATERIAL_SETTINGS_RESEARCH.md"
     },
     {
       "category": "guide",
@@ -1121,6 +1137,14 @@
       "source": "tests/test_live_printer_readers.py"
     },
     {
+      "category": "authored-code",
+      "destination": "tests/test_material_profiles.py",
+      "license": "MIT authored report/tool; referenced vendor material rights retained",
+      "provenance": "Synthetic profile fixtures only; tests bounds, conflicts, redaction and read-only behavior.",
+      "sha256": "cf924cfe1e7aaf67dcbae29c3ed416a90b22984aac61ac2b6516b6aab4e26040",
+      "source": "tests/test_material_profiles.py"
+    },
+    {
       "category": "synthetic-test",
       "destination": "tests/test_native_clock_timezone.py",
       "license": "MIT; retain existing contributor notices",
@@ -1375,6 +1399,14 @@
       "provenance": "Authored public-source review, documentation or synthetic validation; no device evidence or vendor code.",
       "sha256": "221db2a26563037d5a51df409820da6fbfdf3179be67572f0d72c86bf97dd248",
       "source": "tools/check_public_source.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/compare_material_profiles.py",
+      "license": "MIT authored report/tool; referenced vendor material rights retained",
+      "provenance": "Authored bounded offline JSON comparator; no vendor profiles, keys, writes or network client.",
+      "sha256": "ee86046732e73481fbee43b322f3f33c2ceb22e38fa1b20d304b2a61f9956d1f",
+      "source": "tools/compare_material_profiles.py"
     },
     {
       "category": "authored-code",

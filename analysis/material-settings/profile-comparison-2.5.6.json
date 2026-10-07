@@ -1,0 +1,169 @@
+{
+  "all_materials_covered": false,
+  "arrays_counted_as": "one parameter per array",
+  "calibration_profile_included": false,
+  "comparison": {
+    "absent_in_some": 128,
+    "constant": 563,
+    "union": 750,
+    "varying_or_absent": 187
+  },
+  "context": "explicit copied profile collection",
+  "device_writes": false,
+  "evidence_level": "FILES_ONLY",
+  "firmware_build": "2.5.6-2773",
+  "firmware_source_directory": "/usr/share/Formlabs/CleaningMeshes",
+  "groups": {
+    "Daguerre_Print": {
+      "absent_in_some": 0,
+      "constant": 58,
+      "union": 65,
+      "varying_or_absent": 7
+    },
+    "Material_Daguerre_Print": {
+      "absent_in_some": 12,
+      "constant": 65,
+      "union": 97,
+      "varying_or_absent": 32
+    },
+    "Material_Form2_Print": {
+      "absent_in_some": 0,
+      "constant": 64,
+      "union": 64,
+      "varying_or_absent": 0
+    }
+  },
+  "license_activation": false,
+  "network_access": false,
+  "profiles": [
+    {
+      "editable_range_proven": false,
+      "job": {
+        "material_code": "FLGPWH04",
+        "material_match": false,
+        "sha256": "d255e32f764b1ae29317cc3ef1339843e4815a967a7af9789a8589af12f1b295",
+        "status": "READ"
+      },
+      "leaf_parameters": 729,
+      "material_code": "FLDUCL02",
+      "overrides": {
+        "empty": true,
+        "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "status": "READ"
+      },
+      "profile_sha256": "c0f76614d7bf9736582143c89c7f90192e0163061347c9a559765a20d1ce05f7",
+      "runtime_consumers_proven": false
+    },
+    {
+      "editable_range_proven": false,
+      "job": {
+        "material_code": "FLGPWH04",
+        "material_match": false,
+        "sha256": "12070db6edac8915201383fa80b6dca56429489ad6cb58bd327233954838424d",
+        "status": "READ"
+      },
+      "leaf_parameters": 729,
+      "material_code": "FLDLCL01",
+      "overrides": {
+        "empty": true,
+        "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "status": "READ"
+      },
+      "profile_sha256": "60327c0289f86367a5d95491175e03c9a557f2eea3fc8b180cd48ff0cb7c4022",
+      "runtime_consumers_proven": false
+    },
+    {
+      "editable_range_proven": false,
+      "job": {
+        "material_code": "FLGPWH04",
+        "material_match": false,
+        "sha256": "9ab940ba0a32e7b55dd13c2c34c20f7487bccf56684e18a26598293a92bbb949",
+        "status": "READ"
+      },
+      "leaf_parameters": 729,
+      "material_code": "FLGPCL04",
+      "overrides": {
+        "empty": true,
+        "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "status": "READ"
+      },
+      "profile_sha256": "a080721365a44626097f54b0badec25b2a17e36542135f61bcf8828a3cc36e23",
+      "runtime_consumers_proven": false
+    },
+    {
+      "editable_range_proven": false,
+      "job": {
+        "material_code": "FLGPWH04",
+        "material_match": false,
+        "sha256": "5925a76748605ded2c9b4dab6bc8f9b404ba474dc77111271d376482404055f9",
+        "status": "READ"
+      },
+      "leaf_parameters": 729,
+      "material_code": "FLELCL01",
+      "overrides": {
+        "empty": true,
+        "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "status": "READ"
+      },
+      "profile_sha256": "542c1ebcafffd049f412aba16a5ac5ffc63a772277eae2cfa5ea8a3ea37a89fb",
+      "runtime_consumers_proven": false
+    },
+    {
+      "editable_range_proven": false,
+      "job": {
+        "material_code": "FLGPWH04",
+        "material_match": false,
+        "sha256": "64a7736d447b8548be3d7eb4b498b4913201279565d584791f7eb3d027e4758a",
+        "status": "READ"
+      },
+      "leaf_parameters": 729,
+      "material_code": "FLGPBK04",
+      "overrides": {
+        "empty": true,
+        "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "status": "READ"
+      },
+      "profile_sha256": "407442b303ed731416b09e7ae5fb0e797ee03dbae96a922850d7c2f85fc8fa01",
+      "runtime_consumers_proven": false
+    },
+    {
+      "editable_range_proven": false,
+      "job": {
+        "material_code": "FLGPWH04",
+        "material_match": false,
+        "sha256": "6b44b211cba7583f1c9265156d8ddf35946f3774008bfbb2afc7681024901121",
+        "status": "READ"
+      },
+      "leaf_parameters": 729,
+      "material_code": "FLDMBE02",
+      "overrides": {
+        "empty": true,
+        "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "status": "READ"
+      },
+      "profile_sha256": "7702d41a3aaa5e90254ead939149505e07e0dfe41e06d3fa8ca0c4e4817f749c",
+      "runtime_consumers_proven": false
+    },
+    {
+      "editable_range_proven": false,
+      "job": {
+        "material_code": "FLGPWH04",
+        "material_match": false,
+        "sha256": "007d65d4bc489af50683883d4eae2154e3606556d0782168e67c18903549243b",
+        "status": "READ"
+      },
+      "leaf_parameters": 643,
+      "material_code": "FLDRBL01",
+      "overrides": {
+        "empty": true,
+        "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "status": "READ"
+      },
+      "profile_sha256": "e10663d740117e32ba6a92f6c4ad91997956eabeb88f961cb31fefedfad53be3",
+      "runtime_consumers_proven": false
+    }
+  ],
+  "review_date": "2026-10-07",
+  "safe_to_apply": false,
+  "schema": 1
+}

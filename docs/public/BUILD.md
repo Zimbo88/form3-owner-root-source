@@ -125,6 +125,7 @@ python3 tools/check_public_source.py --output build/public-source-review.json
 python3 -m unittest discover -s tests -p test_public_source.py
 python3 -m unittest discover -s tests -p test_public_export.py
 python3 -m unittest discover -s tests -p test_documentation_voice.py
+python3 -m unittest discover -s tests -p test_material_profiles.py
 ```
 
 Expected: no errors, matching generated checksums/allowlist/provenance, valid local
