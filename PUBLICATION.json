@@ -4,8 +4,8 @@
   "history_included": false,
   "kind": "UNSIGNED SOURCE REVIEW; not an installation package",
   "legal_clearance": false,
-  "producer_allowlist_sha256": "93f16773c02a4afd4c8927009545cde17eb291557994d543772649063a898a78",
-  "producer_commit": "13d3dc32ddb0742aa7e446c7a4f09c75a4d75fdf",
+  "producer_allowlist_sha256": "b95853c8add64bcd87880e9bf1f42b5b97cb54d7b3184be0fd3098d7456cb64f",
+  "producer_commit": "572f26d08d49d7f9374297d49cca99cad887c43d",
   "reviewed_files": [
     {
       "category": "guide",
@@ -30,14 +30,6 @@
       "provenance": "Authored public-source review, documentation or synthetic validation; no device evidence or vendor code.",
       "sha256": "55c78f623afeea654dca8478881780e5f64fb6e987df95ade9be4410fab49f9a",
       "source": ".github/PULL_REQUEST_TEMPLATE.md"
-    },
-    {
-      "category": "authored-code",
-      "destination": ".github/workflows/public-source.yml",
-      "license": "MIT; retain existing contributor notices",
-      "provenance": "Authored public-source review, documentation or synthetic validation; no device evidence or vendor code.",
-      "sha256": "0cea116198501ff9d64d4b709e9c35d8b6db11a0ec39a0a6f3c7b72a0327c5db",
-      "source": ".github/workflows/public-source.yml"
     },
     {
       "category": "notice",
@@ -420,7 +412,7 @@
       "destination": "docs/maintainer/PUBLICATION_REVIEW.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored public-source review, documentation or synthetic validation; no device evidence or vendor code.",
-      "sha256": "c1ad14bf99a90285e50ef1e2584e7a454b13884d1a530ba18a46fb19bc601307",
+      "sha256": "eb98eab8c5e5c760a9e7b61e3972311cd7364e2d3163b4645dc2956bedbaf95f",
       "source": "docs/maintainer/PUBLICATION_REVIEW.md"
     },
     {
@@ -428,8 +420,16 @@
       "destination": "docs/maintainer/RELEASE_CHECKLIST.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored public-source review, documentation or synthetic validation; no device evidence or vendor code.",
-      "sha256": "c7df420c755a092bc92c6d9f72a42fe4bcd662ddbd28fc40be7a976fd809f111",
+      "sha256": "175c766967c888a146b8732869dee9ada1a704bf6d7041b4ecf22ca2a625de93",
       "source": "docs/maintainer/RELEASE_CHECKLIST.md"
+    },
+    {
+      "category": "authored-code",
+      "destination": "docs/maintainer/ci/public-source.yml.example",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored inactive public-source CI template; GitHub workflow upload permission is still required for activation.",
+      "sha256": "0cea116198501ff9d64d4b709e9c35d8b6db11a0ec39a0a6f3c7b72a0327c5db",
+      "source": "docs/maintainer/ci/public-source.yml.example"
     },
     {
       "category": "guide",
@@ -444,7 +444,7 @@
       "destination": "docs/public/BUILD.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored scoped reproduction guide; no private research records or recovered vendor source.",
-      "sha256": "97bc26f7567affe802cddbe870ac72f9cb5852409a563f1ab404b43fb3467979",
+      "sha256": "ff0a4a16beaecd8f006b8c66443fdb06e80af2dd8081ddbffbbcc56b527c6501",
       "source": "docs/public/BUILD.md"
     },
     {

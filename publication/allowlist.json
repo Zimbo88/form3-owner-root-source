@@ -25,14 +25,6 @@
       "source": ".github/PULL_REQUEST_TEMPLATE.md"
     },
     {
-      "category": "authored-code",
-      "destination": "docs/maintainer/ci/public-source.yml.example",
-      "license": "MIT; retain existing contributor notices",
-      "provenance": "Authored inactive public-source CI template; GitHub workflow upload permission is still required for activation.",
-      "sha256": "0cea116198501ff9d64d4b709e9c35d8b6db11a0ec39a0a6f3c7b72a0327c5db",
-      "source": "docs/maintainer/ci/public-source.yml.example"
-    },
-    {
       "category": "notice",
       "destination": ".gitignore",
       "license": "MIT; retain existing contributor notices",
@@ -423,6 +415,14 @@
       "provenance": "Authored public-source review, documentation or synthetic validation; no device evidence or vendor code.",
       "sha256": "175c766967c888a146b8732869dee9ada1a704bf6d7041b4ecf22ca2a625de93",
       "source": "docs/maintainer/RELEASE_CHECKLIST.md"
+    },
+    {
+      "category": "authored-code",
+      "destination": "docs/maintainer/ci/public-source.yml.example",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored inactive public-source CI template; GitHub workflow upload permission is still required for activation.",
+      "sha256": "0cea116198501ff9d64d4b709e9c35d8b6db11a0ec39a0a6f3c7b72a0327c5db",
+      "source": "docs/maintainer/ci/public-source.yml.example"
     },
     {
       "category": "guide",
