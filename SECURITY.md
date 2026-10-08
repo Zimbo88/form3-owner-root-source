@@ -11,10 +11,13 @@ reproducer. Do not test other owners' devices or use recovered vendor credential
 If that option is unavailable, open only a minimal public request for a private
 reporting channel, without exploit details or attachments, and wait for the
 maintainer to establish one. No email address or response-time guarantee is
-asserted here. Private vulnerability reporting was **not confirmed** during the
-2026-10-05 review: the repository API returned 404 while the repository was private.
-Maintainer action: enable and verify it before public release using
-[GitHub's instructions](https://docs.github.com/en/code-security/how-tos/report-and-fix-vulnerabilities/configure-vulnerability-reporting/configure-for-a-repository).
+asserted here. Private vulnerability reporting was **enabled and verified on
+2026-10-08** after the source repository became public. Use
+[Report a vulnerability](https://github.com/Zimbo88/form3-owner-root-source/security/advisories/new).
+The earlier private-repository review returned 404 and did not confirm this feature;
+that historical result is superseded by the verified public setting. See
+[GitHub's instructions](https://docs.github.com/en/code-security/how-tos/report-and-fix-vulnerabilities/configure-vulnerability-reporting/configure-for-a-repository)
+if maintaining another copy of this project.
 
 ## Supported review scope
 

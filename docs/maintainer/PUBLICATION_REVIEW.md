@@ -1,5 +1,9 @@
 # Public source review — October 2026
 
+Historical preparation review. The later [public release record](PUBLIC_RELEASE.md)
+records the 2026-10-08 visibility decision, checks and security-reporting setting.
+The results and then-open gates below are retained as historical evidence.
+
 ## Scope and provenance
 
 Review baseline: curated source commit

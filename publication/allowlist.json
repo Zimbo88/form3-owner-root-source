@@ -53,7 +53,7 @@
       "destination": "README.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "First-person public project introduction; curated navigation and explicit compatibility limits.",
-      "sha256": "f74d7082894e2765b1f8c3fe3c3b0400c52411487bc0a1f82903935869b3d7c4",
+      "sha256": "c8842947dbd7da0a5a6f47736a7659f9c8e1c19c3ad6a3940ec7ea15ed7e9b1b",
       "source": "README.md"
     },
     {
@@ -61,7 +61,7 @@
       "destination": "SECURITY.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Project version, distribution boundary or retained authorship/third-party notice.",
-      "sha256": "7729cd059ad3b5f5fa88853433b72a85f0430b208f88c18c4e5ab49ff8e1fde2",
+      "sha256": "4a7c96ee1a227dbeb8795b1947a81a75e5304f3c827b4352983448c1755c1b56",
       "source": "SECURITY.md"
     },
     {
@@ -429,15 +429,23 @@
       "destination": "docs/maintainer/PUBLICATION_REVIEW.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored public-source review, documentation or synthetic validation; no device evidence or vendor code.",
-      "sha256": "eb98eab8c5e5c760a9e7b61e3972311cd7364e2d3163b4645dc2956bedbaf95f",
+      "sha256": "75030bca4a149b984955f1272d018d2aba96f5b142c30291b1702ec547fdf65d",
       "source": "docs/maintainer/PUBLICATION_REVIEW.md"
+    },
+    {
+      "category": "guide",
+      "destination": "docs/maintainer/PUBLIC_RELEASE.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored public visibility and source-review record; no raw provider data, device records or private inputs.",
+      "sha256": "92a2f3c3ab3946e3ea6bd8d7be4bab13cb20326ac62583cceb5e89bafa364c93",
+      "source": "docs/maintainer/PUBLIC_RELEASE.md"
     },
     {
       "category": "guide",
       "destination": "docs/maintainer/RELEASE_CHECKLIST.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored public-source review, documentation or synthetic validation; no device evidence or vendor code.",
-      "sha256": "175c766967c888a146b8732869dee9ada1a704bf6d7041b4ecf22ca2a625de93",
+      "sha256": "96be0b97c92d3f31bbf28bcb76b4decf4f43a04aee211bc39853f8a361a4b204",
       "source": "docs/maintainer/RELEASE_CHECKLIST.md"
     },
     {

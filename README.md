@@ -86,13 +86,15 @@ was no longer available to me. Encrypted support archives made independent
 diagnosis difficult. Some local diagnostics are plaintext; root does not decrypt
 every support archive.
 
-This source edition was selected from private research. Manufacturer binaries,
+This public source edition was selected from private research. Manufacturer binaries,
 private data and material with unresolved redistribution questions are omitted;
 those omissions are not a guarantee of legal clearance. The
 [rights boundary](docs/public/RIGHTS_AND_RELEASE.md), [security policy](SECURITY.md)
 and [maintainer release checklist](docs/maintainer/RELEASE_CHECKLIST.md) explain
-what can be shared and what still needs review. Visibility is a separate maintainer
-decision; no tool here makes a private repository public.
+what can be shared and what still needs review. This source repository became
+public on 2026-10-08 after an explicit maintainer decision and the
+[recorded release checks](docs/maintainer/PUBLIC_RELEASE.md). The separate research
+repository and raw evidence remain private; project tools do not change visibility.
 
 ## Why the demonstrated route works
 

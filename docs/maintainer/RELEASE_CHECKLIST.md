@@ -14,7 +14,7 @@ branch in the old repository is therefore insufficient.
 
 `publication/allowlist.json` selects and pins each source file. The export contains
 the panel, rescue/installation sources, tutorials, authored diagrams, the reviewed
-owner closeup, notices, tests and compatibility checksums. It excludes raw firmware,
+owner photographs, notices, tests and compatibility checksums. It excludes raw firmware,
 rootfs, decrypted archives, private keys, logs, job models, deployment records and
 raw decompilation. Original evidence and private history stay preserved locally.
 
@@ -28,13 +28,14 @@ engineering gates remain; do not imply that publication makes them disappear.
    it is not a fork and has no inherited private research history; audit every extra branch and tag.
 2. Inspect **every reachable commit and asset**, not just `git status` or HEAD.
    Check the allowlist, licenses, authorship and small transformation contexts.
-   The included photo is credited to Mathias Zimmermann; the manufacturer's
+   The included photographs are credited to Mathias Zimmermann; the manufacturer's
    datasheet and third-party articles are linked, not bundled.
 3. Build/test a fresh clone with [BUILD](../public/BUILD.md). No firmware archive is needed
    for the disconnected fixtures. Record counts, exclusions, source commit and
    package checksum. Do not mark unperformed hardware checks as passed.
-   Activate the prepared CI workflow using an appropriately authorized credential
-   and verify its hosted run; see [pending activation](../public/BUILD.md#hosted-ci-activation-pending).
+   Hosted CI is recommended separately: activate the prepared workflow with an
+   appropriately authorized credential and verify its run. If unavailable, retain
+   the explicit limitation and source-bound local test receipts; see [pending activation](../public/BUILD.md#hosted-ci-activation-pending).
 4. Inspect repository data outside Git: releases/assets, issues, pull requests,
    discussions, wiki, Actions logs/artifacts, Pages, integrations and attachments.
    Exported source checks cannot inspect those on a future maintainer's behalf.
@@ -81,7 +82,8 @@ when refreshing its generated metadata. All selected authored files must already
 match. Commit those generated files, rerun public checks and test a fresh clone.
 Never export uncommitted work or substitute a success receipt for failed checks.
 
-Before public visibility, enable and verify private vulnerability reporting if
-available, following [SECURITY](../../SECURITY.md). A 404/denied API response is
-not proof of absence. Inspect non-Git attachments/settings separately. This
+Private vulnerability reporting applies to public repositories. Enable and verify
+it immediately after the approved public transition, following
+[SECURITY](../../SECURITY.md); keep the fallback reporting instructions accurate
+if unavailable. A 404/denied API response is not proof of absence. Inspect non-Git attachments/settings separately. This
 checklist does not authorize automatic visibility changes or history rewriting.
