@@ -46,6 +46,16 @@ obscures part of the marking. The small dark package mark near the lower-left in
 this particular photo is an orientation clue, not permission to number leads
 without the package drawing. Do not scrape the component to reproduce this guide.*
 
+### Historical Pi and clip setup
+
+<img src="../root/assets/img_4042.jpg" width="480" alt="My removed SOM beside a Raspberry Pi 5, with a clip on the soldered flash and an adapter connecting the ribbon cable to jumper wires">
+
+*Photo: Mathias Zimmermann (`img_4042.jpg`). This records my clip-based access to
+an intact, soldered flash on the removed SOM. The Pi, ribbon adapter and jumper
+wires show the physical arrangement, not a complete verified connection map.
+Do not copy wire colours or infer an electrical isolation or power state from the
+photo. Use the signal map and unpowered measurements below before wiring.*
+
 ## 1. Understand the three different sets of numbers
 
 - **Chip pin 1–8:** a position on the flash package, interpreted from its datasheet.
@@ -213,9 +223,29 @@ contact side and mounting holes. It supports the reassembly reminder above; it
 does not establish thermal-interface material, thickness, torque or an approved
 paste pattern. Preserve the correct original contact arrangement before power-on.*
 
-All three retained photographs are unchanged copies without EXIF/GPS metadata.
-The [photo inventory](../maintainer/PHOTO_REVIEW.md) records their purpose and
-explains why the other three deployment-kit photographs remain private.
+### Historical thermal assembly
+
+<img src="../root/assets/img_4045.jpg" width="480" alt="My removed SOM with compound on the processor, the detached heatspreader, and thermal-compound packaging beside it">
+
+*Photo: Mathias Zimmermann (`img_4045.jpg`). This is a record of my repair work,
+not a recommended compound, amount, coverage pattern or substitute for the original
+thermal design. A photograph cannot establish contact pressure, electrical
+clearance or thermal performance. The product packaging is incidental, not an
+endorsement or a required item in the bill of materials.*
+
+### Electronics after reassembly
+
+<img src="../root/assets/img_4048.jpg" width="480" alt="My printer electronics with the finned heatspreader installed, surrounding cables, antenna and mechanical assemblies visible">
+
+*Photo: Mathias Zimmermann (`img_4048.jpg`). This shows the electronics during
+reassembly with the heatspreader in place. It helps relate the removed module to
+its installed surroundings. It does not prove that every cable is correctly
+connected, that the printer is ready to power on, or that a fault was repaired.*
+
+All six photographs are unchanged copies without EXIF/GPS metadata. Visible
+component labels and codes remain in the images with my explicit approval.
+The [photo inventory](../maintainer/PHOTO_REVIEW.md) records each image's purpose
+and the scope of the visual review.
 
 ## Reference versions and measurement diagram
 

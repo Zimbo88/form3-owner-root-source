@@ -420,8 +420,8 @@
       "category": "guide",
       "destination": "docs/maintainer/PHOTO_REVIEW.md",
       "license": "MIT; retain existing contributor notices",
-      "provenance": "Authored six-photo selection and placement review; excluded private images not included.",
-      "sha256": "55d4ad99262036101d5cdff64c8b591ea47d1194fa8b9de0799715e76ec6ae44",
+      "provenance": "Authored six-photo placement, permission and visual/metadata review; historical observations, not new hardware acceptance.",
+      "sha256": "b9bd6007fd64bbdc236c1996d4e0da1bf0bb29b703250c921a5bb52cb1a55868",
       "source": "docs/maintainer/PHOTO_REVIEW.md"
     },
     {
@@ -573,7 +573,7 @@
       "destination": "docs/public/PI5_CLIP_GUIDE.md",
       "license": "MIT; Mathias Zimmermann",
       "provenance": "Authored bench guide; conditional historical map and primary-documentation citations, no new hardware proof.",
-      "sha256": "e802bd79f5a8e25556c145565c071708222dd9ee5d9fa77007fce49d5960350b",
+      "sha256": "02eec4dbc173a947fd65018f1dcd6178a9a15d5b5888eac1d9cf978bca39d140",
       "source": "docs/public/PI5_CLIP_GUIDE.md"
     },
     {
@@ -666,11 +666,35 @@
     },
     {
       "category": "original-artwork",
+      "destination": "docs/root/assets/img_4042.jpg",
+      "license": "Mathias Zimmermann; included with explicit author permission",
+      "provenance": "Owner-supplied historical repair photograph; unchanged kit copy, visual and metadata review. Visible component labels/codes retained with explicit permission; not electrical or repair proof.",
+      "sha256": "64f83029f2e19b5778a07356a3953d56397bbd190b873befa205cfed4533bebe",
+      "source": "docs/root/assets/img_4042.jpg"
+    },
+    {
+      "category": "original-artwork",
       "destination": "docs/root/assets/img_4044.jpg",
       "license": "Mathias Zimmermann; included with author permission",
       "provenance": "Owner-supplied heatspreader contact-side record; unchanged kit copy, repeated visual and metadata review; not a thermal-interface prescription.",
       "sha256": "8001fcf821d6c6d1956d462e21e00352972cde9d936f2acdf8dda35844eab363",
       "source": "docs/root/assets/img_4044.jpg"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/root/assets/img_4045.jpg",
+      "license": "Mathias Zimmermann; included with explicit author permission",
+      "provenance": "Owner-supplied historical repair photograph; unchanged kit copy, visual and metadata review. Visible component labels/codes retained with explicit permission; not electrical or repair proof.",
+      "sha256": "74b3d6359f3f6c3b0f6271bb5cb1ab4293a7ed092b380fa0e1dfdb18f7730e05",
+      "source": "docs/root/assets/img_4045.jpg"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/root/assets/img_4048.jpg",
+      "license": "Mathias Zimmermann; included with explicit author permission",
+      "provenance": "Owner-supplied historical repair photograph; unchanged kit copy, visual and metadata review. Visible component labels/codes retained with explicit permission; not electrical or repair proof.",
+      "sha256": "65baf282611246549d34a4bb11dca6b8ec652958a8084d228a2d2514dafda57b",
+      "source": "docs/root/assets/img_4048.jpg"
     },
     {
       "category": "notice",
