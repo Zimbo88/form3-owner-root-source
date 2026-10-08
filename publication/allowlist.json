@@ -410,6 +410,14 @@
     },
     {
       "category": "guide",
+      "destination": "docs/maintainer/DIAGRAM_REVIEW.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored diagram rendering review and reproducible host checks; no device evidence or vendor code.",
+      "sha256": "512cffb243d20bbccd92886d3329bb2d2d59a428fae433b0ffc3d2efe3d859e1",
+      "source": "docs/maintainer/DIAGRAM_REVIEW.md"
+    },
+    {
+      "category": "guide",
       "destination": "docs/maintainer/PUBLICATION_REVIEW.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored public-source review, documentation or synthetic validation; no device evidence or vendor code.",
@@ -445,7 +453,7 @@
       "destination": "docs/public/BUILD.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored scoped reproduction guide; no private research records or recovered vendor source.",
-      "sha256": "431ed8661a77b403b3061995ea9daac43489a83c3445a731d02da876f9e9f2f3",
+      "sha256": "0eb71f127cc4cd715e90e8f3c58b895729dd75c33d257bd6e6df0ff197d335d1",
       "source": "docs/public/BUILD.md"
     },
     {
@@ -453,7 +461,7 @@
       "destination": "docs/public/CARTRIDGE_DECODING.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored offline decoder, synthetic tests or reproduction guide; no captured data, vendor key or identity. No device writer.",
-      "sha256": "02ea30ef81ca51f8ad49e3e1ce8883e94655aa90322f67969ab0c6e6416bdf37",
+      "sha256": "d2ab0b806af42d7df254f636a39f20e2df8ee4ddbf71254cfbb1ed5477da8487",
       "source": "docs/public/CARTRIDGE_DECODING.md"
     },
     {
@@ -469,7 +477,7 @@
       "destination": "docs/public/CARTRIDGE_PANEL_RESET.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
-      "sha256": "8910bf16036a8372ab78fb8cc9401c9a1cdefa746458d7721e473615099e3fab",
+      "sha256": "6d5d53d3743784cd4c5ae23b85754d7ae398ddb9bb432c7989b2cfdedf3ff51d",
       "source": "docs/public/CARTRIDGE_PANEL_RESET.md"
     },
     {
@@ -477,7 +485,7 @@
       "destination": "docs/public/CARTRIDGE_RECONCILIATION.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored offline reconciliation model, synthetic fixtures or sanitized findings; no memory writer, secrets or vendor code.",
-      "sha256": "6aa5018343b4e36508667cd471193be659797c0080ccbf7ab1e5878a39a1847c",
+      "sha256": "2825fb6a98469b0cdb5ecc7d2a126ee6c2cc1ff0d8f8ccd5d2f3adf3064f3606",
       "source": "docs/public/CARTRIDGE_RECONCILIATION.md"
     },
     {
@@ -525,7 +533,7 @@
       "destination": "docs/public/MATERIAL_SETTINGS_RESEARCH.md",
       "license": "MIT authored report/tool; referenced vendor material rights retained",
       "provenance": "Authored reconciliation of owner handoff and pinned evidence; raw cryptographic constants and vendor extracts excluded.",
-      "sha256": "0e55a05182056c6bfb717a24a7db1ea5b1366ae11e0e0a12f6697f3c1ae4ffad",
+      "sha256": "f820a3012ba4e8dd0ae212221e11b01a169d023c14add14fd2a5626326956888",
       "source": "docs/public/MATERIAL_SETTINGS_RESEARCH.md"
     },
     {
@@ -1221,7 +1229,7 @@
       "destination": "tests/test_public_source.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored public-source review, documentation or synthetic validation; no device evidence or vendor code.",
-      "sha256": "2878de5135c9f541ff21d154334ad36cd462d1eb892ffb75aaaf4e60c16c5ab8",
+      "sha256": "08c336edf873af7d40d1192db493cc34c48a18f4a300e9135afd055f2dfe66e5",
       "source": "tests/test_public_source.py"
     },
     {
@@ -1397,7 +1405,7 @@
       "destination": "tools/check_public_source.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored public-source review, documentation or synthetic validation; no device evidence or vendor code.",
-      "sha256": "221db2a26563037d5a51df409820da6fbfdf3179be67572f0d72c86bf97dd248",
+      "sha256": "74e45d12b6afbce0888f254f32995130937ba3b75108efd48cd4b780fd69351e",
       "source": "tools/check_public_source.py"
     },
     {

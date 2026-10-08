@@ -43,21 +43,23 @@ an already-zero state do not consume another EEPROM write cycle.
 
 ```mermaid
 sequenceDiagram
-    participant B as Authenticated browser
-    participant P as Unprivileged panel
-    participant R as Root UNIX-socket broker
-    participant T as Pinned transaction engine
-    B->>P: CSRF-protected preview request
+    accTitle: Clear cartridge reset privilege and transaction boundary
+    accDescr: The authenticated browser requests a preview and explicit apply through the unprivileged panel and local root broker. The transaction engine checks prerequisites, stops the cartridge writer, updates the file then copies B and A with readbacks, and verifies the native merge after restart.
+    participant B as Authenticated<br/>browser
+    participant P as Unprivileged<br/>panel
+    participant R as Root UNIX-socket<br/>broker
+    participant T as Pinned transaction<br/>engine
+    B->>P: CSRF-protected<br/>preview request
     P->>R: prepare (no path or command)
-    R-->>P: public numeric preview + expiring opaque plan ID
-    B->>P: confirmation + reauthentication
+    R-->>P: public numeric preview<br/>+ expiring opaque plan ID
+    B->>P: confirmation<br/>+ reauthentication
     P->>R: apply(plan ID)
     R->>T: private hash-pinned plan
-    T->>T: idle/identity/baseline checks and durable backup
-    T->>T: stop cartridge writer; file → B → A; full readbacks
-    T->>T: restart cartridge service; verify native merge
+    T->>T: idle/identity/baseline checks<br/>and durable backup
+    T->>T: stop cartridge writer<br/>file → B → A with full readbacks
+    T->>T: restart cartridge service<br/>verify native merge
     T-->>R: private receipt
-    R-->>P: allowlisted result, no keys or identity
+    R-->>P: allowlisted result<br/>no keys or identity
 ```
 
 The root broker has no network listener. The fixed local socket verifies kernel

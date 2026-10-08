@@ -133,6 +133,8 @@ paths and GitHub-style heading fragments, shell/Python snippet syntax, Python 3.
 target grammar and safe described SVGs. Grammar alone is not runtime compatibility.
 The Markdown checker supports the syntax used in this repository, not every GitHub
 extension. See its tests for duplicate/Unicode headings and bounded local fixtures.
+Its Mermaid guard catches sequence-message delimiter regressions; full rendering
+is a separate [diagram review](../maintainer/DIAGRAM_REVIEW.md#repeatable-checks).
 
 | Check tier | Scope | What it cannot establish |
 |---|---|---|

@@ -112,6 +112,23 @@ def version_issues(text, version):
     return sorted(set(result))
 
 
+def mermaid_message_issues(source):
+    """Catch the known sequence-message delimiter failure, not all Mermaid syntax.
+
+    This repository uses one sequence statement per line. Literal semicolons in
+    messages need Mermaid's #59; entity; otherwise the parser starts a statement.
+    Flowchart labels use a different grammar and are intentionally not checked.
+    """
+    if not re.search(r'^\s*sequenceDiagram\s*$', source, re.M):
+        return []
+    issues = []
+    for number, line in enumerate(source.splitlines(), 1):
+        message = re.match(r'^\s*[^:]+(?:--?>>?|--?x|--?\))[+\-]?[^:]+:(.*)$', line)
+        if message and ';' in re.sub(r'#[A-Za-z0-9]+;', '', message[1]):
+            issues.append(number)
+    return issues
+
+
 def external_svg_url(value):
     return any(not m[1].strip(' \"\'').startswith('#')
                for m in re.finditer(r'url\(([^)]*)\)', value, re.I))
@@ -181,6 +198,10 @@ def review(root, editing=False):
                     errors.append(str(p.relative_to(root))+': missing heading '+target)
             if dest.suffix == '.svg':
                 embedded.add(dest)
+        for block in re.finditer(r'```mermaid\n(.*?)\n```', text, re.S):
+            first = text.count('\n', 0, block.start(1))
+            for n in mermaid_message_issues(block[1]):
+                errors.append(str(p.relative_to(root))+':'+str(first+n)+': unescaped Mermaid sequence-message semicolon')
         for n in version_issues(text, (root/'VERSION').read_text().strip()):
             errors.append(str(p.relative_to(root))+':'+str(n)+': current-version drift')
         for block in re.findall(r'```(?:sh|bash|shell)\n(.*?)\n```', text, re.S):
@@ -192,6 +213,9 @@ def review(root, editing=False):
             try: ast.parse(body)
             except SyntaxError: errors.append(str(p.relative_to(root))+': invalid Python here-document')
     for p in all_files:
+        if p.suffix == '.mmd':
+            for n in mermaid_message_issues(p.read_text()):
+                errors.append(str(p.relative_to(root))+':'+str(n)+': unescaped Mermaid sequence-message semicolon')
         if p.suffix == '.svg':
             svg_count += 1; data = p.read_bytes()
             if b'<!ENTITY' in data:
@@ -226,6 +250,7 @@ def review(root, editing=False):
             'target_python35_grammar_files':target_count,'hardware_contact':False,
             'external_links':'NOT FETCHED; separate non-blocking review',
             'metadata':'NOT RUN (--editing)' if editing else 'checked',
+            'mermaid_scope':'Sequence-message delimiter regression only; renderer review is separate',
             'runtime_compatibility_proven':False}
 
 

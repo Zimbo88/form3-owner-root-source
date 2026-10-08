@@ -60,6 +60,8 @@ not a supported reset or recovery procedure.
 
 ```mermaid
 flowchart TD
+    accTitle: Cartridge insertion and state reconciliation
+    accDescr: Historical static reachability and selected-function tests describe EEPROM selection, filesystem merge and separate writeback paths. Unknown ordering or concurrent state blocks an owner native write in this research model.
     I[Insertion event] --> R[Read and authenticate worker]
     R --> L[Load EEPROM / select valid copy]
     L --> C[Read-completion callback]

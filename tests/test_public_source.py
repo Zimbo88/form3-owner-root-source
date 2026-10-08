@@ -39,6 +39,17 @@ class Markdown(unittest.TestCase):
     def test_stale_title_detected(self):
         self.assertEqual(check.version_issues('# Lifecycle — 0.5.9-review source','0.5.13-review'),[1])
 
+    def test_sequence_message_semicolon_regression(self):
+        source = 'sequenceDiagram\n    T->>T: stop writer; file → B → A; readback\n'
+        self.assertEqual(check.mermaid_message_issues(source), [2])
+
+    def test_sequence_message_entities_and_breaks(self):
+        source = 'sequenceDiagram\n    T->>T: stop writer#59; file → B → A<br/>readback\n    T-->>R: result #amp; receipt\n'
+        self.assertEqual(check.mermaid_message_issues(source), [])
+
+    def test_flowchart_semicolons_are_not_sequence_messages(self):
+        self.assertEqual(check.mermaid_message_issues('flowchart TD\nA[Merge; keep counter] --> B[Done]\n'), [])
+
     def test_svg_local_fragment_allowed_external_refused(self):
         self.assertFalse(check.external_svg_url('url( "#gradient" )'))
         self.assertTrue(check.external_svg_url('url(https://example.invalid/x)'))
@@ -53,6 +64,14 @@ class SourceReview(unittest.TestCase):
         (self.root/'guide.md').write_text('# Next\n')
 
     def review(self):return check.review(self.root,editing=True)
+
+    def test_inline_and_standalone_sequence_delimiters_checked(self):
+        source = 'sequenceDiagram\nA->>B: update; readback\n'
+        (self.root/'README.md').write_text('# Diagram\n\n```mermaid\n'+source+'```\n')
+        (self.root/'flow.mmd').write_text(source)
+        errors = self.review()['errors']
+        self.assertIn('README.md:5: unescaped Mermaid sequence-message semicolon', errors)
+        self.assertIn('flow.mmd:2: unescaped Mermaid sequence-message semicolon', errors)
 
     def test_fragment_failure_then_success(self):
         self.assertTrue(self.review()['passed'])

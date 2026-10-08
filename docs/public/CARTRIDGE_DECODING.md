@@ -39,7 +39,9 @@ physical resin volume**. Padding and unused bytes are not covered by these three
 record checks. The independently retained full-image SHA256 binds the entire copy.
 
 ```mermaid
-flowchart LR
+flowchart TD
+    accTitle: Offline cartridge decoding
+    accDescr: Local copies are version-checked and decrypted using the original record key and device name. Checksums gate the usage comparison report. No device access or reset occurs.
     E[Hash-pinned private EEPROM copy] --> R[Check reviewed envelope versions]
     K[Private record key + original device name] --> D[Derive key locally]
     R --> C[Decrypt RO and both RW records]

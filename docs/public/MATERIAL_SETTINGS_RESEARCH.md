@@ -117,7 +117,9 @@ hashes do not authenticate unknown firmware by themselves. No apply command exis
    [Official OMM printing documentation](https://formlabs.com/support/Printing-with-Open-Material-Mode/).
 
 ```mermaid
-flowchart LR
+flowchart TD
+    accTitle: Separate entitlement and print-profile paths
+    accDescr: Vendor-issued entitlements pass local checks before enabling the native OMM workflow. PreForm custom profiles supply job parameters independently. The owner comparison and future panel path is read-only.
     A[Activation code] --> B[Vendor activation service]
     B --> C[Signed entitlement]
     C --> D[Local signature / device / date checks]
