@@ -27,6 +27,18 @@ its `GUIDE.md` SHA256 is
 `92a1dc8a95237305699d2ab5186f4e1b6ca1eae886a5010854e1f98c91298629`.
 The private kit is provenance, not a required downloaded firmware input.
 
+### Module and flash location
+
+<img src="../root/assets/img_4039.jpg" width="480" alt="My SOM closeup with the large processor package beside the smaller soldered Winbond flash and nearby PCB labels">
+
+*Photo: Mathias Zimmermann (`img_4039.jpg`). This view places the small soldered
+flash next to the processor on my module. It helps locate the component before
+consulting the closeup below. The visible labels do not prove pad continuity,
+supply voltage or a complete flash ordering code. This is not a photo of the
+clip-to-Pi wiring.*
+
+### Flash closeup
+
 ![My flash closeup: the marking is partly covered and the board labels are not a continuity measurement](../root/assets/img_4040.jpg)
 
 *Photo: Mathias Zimmermann; retained closeup without EXIF/GPS. The white spot
@@ -191,6 +203,19 @@ retain every file and stop before printer power. Do not move a powered clip.
 Before reassembly, remove **all** Pi/clip conductors and programmer power; restore
 the SOM and its original heatspreader/contact arrangement. This chapter adds no
 new measurement, successful hardware operation or universal compatibility claim.
+
+### Heatspreader reference before reassembly
+
+<img src="../root/assets/img_4044.jpg" width="480" alt="My removed heatspreader viewed from the contact side, showing four mounting holes and the central contact area">
+
+*Photo: Mathias Zimmermann (`img_4044.jpg`). This records the removed heatspreader's
+contact side and mounting holes. It supports the reassembly reminder above; it
+does not establish thermal-interface material, thickness, torque or an approved
+paste pattern. Preserve the correct original contact arrangement before power-on.*
+
+All three retained photographs are unchanged copies without EXIF/GPS metadata.
+The [photo inventory](../maintainer/PHOTO_REVIEW.md) records their purpose and
+explains why the other three deployment-kit photographs remain private.
 
 ## Reference versions and measurement diagram
 
