@@ -4,8 +4,8 @@
   "history_included": false,
   "kind": "UNSIGNED SOURCE REVIEW; not an installation package",
   "legal_clearance": false,
-  "producer_allowlist_sha256": "d10d4e5c0530fa49bd8ddf1917fbe89fec393ab7641fd2ad499763a3e81f64b6",
-  "producer_commit": "e2bafb811c5738d1aa5edc46929a231103beab60",
+  "producer_allowlist_sha256": "ef51ab54af9ec712f9a29dec6c1c37374d09c18f33e9a9462c4c7bef03a18d09",
+  "producer_commit": "2fd801bef0aef8ff5edb611300600f56bb2222e1",
   "reviewed_files": [
     {
       "category": "guide",
@@ -425,6 +425,14 @@
     },
     {
       "category": "guide",
+      "destination": "docs/maintainer/PHOTO_REVIEW.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored six-photo selection and placement review; excluded private images not included.",
+      "sha256": "55d4ad99262036101d5cdff64c8b591ea47d1194fa8b9de0799715e76ec6ae44",
+      "source": "docs/maintainer/PHOTO_REVIEW.md"
+    },
+    {
+      "category": "guide",
       "destination": "docs/maintainer/PUBLICATION_REVIEW.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored public-source review, documentation or synthetic validation; no device evidence or vendor code.",
@@ -572,7 +580,7 @@
       "destination": "docs/public/PI5_CLIP_GUIDE.md",
       "license": "MIT; Mathias Zimmermann",
       "provenance": "Authored bench guide; conditional historical map and primary-documentation citations, no new hardware proof.",
-      "sha256": "ee455d20cb51746c97f7def54a735d40cc2cdbfa9d4ae183a6f60a45f336a8ad",
+      "sha256": "e802bd79f5a8e25556c145565c071708222dd9ee5d9fa77007fce49d5960350b",
       "source": "docs/public/PI5_CLIP_GUIDE.md"
     },
     {
@@ -649,11 +657,27 @@
     },
     {
       "category": "original-artwork",
+      "destination": "docs/root/assets/img_4039.jpg",
+      "license": "Mathias Zimmermann; included with author permission",
+      "provenance": "Owner-supplied SOM/flash context; unchanged kit copy, repeated visual and metadata review; not electrical proof.",
+      "sha256": "cc4ed13e91049a83c639779c48368094edabda4e6e3fb829654f87e573b08ab7",
+      "source": "docs/root/assets/img_4039.jpg"
+    },
+    {
+      "category": "original-artwork",
       "destination": "docs/root/assets/img_4040.jpg",
       "license": "Mathias Zimmermann; included with author permission",
       "provenance": "Owner-supplied hardware closeup; visual and metadata review; incomplete part marking, not electrical proof.",
       "sha256": "a8d9f469d3270ab3f528e1e6fff8e7e37375c0a66fd407d886604bbe93f68460",
       "source": "docs/root/assets/img_4040.jpg"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/root/assets/img_4044.jpg",
+      "license": "Mathias Zimmermann; included with author permission",
+      "provenance": "Owner-supplied heatspreader contact-side record; unchanged kit copy, repeated visual and metadata review; not a thermal-interface prescription.",
+      "sha256": "8001fcf821d6c6d1956d462e21e00352972cde9d936f2acdf8dda35844eab363",
+      "source": "docs/root/assets/img_4044.jpg"
     },
     {
       "category": "notice",
