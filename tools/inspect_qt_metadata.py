@@ -52,7 +52,8 @@ class Elf32:
         parent, strings, table, dispatch, _, _ = self.words(address, 6)
         header = self.words(table, 14)
         revision, class_index, ci_count, ci_start, count, start = header[:6]
-        if revision != 7 or count > 256 or ci_count > 128 or header[13] > count:
+        if (revision != 7 or count > 256 or ci_count > 128 or header[13] > count
+                or header[8] > 64):
             raise MetadataError('Unsupported revision or metadata budget')
 
         def identifier(index, allow_type=False):
@@ -90,9 +91,28 @@ class Elf32:
                          'kind': ['method', 'signal', 'slot', 'constructor'][(flags >> 2) & 3],
                          'access_bits': flags & 3, 'flags': hex(flags),
                          'side_effects': 'UNKNOWN: inspect implementation and dispatch separately'})
+        enums = []
+        total_keys = 0
+        # Qt 5.9.6 moc revision 7: four words per enum, two per key/value.
+        # Metadata describes numbers, not reachability or permitted transitions.
+        for i in range(header[8]):
+            va = table + (header[9] + i * 4) * 4
+            name, flags, key_count, key_start = self.words(va, 4)
+            total_keys += key_count
+            if flags & ~3 or key_count > 256 or total_keys > 1024:
+                raise MetadataError('Enum flags/key budget')
+            values = []
+            for j in range(key_count):
+                key_va = table + (key_start + j * 2) * 4
+                key, value = self.words(key_va, 2)
+                values.append({'name': identifier(key), 'value_u32': value,
+                               'table_va': hex(key_va)})
+            enums.append({'name': identifier(name), 'flags': flags,
+                          'table_va': hex(va), 'values': values})
         return {'class': identifier(class_index), 'meta_va': hex(address),
                 'parent_meta_va': hex(parent), 'static_dispatch_va': hex(dispatch),
                 'metadata_va': hex(table), 'revision': revision, 'methods': rows,
+                'enums': enums,
                 'signal_count': header[13], 'property_count': header[6],
                 'class_info_values_excluded': True, 'live_interface_proven': False}
 

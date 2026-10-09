@@ -60,6 +60,23 @@ class TankTransactionTests(unittest.TestCase):
             io=Memory(offset,corrupt=True)
             with self.assertRaises(ValueError):io.run()
             self.assertEqual(io.image,io.before);self.assertEqual(io.events['rollback'],'PASS')
+    def test_uncaught_interruption_does_not_imply_automatic_rollback(self):
+        # Synthetic interruption of this helper, not a physical power-loss test.
+        class Interrupted(BaseException):pass
+        for stage in ('persistent_file','B_write_readback','A_write_readback'):
+            io=Memory()
+            def event(name,value):
+                io.events[name]=value
+                if name==stage:raise Interrupted()
+            with self.assertRaises(Interrupted):
+                tx.commit_tank_records(io,io.before,io.target,b'old',b'new',event)
+            expected=bytearray(io.before)
+            if stage in ('B_write_readback','A_write_readback'):
+                expected[128:169]=io.target[128:169]
+            if stage=='A_write_readback':expected[32:73]=io.target[32:73]
+            self.assertEqual(io.image,bytes(expected));self.assertEqual(io.file,b'new')
+            self.assertNotIn('rollback',io.events)
+            self.assertNotIn('full_target_comparison',io.events)
     def test_rollback_failure_never_reports_success(self):
         io=Memory(32)
         def failed_rollback(offset,raw):raise OSError('Synthetic bus unavailable')

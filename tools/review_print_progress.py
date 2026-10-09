@@ -96,7 +96,7 @@ class Progress:
         return rows
 
 
-def review(session):
+def review(session, model=None):
     tree=SafeTree(session)
     try:
         raw=tree.read('SESSION_SHA256.json',4<<20);manifest=strict_json(raw)
@@ -113,7 +113,8 @@ def review(session):
             if not isinstance(row.get('sha256'),str) or not re.fullmatch(r'[a-f0-9]{64}',row['sha256']):raise ValueError('Invalid stream pin')
             sources.append(row)
         if not 1<=len(sources)<=64 or sum(x['bytes'] for x in sources)>MAX_BYTES:raise ValueError('Session budget')
-        model=Progress();events=0;partial=0;gaps=0;checked=[]
+        if model is None:model=Progress()
+        events=0;partial=0;gaps=0;checked=[]
         # Open each component without symlink following, then stream with fixed buffers.
         directory=os.open('raw',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW,dir_fd=tree.fd)
         try:

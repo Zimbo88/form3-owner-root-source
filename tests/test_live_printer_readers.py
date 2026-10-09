@@ -74,6 +74,34 @@ class PassiveSignals(unittest.TestCase):
         self.reader.accept(frame('com.formlabs.Sauron','statesChanged','   string "private-job"\n   array [\n      string "HIGH_LEVEL_JOB"\n      string "PRINT_WAIT_FOR_FLX"\n   ]'),10,20)
         r=self.reader.snapshot(11);self.assertEqual(r['job_layer']['value'],17);self.assertEqual(r['job_state']['state'],'LIVE')
         self.assertNotIn('private-job',json.dumps(r));self.assertIsNone(self.reader.snapshot(100)['job_state']['value'])
+    def test_preheat_card_is_derived_from_fresh_native_state_only(self):
+        self.assertEqual(set(PassivePrinterSignals.PREHEAT_LABELS), {
+            'PREHEAT_IDLE', 'PREHEAT_PREHEATING', 'PREHEAT_STOP_PREHEATING',
+            'PREHEAT_STOP_PREHEATING_TO_START_PREHEATING',
+            'PREHEAT_STOP_PREHEATING_UNTIL_COVER_CLOSED',
+            'PREHEAT_WAITING_FOR_COVER_TO_CLOSE_TO_PREHEAT'})
+        self.assertEqual(len(PassivePrinterSignals.LEVELSENSE_LABELS), 14)
+        body='   string "private-job"\n   array [\n      string "HIGH_LEVEL_IDLE_PREHEAT"\n      string "PREHEAT_PREHEATING"\n   ]'
+        self.reader.accept(frame('com.formlabs.Sauron','statesChanged',body),10,20)
+        live=self.reader.snapshot(11)['preheat_state']
+        self.assertEqual(live['value'],'Preheating')
+        self.assertEqual(live['state'],'LIVE')
+        self.assertTrue(live['fresh'])
+        self.assertTrue(self.reader.snapshot(11)['tank_process_state']['fresh'])
+        self.assertIn('not a heater-output or temperature reading',live['source'])
+        self.assertEqual(self.reader.snapshot(11)['tank_process_state']['value'],'No LevelSense state listed')
+        self.assertIsNone(self.reader.snapshot(71)['preheat_state']['value'])
+        self.reader.accept(frame('com.formlabs.Sauron','statesChanged',
+            ' string ""\n array [\n string "PREHEAT_WAITING_FOR_COVER_TO_CLOSE_TO_PREHEAT"\n string "LEVELSENSE_FILL_TANK"\n ]'),30,40)
+        latest=self.reader.snapshot(31)
+        self.assertEqual(latest['preheat_state']['value'],'Waiting for cover to close')
+        self.assertEqual(latest['tank_process_state']['value'],'Tank fill phase reported')
+        self.assertIn('not pump activity',latest['tank_process_state']['source'])
+        self.reader.accept(frame('com.formlabs.Sauron','statesChanged',
+            ' string ""\n array [\n string "PREHEAT_FUTURE_STATE"\n string "LEVELSENSE_FUTURE_STATE"\n ]'),50,60)
+        unknown=self.reader.snapshot(51)
+        self.assertEqual(unknown['preheat_state']['value'],'Unknown preheat state reported')
+        self.assertEqual(unknown['tank_process_state']['value'],'Unknown LevelSense state reported')
     def test_temperature_not_level_and_fault_invalidates(self):
         path='/com/formlabs/momo/temperatures/Levelsense'
         for fault,want in [('false',35.5),('true',None)]:
@@ -86,6 +114,71 @@ class PassiveSignals(unittest.TestCase):
             self.assertFalse(any(x['celsius'] is not None for x in self.reader.snapshot(2)['sensors']))
         self.reader.accept(frame('com.formlabs.Temperature','temperature',' struct { boolean false\n double 33\n }','/private-secret'),1,1)
         self.assertNotIn('private-secret',json.dumps(self.reader.snapshot(2)))
+    def test_invalid_temperature_update_replaces_preceding_good_sample(self):
+        path='/com/formlabs/momo/temperatures/Tower'
+        good=frame('com.formlabs.Temperature','temperature',' struct { boolean false\n double 31\n }',path)
+        for bad in ['nan','inf','-inf','1e999','-100','999','31 extra']:
+            self.reader.accept(good,10,20)
+            self.assertEqual(self.reader.snapshot(11)['sensors'][0]['celsius'],31)
+            self.reader.accept(frame('com.formlabs.Temperature','temperature',
+                ' struct { boolean false\n double '+bad+'\n }',path),11,21)
+            sensor=self.reader.snapshot(12)['sensors'][0]
+            self.assertIsNone(sensor['celsius'],bad)
+            self.assertFalse(sensor['observation']['fresh'])
+            self.assertEqual(sensor['observation']['state'],'UNAVAILABLE')
+    def test_mixed_or_truncated_state_list_cannot_retain_apparent_idle(self):
+        good=' string ""\n array [\n string "HIGH_LEVEL_IDLE"\n string "PREHEAT_IDLE"\n ]'
+        for bad in [
+            ' string "HIGH_LEVEL_IDLE"\n int32 1',
+            ' string "HIGH_LEVEL_IDLE"\n string "private-token" trailing',
+            ' string "HIGH_LEVEL_IDLE"\n string "PR_ERROR_TRUNCATED',
+            ' string "HIGH_LEVEL_IDLE"\n string "PRINT_WAIT" extra',
+            '\n'.join(['string "HIGH_LEVEL_IDLE"']*65),
+            '',
+        ]:
+            self.reader.accept(frame('com.formlabs.Sauron','statesChanged',good),10,20)
+            self.assertTrue(self.reader.snapshot(11)['job_state']['fresh'])
+            self.reader.accept(frame('com.formlabs.Sauron','statesChanged',
+                ' string ""\n array [\n'+bad+'\n ]'),11,21)
+            result=self.reader.snapshot(12)
+            for key in ('job_state','preheat_state','tank_process_state'):
+                self.assertIsNone(result[key]['value'],key)
+                self.assertEqual(result[key]['state'],'UNAVAILABLE')
+            self.assertNotIn('private-token',json.dumps(result))
+    def test_internal_native_state_labels_are_omitted_and_projection_marked(self):
+        body=' string ""\n array [\n string "PAUSE_NONE"\n string "PRINT_WAIT_FOR_FLX"\n string "FLX_IDLE"\n string "synthetic-private-job.flx"\n ]'
+        self.reader.accept(frame('com.formlabs.Sauron','statesChanged',body),10,20)
+        result=self.reader.snapshot(11)
+        self.assertEqual(result['job_state']['value'],['FLX_IDLE','PAUSE_NONE','PRINT_WAIT_FOR_FLX'])
+        self.assertEqual(result['job_state']['omitted_entries'],1)
+        self.assertFalse(result['job_state']['complete_projection'])
+        self.assertIn('incomplete projection',result['job_state']['source'])
+        self.assertNotIn('synthetic-private-job',json.dumps(result))
+        self.assertIsNone(self.reader.snapshot(71)['job_state']['omitted_entries'])
+        self.assertFalse(self.reader.snapshot(71)['job_state']['complete_projection'])
+    def test_complete_projection_and_all_unknown_replacement(self):
+        self.reader.accept(frame('com.formlabs.Sauron','statesChanged',
+            ' string ""\n array [\n string "PRINT_IDLE"\n ]'),10,20)
+        self.assertTrue(self.reader.snapshot(11)['job_state']['complete_projection'])
+        self.reader.accept(frame('com.formlabs.Sauron','statesChanged',
+            ' string ""\n array [\n string "synthetic-private-job.flx"\n ]'),11,21)
+        result=self.reader.snapshot(12)
+        self.assertIsNone(result['job_state']['value'])
+        self.assertFalse(result['job_state']['complete_projection'])
+    def test_truncated_known_member_invalidates_only_its_observation(self):
+        self.reader.accept(frame('com.formlabs.Sauron','currentlyPrintingLayerChanged',' string ""\n int32 8'),10,20)
+        self.reader.accept(frame('com.formlabs.Sauron','statesChanged',
+            ' string ""\n array [\n string "PRINT_WAIT"\n ]'),10,20)
+        self.reader.accept(frame('com.formlabs.Sauron','currentlyPrintingLayerChanged',' string ""\n int32'),11,21)
+        result=self.reader.snapshot(12)
+        self.assertIsNone(result['job_layer']['value'])
+        self.assertEqual(result['job_state']['value'],['PRINT_WAIT'])
+    def test_complete_unknown_future_state_remains_explicitly_unknown(self):
+        self.reader.accept(frame('com.formlabs.Sauron','statesChanged',
+            ' string ""\n array [\n string "PREHEAT_FUTURE_STATE"\n ]'),10,20)
+        result=self.reader.snapshot(11)
+        self.assertEqual(result['job_state']['value'],['PREHEAT_FUTURE_STATE'])
+        self.assertEqual(result['preheat_state']['value'],'Unknown preheat state reported')
     def test_disconnect_owner_change_and_backward_clock_invalidate(self):
         b=frame('com.formlabs.Sauron','currentlyPrintingLayerChanged',' string ""\n int32 8')
         self.reader.accept(b,10,20);self.assertIsNone(self.reader.snapshot(9)['job_layer']['value'])

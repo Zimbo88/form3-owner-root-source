@@ -1,0 +1,667 @@
+{
+  "arm_python": {
+    "dependency_files": 106,
+    "exit": 0,
+    "hardware_tested": false,
+    "isolation": "unprivileged user/network/PID namespace; selected read-only runtime; no site initialization; no home/credentials",
+    "old_kernel_compatibility": "NOT PROVEN: QEMU user-mode uses host kernel",
+    "passed": true,
+    "runtime_sha256": "df3413b3551a248be8f2e4361f6cabf71b44fbdbbe8e0410b548adac66f520e8"
+  },
+  "arm_python_log_sha256": "d4809e7c82d5308b14eaf98c18852b208643126b08ff4433160bb2eb4d8b297f",
+  "arm_python_tests": 18,
+  "deployed": false,
+  "evidence_verification": {
+    "evidence-after.json": {
+      "all_valid": true,
+      "receipt_sha256": "37650b378cb6ab09cb8aa8c2faea343d2c82956729417cc383cd230f866ce8be"
+    },
+    "evidence-before.json": {
+      "all_valid": true,
+      "receipt_sha256": "37650b378cb6ab09cb8aa8c2faea343d2c82956729417cc383cd230f866ce8be"
+    }
+  },
+  "hardware_contact": false,
+  "historical_panel_replay": {
+    "coverage_gaps_reported": 0,
+    "duplicate_handling": "Repeated captured frames are counted, not independent events",
+    "events": 1150242,
+    "hardware_contact": false,
+    "manifest_sha256": "29237060a02c8a7d7e686de393486a84ec4a5572f6cc04106bb7d1fdbe62254d",
+    "observations": {
+      "counts": {
+        "layers_frames": 1175,
+        "layers_value_available": 1175,
+        "states_frames": 54773,
+        "states_incomplete_projection": 54670,
+        "states_value_available": 54773,
+        "temperatures_frames": 785397,
+        "temperatures_value_available": 785397
+      },
+      "unique_boots": 7
+    },
+    "parser_sha256": "7bbc8588219f335797de848c3843df3cc30cff1a72a3d07778060c8765eb6ee0",
+    "receipt_sha256": "53b2ce65305cdcc8490f586c1a8b024bb88e86ae3ed0136e1eb5690d2ec51919",
+    "replay_tool_sha256": "8b926db487d16458f23fa2b6f2725f948008549c3d918849f06e8ab66e31c9c2",
+    "scope": "HISTORICAL parser replay; no current device or timing acceptance",
+    "streams": 29,
+    "undelimited_tail_frames_omitted": 20
+  },
+  "native_probes": [
+    {
+      "address_convention": "ELF link VA",
+      "binary_sha256": "025a21f7cdfaf2f10b2a40f2580d62992794a1d500643194e4606eb4e8676e34",
+      "case_count": 16,
+      "cases": [
+        {
+          "case": "threshold_0.0",
+          "count": 0,
+          "functional": true,
+          "native_instruction_addresses": 8,
+          "notifications": [],
+          "passed": true,
+          "property_value": 0.0,
+          "sum": 0.0
+        },
+        {
+          "case": "threshold_0.009",
+          "count": 0,
+          "functional": true,
+          "native_instruction_addresses": 8,
+          "notifications": [],
+          "passed": true,
+          "property_value": 0.0,
+          "sum": 0.0
+        },
+        {
+          "case": "threshold_0.01",
+          "count": 0,
+          "functional": true,
+          "native_instruction_addresses": 8,
+          "notifications": [],
+          "passed": true,
+          "property_value": 0.0,
+          "sum": 0.0
+        },
+        {
+          "case": "threshold_0.010001",
+          "count": 0,
+          "functional": true,
+          "native_instruction_addresses": 10,
+          "notifications": [
+            "temperature_changed"
+          ],
+          "passed": true,
+          "property_value": 0.010001,
+          "sum": 0.0
+        },
+        {
+          "case": "threshold_-0.02",
+          "count": 0,
+          "functional": true,
+          "native_instruction_addresses": 10,
+          "notifications": [
+            "temperature_changed"
+          ],
+          "passed": true,
+          "property_value": -0.02,
+          "sum": 0.0
+        },
+        {
+          "case": "threshold_NaN",
+          "count": 0,
+          "functional": true,
+          "native_instruction_addresses": 8,
+          "notifications": [],
+          "passed": true,
+          "property_value": 0.0,
+          "sum": 0.0
+        },
+        {
+          "case": "threshold_Infinity",
+          "count": 0,
+          "functional": true,
+          "native_instruction_addresses": 10,
+          "notifications": [
+            "temperature_changed"
+          ],
+          "passed": true,
+          "property_value": "Infinity",
+          "sum": 0.0
+        },
+        {
+          "case": "two_valid_samples_average_and_clear",
+          "count": 0,
+          "functional": true,
+          "native_instruction_addresses": 59,
+          "notifications": [
+            "temperature_changed"
+          ],
+          "passed": true,
+          "property_value": 32.0,
+          "sum": 0.0
+        },
+        {
+          "case": "fault_excluded_and_functional_false",
+          "count": 0,
+          "functional": false,
+          "native_instruction_addresses": 25,
+          "notifications": [
+            "functional_changed"
+          ],
+          "passed": true,
+          "property_value": 20.0,
+          "sum": 0.0
+        },
+        {
+          "case": "fault_does_not_clear_prior_valid_accumulation",
+          "count": 0,
+          "functional": false,
+          "native_instruction_addresses": 67,
+          "notifications": [
+            "functional_changed",
+            "temperature_changed"
+          ],
+          "passed": true,
+          "property_value": 30.0,
+          "sum": 0.0
+        },
+        {
+          "case": "empty_timer_retains_property",
+          "count": 0,
+          "functional": true,
+          "native_instruction_addresses": 14,
+          "notifications": [],
+          "passed": true,
+          "property_value": 20.0,
+          "sum": 0.0
+        },
+        {
+          "case": "fault_can_start_inactive_timer",
+          "count": 0,
+          "functional": false,
+          "native_instruction_addresses": 27,
+          "notifications": [
+            "functional_changed",
+            "timer_start"
+          ],
+          "passed": true,
+          "property_value": 20.0,
+          "sum": 0.0
+        },
+        {
+          "case": "valid_sample_restores_functional",
+          "count": 1,
+          "functional": true,
+          "native_instruction_addresses": 32,
+          "notifications": [
+            "functional_changed"
+          ],
+          "passed": true,
+          "property_value": 20.0,
+          "sum": 21.0
+        },
+        {
+          "case": "native_unflagged_NaN_is_accumulated",
+          "count": 1,
+          "functional": true,
+          "native_instruction_addresses": 30,
+          "notifications": [],
+          "passed": true,
+          "property_value": 20.0,
+          "sum": "NaN"
+        },
+        {
+          "case": "native_unflagged_Infinity_is_accumulated",
+          "count": 1,
+          "functional": true,
+          "native_instruction_addresses": 30,
+          "notifications": [],
+          "passed": true,
+          "property_value": 20.0,
+          "sum": "Infinity"
+        },
+        {
+          "case": "getter_wrapper_argument_capture",
+          "count": 0,
+          "functional": true,
+          "native_instruction_addresses": 36,
+          "notifications": [],
+          "passed": true,
+          "property_value": 20.0,
+          "sum": 0.0
+        }
+      ],
+      "getter_invocation": [
+        {
+          "connection_type": 0,
+          "member": "GetCurrentState",
+          "return_type": "QVariantMap"
+        }
+      ],
+      "hardware_contact": false,
+      "local_receipt": "research-private/panel50-20261009/heater-native.json",
+      "modeled": [
+        "synthetic watcher initial fields",
+        "Qt notifications intercepted",
+        "QTimer start intercepted",
+        "QMetaObject invocation intercepted"
+      ],
+      "not_proven": [
+        "sensor hardware",
+        "native initial member values",
+        "native timer period",
+        "Qt delivery",
+        "getter implementation behind invocation",
+        "Linux 4.9 runtime"
+      ],
+      "passed": true,
+      "receipt_sha256": "df34b45e46f6924eebdc94b131428a65b98f291e5b1f8b46c13e689da874d756",
+      "tool": "tools/probe_heater_watcher_native.py",
+      "tool_sha256": "46aec465260d23d22d34cc8cbbe7faabd1ccf336bbb7cc6262385d6e4a37157c"
+    },
+    {
+      "case_count": 412,
+      "case_grid": {
+        "fault_expansion": "Every reached read callback and every reached write callback; write failure before/after modeled full-page commit.",
+        "lengths": [
+          0,
+          1,
+          9,
+          20,
+          31,
+          32,
+          41,
+          64
+        ],
+        "offsets": [
+          32,
+          63,
+          64,
+          72,
+          128,
+          159,
+          160,
+          168,
+          480,
+          500,
+          511,
+          512,
+          513
+        ]
+      },
+      "examples": [
+        {
+          "changed_bytes": 41,
+          "injected_read_error": null,
+          "injected_write_error": null,
+          "length": 41,
+          "modeled_commit_on_error": false,
+          "mutex_balanced": true,
+          "neighbor_bytes_preserved": true,
+          "offset": 32,
+          "pages_attempted": [
+            1,
+            2
+          ],
+          "pages_read": [
+            2
+          ],
+          "pages_written": [
+            1,
+            2
+          ],
+          "passed": true,
+          "return": 41
+        },
+        {
+          "changed_bytes": 32,
+          "injected_read_error": 0,
+          "injected_write_error": null,
+          "length": 41,
+          "modeled_commit_on_error": false,
+          "mutex_balanced": true,
+          "neighbor_bytes_preserved": true,
+          "offset": 32,
+          "pages_attempted": [
+            1
+          ],
+          "pages_read": [
+            2
+          ],
+          "pages_written": [
+            1
+          ],
+          "passed": true,
+          "return": -5
+        },
+        {
+          "changed_bytes": 0,
+          "injected_read_error": null,
+          "injected_write_error": 0,
+          "length": 41,
+          "modeled_commit_on_error": false,
+          "mutex_balanced": true,
+          "neighbor_bytes_preserved": true,
+          "offset": 32,
+          "pages_attempted": [
+            1
+          ],
+          "pages_read": [],
+          "pages_written": [],
+          "passed": true,
+          "return": -5
+        },
+        {
+          "changed_bytes": 32,
+          "injected_read_error": null,
+          "injected_write_error": 0,
+          "length": 41,
+          "modeled_commit_on_error": true,
+          "mutex_balanced": true,
+          "neighbor_bytes_preserved": true,
+          "offset": 32,
+          "pages_attempted": [
+            1
+          ],
+          "pages_read": [],
+          "pages_written": [
+            1
+          ],
+          "passed": true,
+          "return": -5
+        },
+        {
+          "changed_bytes": 32,
+          "injected_read_error": null,
+          "injected_write_error": 1,
+          "length": 41,
+          "modeled_commit_on_error": false,
+          "mutex_balanced": true,
+          "neighbor_bytes_preserved": true,
+          "offset": 32,
+          "pages_attempted": [
+            1,
+            2
+          ],
+          "pages_read": [
+            2
+          ],
+          "pages_written": [
+            1
+          ],
+          "passed": true,
+          "return": -5
+        },
+        {
+          "changed_bytes": 41,
+          "injected_read_error": null,
+          "injected_write_error": 1,
+          "length": 41,
+          "modeled_commit_on_error": true,
+          "mutex_balanced": true,
+          "neighbor_bytes_preserved": true,
+          "offset": 32,
+          "pages_attempted": [
+            1,
+            2
+          ],
+          "pages_read": [
+            2
+          ],
+          "pages_written": [
+            1,
+            2
+          ],
+          "passed": true,
+          "return": -5
+        },
+        {
+          "changed_bytes": 41,
+          "injected_read_error": null,
+          "injected_write_error": null,
+          "length": 41,
+          "modeled_commit_on_error": false,
+          "mutex_balanced": true,
+          "neighbor_bytes_preserved": true,
+          "offset": 128,
+          "pages_attempted": [
+            4,
+            5
+          ],
+          "pages_read": [
+            5
+          ],
+          "pages_written": [
+            4,
+            5
+          ],
+          "passed": true,
+          "return": 41
+        },
+        {
+          "changed_bytes": 32,
+          "injected_read_error": 0,
+          "injected_write_error": null,
+          "length": 41,
+          "modeled_commit_on_error": false,
+          "mutex_balanced": true,
+          "neighbor_bytes_preserved": true,
+          "offset": 128,
+          "pages_attempted": [
+            4
+          ],
+          "pages_read": [
+            5
+          ],
+          "pages_written": [
+            4
+          ],
+          "passed": true,
+          "return": -5
+        },
+        {
+          "changed_bytes": 0,
+          "injected_read_error": null,
+          "injected_write_error": 0,
+          "length": 41,
+          "modeled_commit_on_error": false,
+          "mutex_balanced": true,
+          "neighbor_bytes_preserved": true,
+          "offset": 128,
+          "pages_attempted": [
+            4
+          ],
+          "pages_read": [],
+          "pages_written": [],
+          "passed": true,
+          "return": -5
+        },
+        {
+          "changed_bytes": 32,
+          "injected_read_error": null,
+          "injected_write_error": 0,
+          "length": 41,
+          "modeled_commit_on_error": true,
+          "mutex_balanced": true,
+          "neighbor_bytes_preserved": true,
+          "offset": 128,
+          "pages_attempted": [
+            4
+          ],
+          "pages_read": [],
+          "pages_written": [
+            4
+          ],
+          "passed": true,
+          "return": -5
+        },
+        {
+          "changed_bytes": 32,
+          "injected_read_error": null,
+          "injected_write_error": 1,
+          "length": 41,
+          "modeled_commit_on_error": false,
+          "mutex_balanced": true,
+          "neighbor_bytes_preserved": true,
+          "offset": 128,
+          "pages_attempted": [
+            4,
+            5
+          ],
+          "pages_read": [
+            5
+          ],
+          "pages_written": [
+            4
+          ],
+          "passed": true,
+          "return": -5
+        },
+        {
+          "changed_bytes": 41,
+          "injected_read_error": null,
+          "injected_write_error": 1,
+          "length": 41,
+          "modeled_commit_on_error": true,
+          "mutex_balanced": true,
+          "neighbor_bytes_preserved": true,
+          "offset": 128,
+          "pages_attempted": [
+            4,
+            5
+          ],
+          "pages_read": [
+            5
+          ],
+          "pages_written": [
+            4,
+            5
+          ],
+          "passed": true,
+          "return": -5
+        },
+        {
+          "changed_bytes": 12,
+          "injected_read_error": null,
+          "injected_write_error": null,
+          "length": 20,
+          "modeled_commit_on_error": false,
+          "mutex_balanced": true,
+          "neighbor_bytes_preserved": true,
+          "offset": 500,
+          "pages_attempted": [
+            15
+          ],
+          "pages_read": [
+            15
+          ],
+          "pages_written": [
+            15
+          ],
+          "passed": true,
+          "return": 12
+        },
+        {
+          "changed_bytes": 0,
+          "injected_read_error": 0,
+          "injected_write_error": null,
+          "length": 20,
+          "modeled_commit_on_error": false,
+          "mutex_balanced": true,
+          "neighbor_bytes_preserved": true,
+          "offset": 500,
+          "pages_attempted": [],
+          "pages_read": [
+            15
+          ],
+          "pages_written": [],
+          "passed": true,
+          "return": -5
+        },
+        {
+          "changed_bytes": 0,
+          "injected_read_error": null,
+          "injected_write_error": 0,
+          "length": 20,
+          "modeled_commit_on_error": false,
+          "mutex_balanced": true,
+          "neighbor_bytes_preserved": true,
+          "offset": 500,
+          "pages_attempted": [
+            15
+          ],
+          "pages_read": [
+            15
+          ],
+          "pages_written": [],
+          "passed": true,
+          "return": -5
+        },
+        {
+          "changed_bytes": 12,
+          "injected_read_error": null,
+          "injected_write_error": 0,
+          "length": 20,
+          "modeled_commit_on_error": true,
+          "mutex_balanced": true,
+          "neighbor_bytes_preserved": true,
+          "offset": 500,
+          "pages_attempted": [
+            15
+          ],
+          "pages_read": [
+            15
+          ],
+          "pages_written": [
+            15
+          ],
+          "passed": true,
+          "return": -5
+        },
+        {
+          "changed_bytes": 0,
+          "injected_read_error": null,
+          "injected_write_error": null,
+          "length": 1,
+          "modeled_commit_on_error": false,
+          "mutex_balanced": true,
+          "neighbor_bytes_preserved": true,
+          "offset": 512,
+          "pages_attempted": [],
+          "pages_read": [],
+          "pages_written": [],
+          "passed": true,
+          "return": 0
+        }
+      ],
+      "hardware_contact": false,
+      "local_receipt": "research-private/panel50-20261009/tank-driver-final.json",
+      "modeled": [
+        "mutex",
+        "memcpy",
+        "readpage",
+        "writepage",
+        "optional whole-page commit despite error"
+      ],
+      "module_sha256": "2549601cf7b059f1cad752234377d2270f1721c2a7a38b8ef27878c54732950a",
+      "native_function": ".text+0x169c eeprom_write",
+      "not_proven": [
+        "physical bus writes",
+        "kernel concurrency",
+        "torn bytes within one page",
+        "power loss",
+        "native service reload"
+      ],
+      "passed": true,
+      "receipt_sha256": "118c6b5a77e80510a86bf67138de67d9dbb380bd64150557b4c754fac79ad8f9",
+      "tool": "tools/probe_tank_driver.py",
+      "tool_sha256": "667f09ff3cad2c54b70e3a03ab4d444520048a95346c6f657e6aabb9652c4c9c"
+    }
+  ],
+  "qt_metadata_receipt_sha256": "a12d7e61310519aef0aac7b6882f3c36550bb1e6d2d7dfd3019b40ddae978462",
+  "schema_version": 1,
+  "scope": "Offline panel research; selected native ARM slices with modeled boundaries",
+  "source_baseline": "398d5f9f9678ef76cc774d93f60a357d136da514",
+  "version": "0.5.17-review"
+}

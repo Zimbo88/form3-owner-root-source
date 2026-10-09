@@ -41,6 +41,20 @@ def qt_fixture():
 
 
 class QtMetadata(unittest.TestCase):
+    def test_enum_values_and_bounds_are_metadata_not_state_transitions(self):
+        raw=qt_fixture()
+        struct.pack_into('<2I',raw,0x220,1,28)
+        struct.pack_into('<4I',raw,0x270,3,0,2,32)
+        struct.pack_into('<4I',raw,0x280,1,0,2,5)
+        enum=Elf32(raw).meta(0x10100)['enums'][0]
+        self.assertEqual(enum['name'],'FixtureState')
+        self.assertEqual([x['value_u32'] for x in enum['values']],[0,5])
+        self.assertEqual([x['name'] for x in enum['values']],['changed','GetStates'])
+        self.assertFalse(Elf32(raw).meta(0x10100)['live_interface_proven'])
+        for offset,value in ((0x220,65),(0x274,4),(0x278,257),(0x27c,65536),(0x280,4097)):
+            bad=raw[:];struct.pack_into('<I',bad,offset,value)
+            with self.assertRaises(MetadataError):Elf32(bad).meta(0x10100)
+
     def test_structural_metadata_not_safety_authorization(self):
         x = Elf32(qt_fixture()).meta(0x10100)
         self.assertEqual(x['class'], 'Fixture::Status')

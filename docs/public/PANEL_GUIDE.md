@@ -1,5 +1,8 @@
 # Owner panel: live pages and consumable workflows
 
+The [0.5.18 Overview and passive state update](PANEL_RESEARCH_UPDATE.md)
+adds the current screenshot, firmware findings and its own acceptance scope.
+
 **Current access/UI:** [Optional secret and direct actions](PANEL_ACCESS.md).
 The 0.5.16/0.5.15 screenshots below retain their historical labels.
 

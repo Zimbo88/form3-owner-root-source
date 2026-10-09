@@ -1,0 +1,98 @@
+{
+  "arm_runtime_checks": 18,
+  "baseline_verified": true,
+  "bootstrap_config_unchanged": true,
+  "browser": {
+    "new_phase_cards_rendered": true,
+    "pages_rendered": [
+      "status",
+      "materials",
+      "jobs",
+      "diagnostics",
+      "settings",
+      "network",
+      "privacy",
+      "maintenance"
+    ],
+    "passed": true,
+    "screenshots_private": true,
+    "write_controls_not_invoked": true
+  },
+  "browser_fixture_pages": 9,
+  "date_utc": "2026-10-09",
+  "firmware": "2.5.6-2773",
+  "formule_listener_present": true,
+  "host_fixture_tests": {
+    "errors": 0,
+    "failures": 0,
+    "run": 717,
+    "skipped": 0
+  },
+  "http_checks": {
+    "asset_bytes_match_signed_source": true,
+    "invalid_Host_rejected": true,
+    "invalid_Origin_rejected": true,
+    "missing_CSRF_rejected": true,
+    "new_api_fields_present": true,
+    "open_preference_preserved": true,
+    "root": true,
+    "session_cookie_HttpOnly_SameSiteStrict": true
+  },
+  "installed_verified": true,
+  "kernel": "4.9.65+",
+  "live_temperature_channels": [
+    "ForceSense",
+    "Levelsense",
+    "Tower",
+    "core_thermal",
+    "cpu_thermal",
+    "dspeve_thermal",
+    "gpu_thermal",
+    "iva_thermal"
+  ],
+  "manifest_sha256": "08bf92b8cda0468319ca000ab5f0a11dee28f2eab679760ed4d892a46711e1b7",
+  "new_phase_fields_at_acceptance": "UNAVAILABLE: no fresh state transition; not replaced with root-query values",
+  "not_tested": [
+    "active preheat or LevelSense phase transition on hardware",
+    "physical sensor accuracy/calibration",
+    "print/dispense operations",
+    "consumable EEPROM writes",
+    "live heater/fan getter implementation",
+    "hardware power-loss recovery"
+  ],
+  "owner_uid": 65000,
+  "package_sha256": "1a237c8b9fcaa869fc0a57842a6db2c44832583c6ff0268f3b54150bda1e1c6f",
+  "pending_transaction": false,
+  "plan_hash": "46ddde42f69bb44af21e6a0c3773ba9cfe994910baf8f1440a049d8e137acb56",
+  "private_receipt_sha256": {
+    "archive-apply.private.json": "43eada99abfcf1d1e46a975dc59e7c32439a19c80e369dd7e6a8a4d8529b5ba6",
+    "archive-plan.private.json": "549d0cd0689a82098950cd76f5211b4dbf9494006609c97d20f7189b12fec628",
+    "live-acceptance.json": "9b93163d4dd8c3e1d0dff5f8ace206839618ad6ae38bb9069f28ea6d64e8e5ff",
+    "passive-probe.private.json": "6124a5cb68c9a158d224d89f8b8281bb192f6cafae522d18192442f330e21164",
+    "postflight.private.json": "d2a157efb54b579809986c867d7c2bc5768e39f27506e15d500967ab941fb85c",
+    "preflight.private.json": "7d0384d3a90f48d095416e9a43f39d3ab92f486865f10f4b3eb15a3d271dabfe",
+    "state-and-pins.private.json": "dcd484a98111d7b891f270c125168de406d30a94be930d46a7f92ced8ed66243",
+    "update-apply.private.json": "acaa98cf0655f95806956b54fa83e40c02d41e4e334ec4afe1eaa037d5c32df7",
+    "update-plan.private.json": "6351402f9132cb626e3b22c26ca7afb827d556d52203471a7f18a2c2e81bc958"
+  },
+  "release_archival": "0.5.10-review moved through existing owner transaction; rollback bytes retained",
+  "root_mount_preserved_readonly": true,
+  "route_uses_wlan": true,
+  "runtime": "Python 3.5.3",
+  "same_boot": true,
+  "schema_version": 1,
+  "scope": "Panel-only reference hardware update; no printing or actuator acceptance",
+  "selected_slot": 6,
+  "source_commit": "7973a1ccbd854b9f46953557adb57f2473269027",
+  "ssh_reconnect": true,
+  "state_query_labels": [
+    "PREHEAT_IDLE",
+    "PRINT_IDLE",
+    "PAUSE_NONE",
+    "SAURON_IDLE",
+    "HIGH_LEVEL_IDLE"
+  ],
+  "state_signal_during_passive_probe": false,
+  "vendor_processes_preserved": true,
+  "version": "0.5.18-review"
+}

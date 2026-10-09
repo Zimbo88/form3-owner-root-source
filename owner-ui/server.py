@@ -200,6 +200,8 @@ def decorate_snapshot(data, bundle=None):
     printer=data.get('printer',{})
     fields['printer_state']=printer.get('printer_state',field())
     fields['job_state']=printer.get('job_state',field(source='No fresh passive Sauron state signal; prepared printer status is separate'))
+    fields['preheat_state']=printer.get('preheat_state',field(source='No fresh passive Sauron state signal; heater output is not inferred'))
+    fields['tank_process_state']=printer.get('tank_process_state',field(source='No fresh passive Sauron state signal; pump activity and measured height are not inferred'))
     fields['job_layer']=printer.get('job_layer',field())
     fields['tank_level']=printer.get('tank_level',field(unit='mm'))
     data['fields'] = fields

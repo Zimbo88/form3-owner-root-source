@@ -15,7 +15,7 @@ import select
 import subprocess
 import time
 
-VERSION = '0.5.17-review'
+VERSION = '0.5.18-review'
 MAX_FILE = 2 * 1024 * 1024
 
 
@@ -677,10 +677,35 @@ class PassivePrinterSignals(object):
         "type='signal',sender='org.freedesktop.DBus',interface='org.freedesktop.DBus',member='NameOwnerChanged',arg0='com.formlabs.Sauron'",
         "type='signal',sender='org.freedesktop.DBus',interface='org.freedesktop.DBus',member='NameOwnerChanged',arg0='com.formlabs.CandyBus'"]
     CHANNELS = {'/com/formlabs/momo/temperatures/'+n: n for n in ('Tower', 'ForceSense', 'Levelsense')}
+    PREHEAT_LABELS = {
+        'PREHEAT_IDLE': 'Idle',
+        'PREHEAT_PREHEATING': 'Preheating',
+        'PREHEAT_STOP_PREHEATING': 'Stopping preheat',
+        'PREHEAT_STOP_PREHEATING_TO_START_PREHEATING': 'Changing preheat state',
+        'PREHEAT_STOP_PREHEATING_UNTIL_COVER_CLOSED': 'Waiting for cover before resuming',
+        'PREHEAT_WAITING_FOR_COVER_TO_CLOSE_TO_PREHEAT': 'Waiting for cover to close',
+    }
+    LEVELSENSE_LABELS = {
+        'LEVELSENSE_IDLE': 'Idle',
+        'LEVELSENSE_FILL_TANK': 'Tank fill phase reported',
+        'LEVELSENSE_DELAY_TO_CHECK_STATE': 'Waiting before a level-state check',
+        'LEVELSENSE_CHECK_STATE_WAIT_FOR_REPLY': 'Waiting for a LevelSense reply',
+        'LEVELSENSE_CHECK_STATE_WAIT_FOR_REPLY_TO_ABORT': 'Aborting a LevelSense reply wait',
+        'LEVELSENSE_WAIT_FOR_LIFT_Z': 'Waiting for the lift step',
+        'LEVELSENSE_WAIT_FOR_LIFT_Z_TO_ABORT': 'Aborting the lift step',
+        'LEVELSENSE_WAIT_FOR_LOWER_Z': 'Waiting for the lower step',
+        'LEVELSENSE_WAIT_FOR_LOWER_Z_TO_ABORT': 'Aborting the lower step',
+        'LEVELSENSE_WAIT_FOR_RESOLUTION': 'Waiting for a resolution',
+        'LEVELSENSE_WAIT_FOR_RESOLUTION_TO_MIXER_DISENGAGE': 'Waiting for resolution and mixer disengagement',
+        'LEVELSENSE_WAIT_FOR_RESOLUTION_TO_ABORT': 'Aborting a resolution wait',
+        'LEVELSENSE_WAIT_FOR_PRINTER_CHECK': 'Waiting for a printer check',
+        'LEVELSENSE_WAIT_FOR_PRINTER_CHECK_TO_ABORT': 'Aborting a printer-check wait',
+    }
 
     def __init__(self):
         self.lock = threading.Lock()
         self.values = {}
+        self.state_omitted = None
         self.stop = threading.Event()
         self.worker = None
         self.pending = b''
@@ -688,6 +713,7 @@ class PassivePrinterSignals(object):
     def clear(self):
         with self.lock:
             self.values.clear()
+            self.state_omitted = None
 
     def accept(self, block, mono=None, wall=None):
         if not isinstance(block, bytes) or len(block) > 65536:
@@ -706,28 +732,43 @@ class PassivePrinterSignals(object):
             self.clear()
             return
         body = '\n'.join(lines[1:])
-        key, value = None, None
+        key, value, omitted = None, None, None
         if interface == 'com.formlabs.Temperature' and member == 'temperature' and path in self.CHANNELS:
+            key = 'temperature/'+self.CHANNELS[path]
             match = re.match(r'^\s*struct \{\s*boolean (true|false)\s+double (-?[0-9.eE+]+)\s*\}\s*$', body)
             if match:
-                key = 'temperature/'+self.CHANNELS[path]
                 try:
                     value = number(float(match.group(2)), -50, 150) if match.group(1) == 'false' else None
                 except ValueError:
                     pass
         elif interface == 'com.formlabs.Sauron' and path == '/com/formlabs/Sauron':
             if member == 'currentlyPrintingLayerChanged':
+                key = 'job_layer'
                 match = re.match(r'^\s*string "[A-Za-z0-9{}_-]{0,128}"\s+int32 ([0-9]{1,7})\s*$', body)
                 if match:
-                    key, value = 'job_layer', number(int(match.group(1)), 0, 1000000)
+                    value = number(int(match.group(1)), 0, 1000000)
             elif member == 'statesChanged':
+                key = 'job_state'
                 match = re.match(r'^\s*string "[A-Za-z0-9{}_-]{0,128}"\s+array \[([\s\S]*)\]\s*$', body)
                 if match and len(match.group(1)) < 8192:
-                    values = re.findall(r'^\s*string "((?:HIGH_LEVEL|SAURON|PRINT|LEVELSENSE|PREHEAT|PR_ERROR)_[A-Z_0-9]{1,90})"\s*$', match.group(1), re.M)
-                    if 0 < len(values) <= 64:
-                        key, value = 'job_state', sorted(set(values))
+                    entries = [line.strip() for line in match.group(1).splitlines() if line.strip()]
+                    # Native lists also contain internal task labels. Validate
+                    # every string, but never expose those labels or identifiers.
+                    grammar = r'^string "(?:[^"\\\r\n]|\\.){0,1024}"$'
+                    if 0 < len(entries) <= 64 and all(re.match(grammar, x) for x in entries):
+                        matches = [re.match(r'^string "((?:HIGH_LEVEL|SAURON|PRINT|LEVELSENSE|PREHEAT|PR_ERROR|PAUSE|FLX)_[A-Z_0-9]{1,90})"$', entry) for entry in entries]
+                        selected = [m.group(1) for m in matches if m]
+                        omitted = len(entries) - len(selected)
+                        if selected:
+                            value = sorted(set(selected))
         if key is not None:
             with self.lock:
+                # A malformed/faulted update must not leave a prior value LIVE.
+                # Do not create channels from invalid first observations.
+                if value is None and key not in self.values:
+                    return
+                if key == 'job_state':
+                    self.state_omitted = omitted
                 self.values[key] = (value, time.monotonic() if mono is None else mono,
                                     time.time() if wall is None else wall)
 
@@ -735,6 +776,7 @@ class PassivePrinterSignals(object):
         now = time.monotonic() if mono is None else mono
         with self.lock:
             values = dict(self.values)
+            state_omitted = self.state_omitted
         result = {'sensors': []}
         for key, (value, observed, stamp) in values.items():
             limit = 10 if key.startswith('temperature/') else 60
@@ -747,6 +789,46 @@ class PassivePrinterSignals(object):
                 result['sensors'].append({'name': key.split('/')[1], 'celsius': view['value'], 'observation': view})
             else:
                 result[key] = view
+        states = result.get('job_state')
+        if states is not None:
+            states['omitted_entries'] = state_omitted if states['fresh'] else None
+            states['complete_projection'] = bool(states['fresh'] and state_omitted == 0)
+            if states['fresh'] and state_omitted:
+                states['source'] += '; additional entries omitted by allowlist; incomplete projection'
+            if states.get('state') == 'LIVE' and isinstance(states.get('value'), list):
+                native_preheat = [x for x in states['value'] if x.startswith('PREHEAT_')]
+                high_level = 'HIGH_LEVEL_IDLE_PREHEAT' in states['value']
+                if len(native_preheat) == 1:
+                    label = self.PREHEAT_LABELS.get(native_preheat[0], 'Unknown preheat state reported')
+                elif len(native_preheat) > 1:
+                    label = 'Multiple preheat states reported'
+                elif high_level:
+                    label = 'High-level idle with preheat context'
+                else:
+                    label = 'No preheat state listed'
+                result['preheat_state'] = field(label, 'LIVE',
+                    'Derived from the fresh passive Sauron statesChanged list; not a heater-output or temperature reading',
+                    timestamp=states.get('timestamp'))
+                result['preheat_state']['fresh'] = states['fresh']
+                native_level = [x for x in states['value'] if x.startswith('LEVELSENSE_')]
+                active_level = [x for x in native_level if x != 'LEVELSENSE_IDLE']
+                if 'LEVELSENSE_FILL_TANK' in active_level:
+                    level_label = self.LEVELSENSE_LABELS['LEVELSENSE_FILL_TANK']
+                elif len(active_level) == 1:
+                    level_label = self.LEVELSENSE_LABELS.get(active_level[0], 'Unknown LevelSense state reported')
+                elif len(active_level) > 1:
+                    level_label = 'Multiple LevelSense states reported'
+                elif native_level:
+                    level_label = 'Idle'
+                else:
+                    level_label = 'No LevelSense state listed'
+                result['tank_process_state'] = field(level_label, 'LIVE',
+                    'Derived from the fresh passive Sauron statesChanged list; a firmware phase label, not pump activity or measured resin height',
+                    timestamp=states.get('timestamp'))
+                result['tank_process_state']['fresh'] = states['fresh']
+            else:
+                result['preheat_state'] = field(source='Native Sauron state signal is stale or unavailable')
+                result['tank_process_state'] = field(source='Native Sauron state signal is stale or unavailable')
         return result
 
     def feed(self, chunk):

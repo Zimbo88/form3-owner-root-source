@@ -4,6 +4,14 @@ This is the evidence index, not a new hardware acceptance receipt. The current
 repository version is [VERSION](../../VERSION). A version string alone does not
 bind a hardware observation to every file in a later checkout.
 
+## Passive state and sensor update
+
+The [0.5.18 research update](PANEL_RESEARCH_UPDATE.md) records the signed panel
+deployment, eight observed live temperature channels and real browser checks.
+Its [package-bound receipt](../../analysis/panel50/live-acceptance-0518.json)
+keeps active state transitions, sensor calibration and physical write tests
+explicitly unconfirmed. The native ARM probes are separate offline evidence.
+
 ## Optional panel access
 
 The [0.5.17 access policy](PANEL_ACCESS.md) unifies optional panel authentication

@@ -1,7 +1,8 @@
 # Form 3 Owner Root
 
-Panel access can now be opened or protected with one setting; see
-[panel access and direct actions](docs/public/PANEL_ACCESS.md).
+The latest panel update adds passive preheat/tank-phase observations and stricter
+sensor freshness checks: [findings, live acceptance and screenshot](docs/public/PANEL_RESEARCH_UPDATE.md).
+Access remains optional through the [owner preference](docs/public/PANEL_ACCESS.md).
 
 ![Original Owner Root project mark](assets/signature-brand.svg)
 
@@ -15,7 +16,7 @@ firmware or a universal Form 3 unlock.
 - **Source version:** [VERSION](VERSION). Reviewed target: **Form 3 / Daguerre,
   selected p6, firmware 2.5.6-2773**, exact layout and file-hash gates.
 - **Hardware evidence:** historical Rescue/acquisition and normal owner access;
-  the 0.5.13 receipt confirms a narrower maintenance/panel acceptance. It does
+  the 0.5.18 receipt confirms a limited panel update and read-only acceptance. It does
   not prove every current path, a fresh installation or another printer revision.
   [Evidence matrix and unresolved acceptance](docs/public/EVIDENCE_STATUS.md).
 - **Required experience:** safe unpowered board work, chip/package identification,

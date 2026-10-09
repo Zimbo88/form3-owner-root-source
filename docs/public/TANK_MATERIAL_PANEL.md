@@ -3,6 +3,11 @@
 **Current access/UI:** [Optional secret and direct actions](PANEL_ACCESS.md).
 The 0.5.16/0.5.15 screenshots below retain their historical labels.
 
+The later [0.5.18 research update](PANEL_RESEARCH_UPDATE.md#firmware-evidence-and-isolated-execution)
+extends driver instruction tests to 412 cases. A page may commit before a later
+error; a caught-error rollback is different from an uncaught interruption or
+physical power loss. This adds no new live tank-write acceptance.
+
 The 0.5.16 extension adds **material assignment and saved-material restoration**
 for the reference Form 3 tank: T/65, mechanical version 3.3, firmware 2.5.6-2773.
 Cartridge usage and material operations remain separate. Other formats are
