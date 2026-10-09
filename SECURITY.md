@@ -1,5 +1,10 @@
 # Security policy
 
+The [optional panel access policy](docs/public/PANEL_ACCESS.md) defaults to open
+access for allowed LAN clients, including enabled write actions and private log
+exports. Enable the secret requirement when those clients are not all trusted.
+This setting does not disable SSH authentication or transaction safety checks.
+
 ## Reporting a vulnerability
 
 Do not put sensitive details, credentials, exploit inputs or device data in public

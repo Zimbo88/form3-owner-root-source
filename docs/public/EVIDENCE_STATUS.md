@@ -4,6 +4,12 @@ This is the evidence index, not a new hardware acceptance receipt. The current
 repository version is [VERSION](../../VERSION). A version string alone does not
 bind a hardware observation to every file in a later checkout.
 
+## Optional panel access
+
+The [0.5.17 access policy](PANEL_ACCESS.md) unifies optional panel authentication
+and simplifies consumable confirmation. Hardware write acceptance is unchanged;
+this is a panel-only update, not a new tank/cartridge write validation.
+
 ## Tank material extension
 
 The [0.5.16 tank material workflow](TANK_MATERIAL_PANEL.md) implements an owner

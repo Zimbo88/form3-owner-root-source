@@ -239,10 +239,8 @@ def make_server(provider, token, port=1328, store=None, bundle=None, bind='127.0
     lock = threading.RLock()
 
     def login_required():
-        if not owner_lan_http:
-            return True
         try:
-            return store.settings()['wlan_login_required'] if store else False
+            return store.settings()['wlan_login_required'] if store else True
         except (ValueError, OSError, TypeError):
             return True  # Invalid policy must never silently open access.
 
@@ -375,7 +373,7 @@ def make_server(provider, token, port=1328, store=None, bundle=None, bind='127.0
                     return self.reply(200, {'csrf': auth['csrf'], 'idle_timeout_seconds': 600, 'absolute_timeout_seconds': 3600})
                 if self.path == '/api/settings':
                     value = store.settings() if store else dict(DEFAULT_SETTINGS)
-                    return self.reply(200, {'settings': value, 'writable': bool(store), 'policy': policy_preview(value['privacy_preference'])})
+                    return self.reply(200, {'settings': value, 'writable': bool(store), 'authentication_required':login_required(), 'policy': policy_preview(value['privacy_preference'])})
                 if self.path == '/api/refills':
                     entries = store.refills() if store else []
                     consumables = bundle.summary().get('consumables', []) if bundle else []
@@ -429,7 +427,7 @@ def make_server(provider, token, port=1328, store=None, bundle=None, bind='127.0
                 if session is None:
                     return
                 if self.path.startswith('/api/cartridge-reset/'):
-                    if not session.get('authenticated'):
+                    if login_required() and not session.get('authenticated'):
                         return self.reply(403, {'error':'Owner login is required for consumable maintenance'})
                     if reset_client is None:
                         return self.reply(409, {'error':'Reviewed root helper is not enabled'})
@@ -455,15 +453,15 @@ def make_server(provider, token, port=1328, store=None, bundle=None, bind='127.0
                         tank_apply=self.path.endswith('/tank-material-apply')
                         material_apply=self.path.endswith('/material-apply')
                         phrases=('CHANGE CLEAN TANK MATERIAL',) if tank_apply else ('CHANGE CARTRIDGE MATERIAL',) if material_apply else ('APPLY CARTRIDGE USAGE','RESET CLEAR USAGE')
-                        required={'plan_id','confirmation','secret'}|({'tank_empty_clean'} if tank_apply else set())
-                        if set(body)!=required or body.get('confirmation') not in phrases or (tank_apply and body.get('tank_empty_clean') is not True):
+                        required={'plan_id','confirmation'}|({'tank_empty_clean'} if tank_apply else set())
+                        if not required <= set(body) or set(body)-required-{'secret'} or body.get('confirmation') not in phrases or (tank_apply and body.get('tank_empty_clean') is not True):
                             raise ValueError('Typed confirmation and the required tank acknowledgement are missing')
                         now=time.monotonic()
                         with lock:
                             while failures and now-failures[0]>60:failures.popleft()
                             if len(failures)>=6:
                                 return self.reply(429, {'error':'Authentication temporarily rate limited'})
-                            if not self.secret_ok(body.get('secret')):
+                            if login_required() and not self.secret_ok(body.get('secret')):
                                 failures.append(now)
                                 return self.reply(403, {'error':'Re-enter the owner access secret'})
                         result=reset_client.request('apply_tank_material' if tank_apply else 'apply_material' if material_apply else 'apply',body['plan_id'])
@@ -500,7 +498,7 @@ def make_server(provider, token, port=1328, store=None, bundle=None, bind='127.0
             if set(body) - {'format', 'start', 'end', 'service', 'private', 'file_id', 'secret', 'confirm_private'}:
                 raise ValueError('Unknown export field')
             if body.get('private') is True:
-                if body.get('confirm_private') != 'DOWNLOAD PRIVATE LOG' or not self.secret_ok(body.get('secret')):
+                if body.get('confirm_private') != 'DOWNLOAD PRIVATE LOG' or (login_required() and not self.secret_ok(body.get('secret'))):
                     return self.reply(403, {'error': 'Explicit private-log confirmation and reauthentication required'})
                 raw = bundle.raw_log(body.get('file_id'))
                 return self.reply(200, raw, 'text/plain; charset=utf-8', {'Content-Disposition': 'attachment; filename="owner-private-log.txt"', 'X-Content-SHA256': __import__('hashlib').sha256(raw).hexdigest()})

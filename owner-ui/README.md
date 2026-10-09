@@ -24,16 +24,16 @@ Requests, workers, exports, sessions, retries and history are bounded. Host/Orig
 checks and CSRF apply to typed mutations. Session idle/absolute expiry, logout
 revocation, rate limits, HttpOnly/SameSite cookies and Secure under HTTPS remain.
 No access secret in URLs, logs or client persistent storage. Private full-log
-export needs explicit confirmation and secret reauthentication even when ordinary
-WLAN login is optional. See the executable limits in `server.py`, not inferred
+export needs explicit confirmation. Secret reauthentication follows the optional
+[panel access policy](../docs/public/PANEL_ACCESS.md), as do consumable actions. See the executable limits in `server.py`, not inferred
 limits from a screenshot.
 
 Primary HTTPS is inherited from the checked launcher. Explicitly configured LAN
 HTTP binds the current eligible physical IPv4 address, validates its private
 connected subnet and rebinds on change. No wildcard/IPv6/vendor-VPN listener,
-UPnP or public relay. The primary socket's validation is preserved. Optional WLAN
-login defaults off as an explicitly selected reference configuration; that does not weaken
-SSH/HTTPS or make HTTP encrypted. [WLAN design](../docs/public/OWNER_INSTALL.md).
+UPnP or public relay. The primary socket's validation is preserved. Optional panel
+login defaults off when no saved policy exists; an enabled policy survives updates.
+This does not change SSH authentication or make HTTP encrypted. [WLAN design](../docs/public/OWNER_INSTALL.md).
 
 ## Data and writes
 

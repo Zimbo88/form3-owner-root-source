@@ -13,6 +13,7 @@ sys.path.insert(0,'/work/owner-ui')
 import server
 from panel_data import OwnerStore,HistoricalBundle,consumable_view,field
 os.mkdir('/tmp/state',0o700);store=OwnerStore('/tmp/state')
+store.save('settings.json',dict(server.DEFAULT_SETTINGS,wlan_login_required=True))
 os.mkdir('/tmp/bundle',0o700)
 cartridge=consumable_view(b'{"OriginalVolume_mL":1000,"EstimatedVolumeDispensed_ml":800}','cartridge')
 for value in cartridge['fields'].values():value['state']='DEMO' if value['value'] is not None else 'UNAVAILABLE'
@@ -145,41 +146,41 @@ try:
  if store.settings()['display_alias']!='Browser fixture':raise RuntimeError('Settings UI write failed')
  js('document.querySelector("nav [data-page=materials]").click();');time.sleep(.3)
  js('Array.from(document.querySelectorAll("button")).find(b=>b.textContent==="Manage cartridge & tank").click();');time.sleep(.2)
- js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==="Prepare a fresh preview").click();')
+ js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==="Reset cartridge usage").click();');time.sleep(.2)
  js('document.getElementById("form-reset-login").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(1.8)
- if not js('return !!document.getElementById("form-reset-confirmation");')['value']:raise RuntimeError('Reset preview not rendered')
+ if not js('return !!document.getElementById("form-reset-secret");')['value']:raise RuntimeError('Reset preview not rendered')
  shot=command('WebDriver:TakeScreenshot',{'id':None,'full':False,'scroll':False})['value']
  open('/result/reset-preview-SYNTHETIC.png','wb').write(base64.b64decode(shot))
- js('document.getElementById("form-reset-confirmation").value="APPLY CARTRIDGE USAGE";document.getElementById("form-reset-secret").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(.3)
+ js('document.getElementById("form-reset-secret").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(.3)
  if reset_fixture.applies!=1:raise RuntimeError('Synthetic apply not called exactly once')
  if not js('return document.querySelector("dialog").textContent.includes("COMPLETE") && !document.querySelector("dialog").textContent.includes("browser-fixture-only-owner-secret");')['value']:raise RuntimeError('Reset result or redaction failed')
  shot=command('WebDriver:TakeScreenshot',{'id':None,'full':False,'scroll':False})['value']
  open('/result/reset-SYNTHETIC.png','wb').write(base64.b64decode(shot))
  js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==="Close").click();')
- for label,filename,expected in [('Back up cartridge','backup-cartridge-SYNTHETIC','BACKUP COMPLETE'),('Back up tank','backup-tank-SYNTHETIC','BACKUP COMPLETE'),('Review saved backups','backups-SYNTHETIC','BACKUPS'),('Review material assignment','material-assignment-SYNTHETIC','MATERIALS')]:
+ for label,filename,expected in [('Back up cartridge','backup-cartridge-SYNTHETIC','BACKUP COMPLETE'),('Back up tank','backup-tank-SYNTHETIC','BACKUP COMPLETE'),('Saved backups','backups-SYNTHETIC','BACKUPS'),('Choose material','material-assignment-SYNTHETIC','MATERIALS')]:
   js('Array.from(document.querySelectorAll("button")).find(b=>b.textContent==="Manage cartridge & tank").click();');time.sleep(.2)
-  js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==='+json.dumps(label)+').click();')
+  js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==='+json.dumps(label)+').click();');time.sleep(.2)
   js('document.getElementById("form-reset-login").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(1.7)
   if not js('return document.querySelector("dialog").textContent.includes('+json.dumps(expected)+');')['value']:raise RuntimeError('Backup/material dialog failed')
   shot=command('WebDriver:TakeScreenshot',{'id':None,'full':False,'scroll':False})['value']
   open('/result/'+filename+'.png','wb').write(base64.b64decode(shot))
   if expected in ('BACKUPS','MATERIALS'):
-   label2='Review saved usage restore' if expected=='BACKUPS' else 'Review cartridge material change'
-   js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==='+json.dumps(label2)+').click();')
+   label2='Restore saved usage' if expected=='BACKUPS' else 'Change cartridge material'
+   js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==='+json.dumps(label2)+').click();');time.sleep(.2)
    js('document.getElementById("form-reset-login").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(1.7)
-   if not js('return !!document.getElementById("form-reset-confirmation");')['value']:raise RuntimeError('Restore/material preview missing')
+   if not js('return !!document.getElementById("form-reset-secret");')['value']:raise RuntimeError('Restore/material preview missing')
    if not js('return Array.from(document.querySelectorAll("dialog button")).some(b=>b.textContent==="Back up tank");')['value']:raise RuntimeError('Ready preview hides backup navigation')
    suffix='restore' if expected=='BACKUPS' else 'material'
    shot=command('WebDriver:TakeScreenshot',{'id':None,'full':False,'scroll':False})['value']
    open('/result/'+suffix+'-preview-SYNTHETIC.png','wb').write(base64.b64decode(shot))
    phrase='APPLY CARTRIDGE USAGE' if expected=='BACKUPS' else 'CHANGE CARTRIDGE MATERIAL'
-   js('document.getElementById("form-reset-confirmation").value='+json.dumps(phrase)+';document.getElementById("form-reset-secret").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(.3)
+   js('document.getElementById("form-reset-secret").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(.3)
    if not js('return document.querySelector("dialog").textContent.includes("COMPLETE");')['value']:raise RuntimeError('Restore/material synthetic apply failed')
    shot=command('WebDriver:TakeScreenshot',{'id':None,'full':False,'scroll':False})['value']
    open('/result/'+suffix+'-complete-SYNTHETIC.png','wb').write(base64.b64decode(shot))
   js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==="Close").click();')
  # New tank material and same-tank material restore: synthetic apply only.
- for entry,label,filename in [('Review material assignment','Review tank material change','tank-material'),('Review saved backups','Review saved tank material','tank-restore')]:
+ for entry,label,filename in [('Choose material','Change tank material','tank-material'),('Saved backups','Restore saved tank material','tank-restore')]:
   js('Array.from(document.querySelectorAll("button")).find(b=>b.textContent==="Manage cartridge & tank").click();');time.sleep(.2)
   js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==='+json.dumps(entry)+').click();');time.sleep(.1)
   js('document.getElementById("form-reset-login").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(.4)
@@ -189,15 +190,34 @@ try:
   shot=command('WebDriver:TakeScreenshot',{'id':None,'full':False,'scroll':False})['value']
   open('/result/'+filename+'-preview-SYNTHETIC.png','wb').write(base64.b64decode(shot))
   before=reset_fixture.applies
-  js('document.getElementById("form-reset-confirmation").value="CHANGE CLEAN TANK MATERIAL";document.getElementById("form-reset-secret").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(.3)
+  js('document.getElementById("form-reset-secret").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(.3)
   if reset_fixture.applies!=before:raise RuntimeError('Unchecked tank confirmation reached broker')
   js('document.getElementById("tank-empty-clean").checked=true;document.getElementById("form-reset-secret").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(.3)
   if reset_fixture.applies!=before+1:raise RuntimeError('Confirmed synthetic tank apply did not run once')
   if not js('return document.querySelector("dialog").textContent.includes("COMPLETE");')['value']:raise RuntimeError('Tank completion not rendered')
   js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==="Close").click();');time.sleep(.1)
+ # Open mode: exercise the same real UI with no password controls.
+ js('document.querySelector("nav [data-page=settings]").click();');time.sleep(.2)
+ js('document.getElementById("form-wlan-login").checked=false;Array.from(document.querySelectorAll("button")).find(b=>b.textContent==="Save owner preferences").click();');time.sleep(.4)
+ if store.settings()['wlan_login_required']:raise RuntimeError('Access option did not turn off')
+ js('document.getElementById("logout").click();');time.sleep(.2)
+ command('WebDriver:Navigate',{'url':'http://127.0.0.1:1328/'});time.sleep(.6)
+ if not js('return !document.getElementById("dashboard").hidden;')['value']:raise RuntimeError('Open mode did not auto-start')
+ js('document.querySelector("nav [data-page=materials]").click();');time.sleep(.2)
+ js('Array.from(document.querySelectorAll("button")).find(b=>b.textContent==="Manage cartridge & tank").click();');time.sleep(.2)
+ js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==="Reset cartridge usage").click();');time.sleep(.4)
+ if js('return !!document.querySelector("dialog input[type=password]");')['value']:raise RuntimeError('Open operation still asks for a secret')
+ before=reset_fixture.applies
+ js('document.querySelector("dialog form").requestSubmit();');time.sleep(.3)
+ if reset_fixture.applies!=before+1:raise RuntimeError('Open synthetic write failed')
+ js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==="Close").click();');time.sleep(.1)
+ js('document.querySelector("nav [data-page=settings]").click();');time.sleep(.2)
+ js('document.getElementById("form-wlan-login").checked=true;Array.from(document.querySelectorAll("button")).find(b=>b.textContent==="Save owner preferences").click();');time.sleep(.4)
+ if not js('return document.getElementById("dashboard").hidden;')['value']:raise RuntimeError('Lock option did not reject open session')
+ js('document.getElementById("token").value="browser-fixture-only-owner-secret";document.getElementById("login-form").requestSubmit();');time.sleep(.3)
  js('document.getElementById("logout").click();');time.sleep(.2)
  if not js('return document.getElementById("dashboard").hidden;')['value']:raise RuntimeError('Logout failed')
- print(json.dumps({'passed':True,'pages':results,'cartridge_reset_browser_flow':'SYNTHETIC PASS; no hardware writes','settings_saved':True,'unsaved_draft_preserved':True,'logout':True,'data':'DEMO ONLY','network_namespace':'loopback only','main_navigation_entries':5,'small_viewport':small_view,'mobile_no_horizontal_overflow':True,'gpu_utilization_unavailable':True,'firefox_content_sandbox_disabled':False}))
+ print(json.dumps({'passed':True,'pages':results,'cartridge_reset_browser_flow':'SYNTHETIC PASS; locked and open modes; no hardware writes','access_toggle':'off then on through UI; open session rejected when enabled','settings_saved':True,'unsaved_draft_preserved':True,'logout':True,'data':'DEMO ONLY','network_namespace':'loopback only','main_navigation_entries':5,'small_viewport':small_view,'mobile_no_horizontal_overflow':True,'gpu_utilization_unavailable':True,'firefox_content_sandbox_disabled':False}))
 finally:
  if s:s.close()
  p.terminate()

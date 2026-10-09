@@ -1,5 +1,8 @@
 # Owner panel: live pages and consumable workflows
 
+**Current access/UI:** [Optional secret and direct actions](PANEL_ACCESS.md).
+The 0.5.16/0.5.15 screenshots below retain their historical labels.
+
 The current tank/material workflow and **seven original 0.5.16 captures** are in
 [Tank material editing](TANK_MATERIAL_PANEL.md#installed-reference-and-original-screenshots).
 Its [separate receipt](tank_panel_acceptance.json) records installation and read-only

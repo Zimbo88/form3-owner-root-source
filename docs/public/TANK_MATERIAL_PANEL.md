@@ -1,5 +1,8 @@
 # Tank material editing in the owner panel
 
+**Current access/UI:** [Optional secret and direct actions](PANEL_ACCESS.md).
+The 0.5.16/0.5.15 screenshots below retain their historical labels.
+
 The 0.5.16 extension adds **material assignment and saved-material restoration**
 for the reference Form 3 tank: T/65, mechanical version 3.3, firmware 2.5.6-2773.
 Cartridge usage and material operations remain separate. Other formats are

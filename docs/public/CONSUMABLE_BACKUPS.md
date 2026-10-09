@@ -1,5 +1,8 @@
 # Consumable backups, usage and material assignment
 
+**Current access/UI:** [Optional secret and direct actions](PANEL_ACCESS.md).
+The 0.5.16/0.5.15 screenshots below retain their historical labels.
+
 ## Current implementation and evidence
 
 The [0.5.16 tank extension](TANK_MATERIAL_PANEL.md) adds material-only editing

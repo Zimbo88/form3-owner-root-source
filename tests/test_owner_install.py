@@ -187,7 +187,7 @@ class InstallTests(unittest.TestCase):
     def test_tampered_signature_rejected(self):
         def change(rows):
             for m,b in rows:
-                if m.name=='manifest.sig':b=b'X'+b[1:]
+                if m.name=='manifest.sig':b=bytes([b[0]^1])+b[1:]  # Always mutate, even when the original starts with X.
                 yield m,b
         with self.assertRaises(ValueError):pkg.verify(self.rewrite(change),str(self.pub),self.pin)
     def test_path_link_device_duplicate_rejected(self):

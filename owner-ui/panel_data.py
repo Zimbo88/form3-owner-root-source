@@ -15,7 +15,7 @@ import select
 import subprocess
 import time
 
-VERSION = '0.5.16-review'
+VERSION = '0.5.17-review'
 MAX_FILE = 2 * 1024 * 1024
 
 
@@ -292,7 +292,7 @@ def validate_settings(value):
     if not isinstance(value, dict) or set(value) != set(DEFAULT_SETTINGS):
         raise ValueError('Settings schema mismatch')
     if type(value['wlan_login_required']) is not bool:
-        raise ValueError('WLAN login preference must be boolean')
+        raise ValueError('Panel access preference must be boolean')
     alias = value['display_alias']
     if not isinstance(alias, str) or not re.match(r'^[A-Za-z0-9 ._-]{1,48}$', alias):
         raise ValueError('Invalid display alias')
@@ -534,7 +534,7 @@ class HistoricalBundle(object):
 
 SETTINGS_CATALOG = [
  {'id':'wlan_login_required','type':'boolean','default':False,'range':[False,True],
-  'source':'owner access-policy.json','side_effects':'Require login on secondary owner LAN HTTP; primary HTTPS and SSH retain authentication',
+  'source':'owner access-policy.json','side_effects':'Require the owner secret for panel login and sensitive actions on all panel listeners; SSH authentication is unchanged',
   'reboot_required':False,'update_persistence':'Owner p7 settings','classification':'OWNER WRITE'},
  {'id':'display_alias','type':'string','default':'Owner maintenance','range':'ASCII letters/digits/space/._-; 1..48 characters',
   'source':'owner settings.json','side_effects':'Panel label only; no hostname or identity change','reboot_required':False,

@@ -1,5 +1,8 @@
 # Form 3 Owner Root
 
+Panel access can now be opened or protected with one setting; see
+[panel access and direct actions](docs/public/PANEL_ACCESS.md).
+
 ![Original Owner Root project mark](assets/signature-brand.svg)
 
 Repair, preservation and local maintenance for a reference Formlabs Form 3:

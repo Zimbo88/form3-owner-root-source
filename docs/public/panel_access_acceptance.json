@@ -1,0 +1,146 @@
+{
+  "boot_unchanged": true,
+  "bootstrap_changed": false,
+  "browser": {
+    "consumable_write_endpoints_invoked": false,
+    "direct_live_panel": true,
+    "final_access_secret_required": false,
+    "fixture_data": false,
+    "no_secret_mode": true,
+    "passed": true,
+    "private_log_secret_input_absent_in_open_mode": true,
+    "screenshots": [
+      "access-off-LIVE",
+      "access-on-login-LIVE",
+      "material-catalog-LIVE",
+      "tank-confirmation-LIVE",
+      "backups-LIVE"
+    ],
+    "secret_login_when_enabled": true,
+    "settings_saved": "Only access policy off -> on -> off",
+    "tank_confirmation_without_secret": true,
+    "toggle_on_rejected_open_session": true,
+    "version": "0.5.17-review",
+    "visual_redaction": "DOM before capture; private hostname/address/consumable IDs/hashes"
+  },
+  "consumable_writes": false,
+  "date": "2026-10-09",
+  "earlier_test_failures": "An accidental untracked private-only test copy in the curated tree was removed (no pre-existing public tests removed). An existing signature-tamper fixture could replace X with X; it now always XORs a bit. Final complete suites passed.",
+  "fixture_suites": {
+    "canonical": {
+      "groups": [
+        {
+          "errors": 0,
+          "failures": 0,
+          "passed": true,
+          "scope": "fixtures",
+          "skipped": 0,
+          "tests_run": 704
+        }
+      ],
+      "log_sha256": "27aa43cacd3c5e8348af708c971fa5f5d109a44c068701765de39f0c26e36aa6",
+      "passed": true
+    },
+    "curated_public": {
+      "groups": [
+        {
+          "errors": 0,
+          "failures": 0,
+          "passed": true,
+          "scope": "fixtures",
+          "skipped": 0,
+          "tests_run": 575
+        }
+      ],
+      "log_sha256": "7908052a4195041e5cd2b9e251a39115583447fbc9789c4766adee1bb4793594",
+      "passed": true
+    }
+  },
+  "genuine_python_compile": true,
+  "isolated_browser": {
+    "access_toggle": "off then on through UI; open session rejected when enabled",
+    "cartridge_reset_browser_flow": "SYNTHETIC PASS; locked and open modes; no hardware writes",
+    "data": "DEMO ONLY",
+    "firefox_content_sandbox_disabled": false,
+    "gpu_utilization_unavailable": true,
+    "logout": true,
+    "main_navigation_entries": 5,
+    "mobile_no_horizontal_overflow": true,
+    "network_namespace": "loopback only",
+    "pages": [
+      {
+        "page": "status",
+        "rendered": true
+      },
+      {
+        "page": "sensors",
+        "rendered": true
+      },
+      {
+        "page": "materials",
+        "rendered": true
+      },
+      {
+        "page": "jobs",
+        "rendered": true
+      },
+      {
+        "page": "diagnostics",
+        "rendered": true
+      },
+      {
+        "page": "network",
+        "rendered": true
+      },
+      {
+        "page": "settings",
+        "rendered": true
+      },
+      {
+        "page": "privacy",
+        "rendered": true
+      },
+      {
+        "page": "maintenance",
+        "rendered": true
+      }
+    ],
+    "passed": true,
+    "settings_saved": true,
+    "small_viewport": {
+      "height": 758,
+      "width": 500
+    },
+    "unsaved_draft_preserved": true
+  },
+  "kind": "panel-only update; optional access and direct confirmation UI",
+  "limits": [
+    "No real consumable apply was invoked.",
+    "Authentication policy does not remove transaction or hardware gates.",
+    "Primary HTTPS socket behavior is covered by fixtures; live browser acceptance used direct owner WLAN HTTP."
+  ],
+  "manifest_sha256": "a3794f66369bde9bc6b73dcd335463da91a95c87053df6fdd72c377db93a231b",
+  "package_sha256": "1cda4f84f634a195c76d5d5111e6a0b81146615c3ad9b491f7e69797bd9bd6af",
+  "plan_hash": "d88058cfa94bfa1fb64330ef5084301f48ed682af3a895b4e7e35dce31bb6a2d",
+  "python": "3.5.3",
+  "root_readonly": true,
+  "schema": 1,
+  "screenshots": {
+    "count": 5,
+    "hashes": {
+      "access-off-LIVE.png": "ea4b199055a511cc2976398327bff6b0ae5b210174886682e703bc1650ff74b8",
+      "access-on-login-LIVE.png": "4a864200f41803ee8d822c42040b800aaa7694efef019e33d89b7e0d10882d23",
+      "backups-LIVE.png": "f058c50c08b10a3253a48c38aef939dbde02fe019bda29c0ca460bdb33388fcc",
+      "material-catalog-LIVE.png": "711a61f00583faa4f914c43c71e3e83ab205b1f6048970374e417f6c71670445",
+      "tank-confirmation-LIVE.png": "f8a9a2b408fe3737389cf1c047c4fbbf1f5966544e574971423f6508484faaad"
+    },
+    "metadata_removed": true,
+    "visual_review": "PASS: contact sheet and full-size tank confirmation inspected; private identifiers redacted"
+  },
+  "source_commit": "e26077528f4ade2370618d30bc2c2f21b692c24b",
+  "ssh_changed": false,
+  "ssh_reachable": true,
+  "vendor_processes_unchanged": true,
+  "verified": true,
+  "version": "0.5.17-review"
+}
