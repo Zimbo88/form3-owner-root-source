@@ -227,10 +227,10 @@ class Device(object):
             raise ValueError('A current print is present')
         states = results['GetStates']
         if set(states) != set(['PREHEAT_IDLE', 'PRINT_IDLE', 'PAUSE_NONE', 'SAURON_IDLE', 'HIGH_LEVEL_IDLE']):
-            raise ValueError('Expected observed idle state set')
+            raise ValueError('Full idle required: stop jobs/calibration and wait for native preheat to be idle')
         return states
 
-    def guard(self):
+    def guard(self, require_idle=True):
         if os.getuid() != 0 or os.uname().machine != 'armv7l' or os.uname().release != '4.9.65+':
             raise ValueError('Wrong target context')
         if read_file('/proc/sys/kernel/random/boot_id', 128).decode().strip() != self.plan['boot_id']:
@@ -243,12 +243,12 @@ class Device(object):
             raise ValueError('Firmware mismatch')
         if os.path.exists('/data/owner-maintenance/pending.json'):
             raise ValueError('Pending owner transaction')
-        self.states()
+        if require_idle:self.states()
         if self.stopped:
             self.exclusion()
 
-    def preflight(self):
-        self.guard()
+    def preflight(self, preview_only=False):
+        self.guard(require_idle=not preview_only)
         if os.path.realpath('/data') != '/data' or not os.path.isdir('/data'):
             raise ValueError('Persistent backup parent unavailable')
         space = os.statvfs('/data')
@@ -366,6 +366,151 @@ class Device(object):
         raise ValueError('Cartridge service state timeout')
 
 
+
+TANK_DRIVER = '/lib/modules/4.9.65+/extra/w1_ds28e36.ko'
+TANK_DRIVER_SHA256 = '2549601cf7b059f1cad752234377d2270f1721c2a7a38b8ef27878c54732950a'
+
+
+def commit_tank_records(io, before, target, original_file, target_file, event):
+    """Material-only T/65 commit, native 32-byte page RMW, full readbacks.
+
+    No identity, lifetime, protection or secret-page writes. There is no claim
+    of power-fail atomicity. A durable transaction marker survives interruption.
+    """
+    allowed = set(range(33,37)) | set(range(61,69)) | set(range(129,133)) | set(range(157,165))
+    if len(before)!=512 or len(target)!=512 or any(before[i]!=target[i] for i in range(512) if i not in allowed):
+        raise ValueError('Unexpected tank target extent')
+    attempted=[];file_attempted=False
+    try:
+        io.guard()
+        if io.read_image()!=before or io.read_mirror()!=original_file:
+            raise ValueError('Tank baseline changed before commit')
+        file_attempted=True;io.write_mirror(target_file)
+        if io.read_mirror()!=target_file:raise ValueError('Tank mirror readback mismatch')
+        event('persistent_file','PASS');expected=bytearray(before)
+        for label,offset in (('B',128),('A',32)):
+            io.guard();attempted.append(offset)
+            io.write_copy(offset,target[offset:offset+41])
+            expected[offset:offset+41]=target[offset:offset+41]
+            if io.read_image()!=bytes(expected):raise ValueError('Tank '+label+' full-image readback mismatch')
+            event(label+'_write_readback','PASS')
+        if io.read_image()!=target or io.read_mirror()!=target_file:
+            raise ValueError('Tank target verification failed')
+        event('full_target_comparison','PASS')
+    except Exception:
+        io.exclusion()
+        for offset in sorted(set(attempted)):
+            # Do not retry a protected/failed page if it never changed.
+            if io.read_image()[offset:offset+41]!=before[offset:offset+41]:
+                io.write_copy(offset,before[offset:offset+41])
+            if io.read_image()[offset:offset+41]!=before[offset:offset+41]:
+                event('rollback','FAIL');raise ValueError('Tank rollback record mismatch')
+        if file_attempted:io.write_mirror(original_file)
+        if io.read_image()!=before or io.read_mirror()!=original_file:
+            event('rollback','FAIL');raise ValueError('Tank rollback full comparison failed')
+        event('rollback','PASS')
+        raise
+
+
+class TankDevice(Device):
+    """Pinned T/65 material assignment; lifetime is never reset or restored."""
+    def __init__(self,plan):
+        name=plan.get('device_name')
+        if not isinstance(name,str) or not re.fullmatch(r'4c-[a-f0-9]{12}',name):
+            raise ValueError('Unexpected tank identity syntax')
+        if plan.get('kind')!='tank' or plan.get('operation') not in ('tank_material','tank_material_restore'):
+            raise ValueError('Unexpected tank operation')
+        self.plan=plan;self.image_path='/sys/bus/w1/devices/'+name+'/eeprom'
+        self.mirror_path='/data/Tanks/'+name+'.json';self.metadata=None;self.stopped=False
+        if plan.get('record_path')!=self.mirror_path:raise ValueError('Tank mirror identity mismatch')
+
+    def read_image(self):
+        if not os.path.realpath(self.image_path).startswith('/sys/devices/'):
+            raise ValueError('Unexpected tank EEPROM filesystem')
+        st=os.lstat(self.image_path)
+        if not stat.S_ISREG(st.st_mode) or st.st_size!=512:raise ValueError('Unexpected tank EEPROM size')
+        image=read_file(self.image_path,512)
+        if len(image)!=512:raise ValueError('Short tank EEPROM read')
+        return image
+
+    def preflight(self, preview_only=False):
+        from tank_codec import material_candidate,decode as tank_decode
+        from package_format import unique_json
+        from material_catalog import allowed_materials
+        self.guard(require_idle=not preview_only)
+        if os.path.realpath('/data')!='/data':raise ValueError('Unexpected persistent filesystem')
+        space=os.statvfs('/data')
+        if space.f_flag & os.ST_RDONLY or space.f_bavail*space.f_frsize < 1<<20:
+            raise ValueError('Tank backup filesystem unavailable/full')
+        # These required pins cannot be supplied/replaced by a browser or plan.
+        from cartridge_broker import PINS
+        if self.plan.get('source_hashes')!=PINS:raise ValueError('Tank plan source pins differ')
+        for path,pin in list(PINS.items())+[(TANK_DRIVER,TANK_DRIVER_SHA256)]:
+            if digest(read_file(path,64<<20))!=pin:raise ValueError('Tank runtime pin mismatch')
+        catalog=read_file('/data/settings/KnownConsumables.json',2<<20)
+        if digest(catalog)!=self.plan['catalog_sha256'] or self.plan['material_target'] not in allowed_materials(catalog):
+            raise ValueError('Tank catalog changed or material is not a public Form 3 entry')
+        image=self.read_image();raw=self.read_mirror();time.sleep(.25)
+        if image!=self.read_image() or digest(image)!=self.plan['eeprom_sha256']:
+            raise ValueError('Tank EEPROM baseline changed')
+        record=unique_json(raw);baseline=base64.b64decode(self.plan['baseline_record_b64'],validate=True)
+        if not self.stopped:
+            from consumable_backup import selected,native_tank_material
+            if selected('tank')!=self.plan['device_name'] or native_tank_material()!=record.get('LastResinUsed'):
+                raise ValueError('Selected tank or native material differs from mirror')
+        if digest(baseline)!=self.plan['record_sha256'] or mirror_semantic_pin(record)!=mirror_semantic_pin(unique_json(baseline)):
+            raise ValueError('Tank mirror baseline changed')
+        # The physical reference is 3.3; do not extend mechanical compatibility.
+        if (record.get('TankVersionMajor'),record.get('TankVersionMinor'))!=(3,3):
+            raise ValueError('Only the reviewed T/65 tank version 3.3 is supported')
+        target,revised,decoded=material_candidate(image,record,self.plan['device_name'],self.plan['material_target'])
+        if target!=base64.b64decode(self.plan['target_b64'],validate=True) or digest(target)!=self.plan['target_sha256']:
+            raise ValueError('Tank target pin mismatch')
+        if {k:v for k,v in record.items() if k!='LastResinUsed'}!={k:v for k,v in revised.items() if k!='LastResinUsed'}:
+            raise ValueError('Tank non-material mirror field changed')
+        target_file=(json.dumps(revised,sort_keys=True,separators=(',',':'),allow_nan=False)+'\n').encode()
+        st=os.lstat(self.mirror_path)
+        if not stat.S_ISREG(st.st_mode) or st.st_nlink!=1:raise ValueError('Unexpected tank mirror links/type')
+        self.metadata={'uid':st.st_uid,'gid':st.st_gid,'mode':stat.S_IMODE(st.st_mode),
+                       'mtime_ns':st.st_mtime_ns,'atime_ns':st.st_atime_ns,
+                       'xattrs':{k:base64.b64encode(os.getxattr(self.mirror_path,k)).decode() for k in os.listxattr(self.mirror_path)}}
+        return image,raw,target,target_file,decoded
+
+    def write_copy(self,offset,data):
+        self.exclusion()
+        if offset not in (32,128) or not isinstance(data,bytes) or len(data)!=41:
+            raise ValueError('Refusing non-RW tank write')
+        target=base64.b64decode(self.plan['target_b64'],validate=True)
+        before=base64.b64decode(self.plan['baseline_image_b64'],validate=True)
+        if len(before)!=512 or digest(before)!=self.plan['eeprom_sha256'] or data not in (target[offset:offset+41],before[offset:offset+41]):
+            raise ValueError('Unplanned tank record bytes')
+        if not os.path.realpath(self.image_path).startswith('/sys/devices/'):
+            raise ValueError('Tank EEPROM path changed')
+        fd=os.open(self.image_path,os.O_WRONLY|os.O_NOFOLLOW)
+        try:
+            st=os.fstat(fd)
+            if not stat.S_ISREG(st.st_mode) or st.st_size!=512 or os.lseek(fd,offset,os.SEEK_SET)!=offset:
+                raise ValueError('Tank EEPROM attribute changed')
+            if os.write(fd,data)!=41:raise ValueError('Short tank EEPROM write')
+        finally:os.close(fd)
+
+    def verify_reloaded(self,target,original):
+        from tank_codec import decode as tank_decode
+        from package_format import unique_json
+        from consumable_backup import selected,native_tank_material
+        if selected('tank')!=self.plan['device_name'] or native_tank_material()!=self.plan['material_target']:
+            raise ValueError('Native tank re-recognition differs from target')
+        image=self.read_image();raw=self.read_mirror();record=unique_json(raw)
+        result=tank_decode(image,record,self.plan['device_name'])
+        old=unique_json(original)
+        expected=dict(old);expected['LastResinUsed']=self.plan['material_target']
+        if image!=target or mirror_semantic_pin(record)!=mirror_semantic_pin(expected):
+            raise ValueError('Tank post-start state changed; preserve recovery receipt')
+        if not result['rw_equal'] or not all(all(c['record_matches'].values()) for c in result['copies']):
+            raise ValueError('Tank reload mirror/copy mismatch')
+        return image,raw,result['copies'][0]['values']
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--plan', required=True)
@@ -392,12 +537,13 @@ def main():
         if not stat.S_ISREG(st.st_mode) or st.st_uid != 0 or st.st_mode & 0o077 or st.st_size:
             raise ValueError('Untrusted maintenance lock')
         fcntl.flock(maintenance_lock,fcntl.LOCK_EX | fcntl.LOCK_NB)
-    device = Device(plan)
+    tank=plan.get('kind')=='tank'
+    device = TankDevice(plan) if tank else Device(plan)
     before, original, target, target_file, decoded = device.preflight()
     if not args.apply:
         print(json.dumps({'preflight':'PASS', 'writes':False, 'states':device.states(),
                           'baseline_sha256':digest(before), 'target_sha256':digest(target),
-                          'target_usage':decoded['rw_copies'][0]['usage']}))
+                          'target_usage':decoded['copies'][0]['values'] if tank else decoded['rw_copies'][0]['usage']}))
         return
     backup = tempfile.mkdtemp(prefix='form3-clear-reset-'+time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())+'-', dir='/data')
     receipt = {'schema':1, 'status':'BACKUP', 'stages':{}, 'plan_sha256':args.plan_sha256,
@@ -431,13 +577,19 @@ def main():
         durable_new(os.path.join(backup,'mirror_metadata_before_commit.private.json'), json.dumps(device.metadata,sort_keys=True).encode())
         receipt['mirror_before_commit_sha256'] = digest(original)
         event('quiesced_baseline','PASS')
-        if plan.get('material_target'):
+        if tank:
+            commit_tank_records(device,before,target,original,target_file,event)
+        elif plan.get('material_target'):
             from cartridge_material import commit_material
             commit_material(device,before,target,original,target_file,event)
         else:commit_records(device, before, target, original, target_file, event)
         actual = device.read_image()
-        verified = decode(actual, parse_record(device.read_mirror()), plan['device_name'])
-        if not all(all(c['record_matches'].values()) for c in verified['rw_copies']):
+        if tank:
+            from tank_codec import decode as tank_decode
+            from package_format import unique_json
+            verified=tank_decode(actual,unique_json(device.read_mirror()),plan['device_name'])
+        else:verified = decode(actual, parse_record(device.read_mirror()), plan['device_name'])
+        if not all(all(c['record_matches'].values()) for c in verified['copies' if tank else 'rw_copies']):
             raise ValueError('Committed decode/mirror mismatch')
         durable_new(os.path.join(backup,'eeprom_after_write.bin'), actual)
         event('electronic_commit','PASS')
@@ -450,6 +602,10 @@ def main():
             device.guard()
             if not device.processes():
                 raise ValueError('Cartridge service exited after restart')
+            if tank:
+                actual,raw,values=device.verify_reloaded(target,original)
+                observations.append({'epoch':time.time(),'sha256':digest(actual),'usage':values})
+                continue
             actual = device.read_image()
             raw = device.read_mirror()
             rec = parse_record(raw)
@@ -472,7 +628,7 @@ def main():
                                  'usage':result['rw_copies'][0]['usage']})
         receipt['observations'] = observations
         receipt['material'] = plan.get('material_target') or parse_record(original)['ResinID']
-        receipt['operation'] = 'material_assignment' if plan.get('material_target') else ('usage_restore' if plan.get('restore_usage') else 'usage_reset')
+        receipt['operation'] = plan['operation'] if tank else 'material_assignment' if plan.get('material_target') else ('usage_restore' if plan.get('restore_usage') else 'usage_reset')
         receipt['final_usage'] = observations[-1]['usage']
         receipt['status'] = 'CONSUMABLE TRANSACTION VERIFIED; DISPLAY NOT INDEPENDENTLY OBSERVED'
         durable_new(os.path.join(backup,'eeprom_after_reload.bin'), actual)
@@ -483,7 +639,7 @@ def main():
         receipt['failure_class'] = type(exc).__name__
         # Our error strings contain no cartridge identity/key or raw log content.
         receipt['failure'] = str(exc) if isinstance(exc, ValueError) else 'OS/timeout failure; private diagnosis required'
-        if device.stopped and receipt['stages'].get('rollback') == 'PASS':
+        if device.stopped and (receipt['stages'].get('rollback') == 'PASS' or (not receipt['stages'].get('quiesced_baseline') and not receipt['stages'].get('electronic_commit'))):
             device.service('start')
             event('daemon_restored_after_rollback','PASS')
         event('failure','FAIL')

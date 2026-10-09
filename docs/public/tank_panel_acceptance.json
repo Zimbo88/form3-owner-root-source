@@ -1,0 +1,163 @@
+{
+  "browser": {
+    "browser": "Firefox headless; fresh private profile; ordinary content sandbox enabled",
+    "consumable_write_endpoints_invoked": false,
+    "direct_live_panel": true,
+    "fixture_data": false,
+    "passed": true,
+    "screenshots": [
+      "materials-LIVE",
+      "authentication-LIVE",
+      "material-catalog-LIVE",
+      "tank-material-preview-LIVE",
+      "backups-LIVE",
+      "tank-restore-noop-LIVE",
+      "tank-material-noop-LIVE"
+    ],
+    "settings_saved": false,
+    "version": "0.5.16-review",
+    "visual_redaction": "DOM only before capture; hostname/IP/MAC/consumable IDs/hashes; values not fabricated"
+  },
+  "consumable_writes": false,
+  "date": "2026-10-09",
+  "direct_http_source_verified": true,
+  "driver_emulation": {
+    "cases": [
+      {
+        "injected_page_error": null,
+        "length": 41,
+        "offset": 32,
+        "pages_written": [
+          1,
+          2
+        ],
+        "passed": true,
+        "return": 41
+      },
+      {
+        "injected_page_error": null,
+        "length": 41,
+        "offset": 128,
+        "pages_written": [
+          4,
+          5
+        ],
+        "passed": true,
+        "return": 41
+      },
+      {
+        "injected_page_error": 1,
+        "length": 41,
+        "offset": 32,
+        "pages_written": [
+          1
+        ],
+        "passed": true,
+        "return": -5
+      },
+      {
+        "injected_page_error": 1,
+        "length": 41,
+        "offset": 128,
+        "pages_written": [
+          4
+        ],
+        "passed": true,
+        "return": -5
+      },
+      {
+        "injected_page_error": null,
+        "length": 1,
+        "offset": 512,
+        "pages_written": [],
+        "passed": true,
+        "return": 0
+      },
+      {
+        "injected_page_error": null,
+        "length": 20,
+        "offset": 500,
+        "pages_written": [
+          15
+        ],
+        "passed": true,
+        "return": 12
+      }
+    ],
+    "hardware_contact": false,
+    "modeled": [
+      "mutex",
+      "memcpy",
+      "readpage",
+      "writepage"
+    ],
+    "module_sha256": "2549601cf7b059f1cad752234377d2270f1721c2a7a38b8ef27878c54732950a",
+    "native_function": ".text+0x169c eeprom_write",
+    "passed": true,
+    "probe_sha256": "0ca176625fca62cec4fc4eb2ac318dac20bc19b77cf99a0325d071ab9fe26a5a"
+  },
+  "existing_evidence": "Earlier receipts remain historical; this receipt does not promote their scope.",
+  "fixture_suites": {
+    "canonical": {
+      "errors": 0,
+      "failures": 0,
+      "log_sha256": "808c5342541665609c269e2daaf2c616f0f32b352ede201dffe8f722879eedf1",
+      "skipped": 0,
+      "tests": 698
+    },
+    "curated_public": {
+      "errors": 0,
+      "failures": 0,
+      "log_sha256": "ee0d02a3f08c3a73d82bb67065eba58851fc1d41fdaa0d223572a1b8ddccfa44",
+      "skipped": 0,
+      "tests": 569
+    }
+  },
+  "live_tank_restore": "Read-only saved-material no-op passed; no live restore write",
+  "live_tank_write": "NOT RUN: no independent material change was needed on the filled reference tank",
+  "manifest_sha256": "dafc39691f241e4a0c4da5d89f58489fca63de714108d07c8123348046ea56e8",
+  "native_state_at_review": "No current job; native preheat active. Read-only preview passed. Apply remained blocked pending full native idle.",
+  "package_sha256": "ac38bc1bdf76e56b029c60eb166d045249e9fe1403aa588a81bd527fe8e668e5",
+  "pinned_ssh_verified": true,
+  "plan_hash": "37d0083df30a9e73d0a74c777440bdce67915f4b926854242cd4fb7c1aa562a0",
+  "printer_reboot": false,
+  "rollback": "Synthetic partial-page/file/readback failure cases passed; hardware power-loss recovery not tested",
+  "root_readonly_restored": true,
+  "schema": 1,
+  "scope": "Installed owner maintenance source and read-only browser acceptance; no tank EEPROM write acceptance",
+  "screenshots": {
+    "count": 7,
+    "metadata_removed": true,
+    "redaction": "DOM before capture; no hostname/private addresses/consumable IDs",
+    "sha256": {
+      "authentication-LIVE.png": "6994adf4855c91a5303ffe6b404931a5915f1451414cac5c4e548e5f0b777623",
+      "backups-LIVE.png": "7eca4785b93825eff3b679c976bf99072dd6ed4bdb5b33461f2b87ce23b70c78",
+      "material-catalog-LIVE.png": "812a967d6fe9a05767926cde902b28c1ad9e2e5dc08988a9c9ee9676faf5e640",
+      "materials-LIVE.png": "02ea2339ee9b8041a00811298377f5bc3c68a87bd76161bdcc9bdce596796652",
+      "tank-material-noop-LIVE.png": "1ad69e8314f20c945a843a10b935fdd925275e59bb1185bbbde6af4a48222bc4",
+      "tank-material-preview-LIVE.png": "c5e1e3e3d9e0b527ab427324aa52c5bc80214af12a4c7283590afa5ca1144194",
+      "tank-restore-noop-LIVE.png": "1ad69e8314f20c945a843a10b935fdd925275e59bb1185bbbde6af4a48222bc4"
+    },
+    "visual_review": "PASS: contact sheet and full-size tank preview/backup dialog inspected; no private hostname visible"
+  },
+  "source_commit": "7abf6386eac6966ca5641af1f26f07aca9eda517",
+  "target_runtime": {
+    "consumable_writes": false,
+    "errors": 0,
+    "failures": 0,
+    "installed_source_pins_match": true,
+    "kernel": "4.9.65+",
+    "native_tank_material": "FLGPCL04",
+    "ownerctl_verified": true,
+    "passed": true,
+    "python": "3.5.3",
+    "root_readonly": true,
+    "tank_eeprom_unchanged": true,
+    "tests": 26,
+    "version": "0.5.16-review"
+  },
+  "update_kind": "maintenance",
+  "vendor_processes_unchanged": true,
+  "verified": true,
+  "version": "0.5.16-review"
+}

@@ -41,6 +41,23 @@ def selected(kind):
     return name
 
 
+
+def parse_tank_material_reply(raw):
+    if not isinstance(raw,bytes) or len(raw)>65536:raise ValueError('Unbounded tank status reply')
+    text=raw.decode('utf-8')
+    values=re.findall(r'dict entry\(\s*string "LastResinUsed"\s*variant\s+string "(FL[A-Z0-9]{6})"\s*\)',text)
+    if len(values)!=1:raise ValueError('Native tank material is unavailable or ambiguous')
+    return values[0]
+
+
+def native_tank_material():
+    result=subprocess.run(['/usr/bin/dbus-send','--system','--print-reply','--reply-timeout=3000',
+                           '--dest=com.formlabs.TankController','/com/Formlabs/TankCartridgeController/Tank',
+                           'com.formlabs.TankController.GetConnectedTank'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=5)
+    if result.returncode:raise ValueError('Native tank status query failed')
+    return parse_tank_material_reply(result.stdout)
+
+
 def capture(kind):
     name=selected(kind)
     expected=128 if kind=='cartridge' else 512
@@ -170,3 +187,25 @@ class Store(object):
         if {k:v for k,v in saved.items() if k not in ignored}!={k:v for k,v in live.items() if k not in ignored}:
             raise ValueError('Backup identity or non-usage fields differ')
         return {key:result['rw_copies'][0]['usage'][key] for key in ('DispenseCount','EstimatedVolumeDispensed_ml','CumulativeDispenseTime_s')}
+
+    def restore_tank_material(self,identity,current):
+        """Restore only the saved material label; retain current tank lifetime."""
+        from tank_codec import decode as tank_decode
+        from package_format import unique_json
+        meta,image,raw=self.load(identity)
+        if meta['kind']!='tank' or current['kind']!='tank' or meta['device_name']!=current['device_name']:
+            raise ValueError('Backup belongs to a different physical tank')
+        live_image=current['eeprom']
+        regions=set(range(32,73))|set(range(128,169))
+        if len(live_image)!=512 or any(image[i]!=live_image[i] for i in range(512) if i not in regions):
+            raise ValueError('Tank identity or non-RW memory differs')
+        saved=unique_json(raw);live=unique_json(current['record'])
+        ignored={'VolumePrinted_mm3','NumLayersPrinted','PrintTime_mS','LastPrintDate',
+                 'LastResinLevel_mm','LastResinUsed','DateFirstFill','LastSuccessfulWritebackTime'}
+        if {k:v for k,v in saved.items() if k not in ignored}!={k:v for k,v in live.items() if k not in ignored}:
+            raise ValueError('Tank backup identity/unknown fields differ')
+        for memory,record in ((image,saved),(live_image,live)):
+            result=tank_decode(memory,record,meta['device_name'])
+            if not result['rw_equal'] or not all(all(c['record_matches'].values()) for c in result['copies']):
+                raise ValueError('Tank backup/current memory and mirror disagree')
+        return saved['LastResinUsed']

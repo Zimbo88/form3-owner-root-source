@@ -100,18 +100,15 @@ python3 tools/inspect_tank_snapshot.py \
 
 ## Material assignment and restoration boundary
 
-The offline candidate changes only `LastResinUsed` and the two RW checksums,
-while preserving RO, lifetime, dates and padding. This is useful for verifying
-an eventual transaction; it is **not a released tank writer**.
+The original 0.5.15 milestone provided the decoder and offline candidate, without
+an enabled tank writer. The [0.5.16 owner transaction](TANK_MATERIAL_PANEL.md)
+adds material-only assignment and restoration of a saved material label for the
+same reference tank. Current lifetime, dates, RO identity and padding remain.
+This is distinct from restoring arbitrary memory or resetting tank wear.
 
-The native touchscreen reprogram path calls `TellTankPrinted`. Static inspection
-also shows accounting/date effects in its writer. Calling it with invented zero
-arguments is not equivalent to a harmless material-only setter. Native material
-eligibility, the exact supported arguments, load/reload behaviour and interruption
-rollback still need a complete transaction proof. The panel therefore exposes
-real validated tank backups while tank material apply and tank restore remain
-unavailable with that reason. A raw backup is not proof of a working restore.
-
-The backing chip family is `4c`; this report does not infer an exact part number
-or borrow the DS2431 cartridge protection semantics for it. No tank lifetime reset
-is provided. See [consumable UI and recovery scope](CONSUMABLE_BACKUPS.md).
+The native touchscreen reprogram path calls `TellTankPrinted`, which also has
+accounting/date effects. The owner transaction does not call that writer and
+must not be described as equivalent to every native eligibility rule. Driver
+page handling and failure tests are documented in the linked extension guide.
+The backing chip family is `4c`; no cartridge protection semantics or lifetime
+reset are borrowed. Historical receipts remain unchanged.

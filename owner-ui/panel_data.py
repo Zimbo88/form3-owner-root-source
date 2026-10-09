@@ -15,7 +15,7 @@ import select
 import subprocess
 import time
 
-VERSION = '0.5.15-review'
+VERSION = '0.5.16-review'
 MAX_FILE = 2 * 1024 * 1024
 
 

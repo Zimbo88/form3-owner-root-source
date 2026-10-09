@@ -2,6 +2,12 @@
 
 ## Current implementation and evidence
 
+The [0.5.16 tank extension](TANK_MATERIAL_PANEL.md) adds material-only editing
+and saved-material restoration for the same reference tank, preserving lifetime.
+The [0.5.16 receipt](tank_panel_acceptance.json) confirms installation, genuine-runtime
+synthetic tests and live previews/no-ops. Its live tank write remains untested.
+The 0.5.15 acceptance below is historical and does not certify that new write path.
+
 The consumable extension was installed as a **0.5.14 maintenance update**;
 0.5.15 is a panel-only navigation fix on that baseline. Real backups, catalog
 and read-only previews passed the [live review](consumable_panel_acceptance.json).
@@ -18,14 +24,14 @@ screenshot or regression tests.
 | Usage reset | Legacy C/0, RW1, 1000 mL; zero usage and native monotonic write counter | Historical Clear reset; not a universal cartridge writer |
 | Restore saved usage | Same physical cartridge, same RO/material and non-usage fields; current WriteCount + 1 | Fixture tested; cannot transplant another cartridge's backup |
 | Cartridge material assignment | Explicit public Form 3 catalog entries, exact firmware pins, writable DS2431 pages, same identity | Earlier Clear V2-to-V4 observation; generalized panel path requires acceptance |
-| Tank material assignment | Visible unavailable state with reason | Native eligibility, accounting side effects and rollback need validation |
-| Full tank/EEPROM restore | No arbitrary-image writer | Not available; a raw backup alone does not validate a restore procedure |
+| Tank material assignment | T/65 mechanical 3.3 only; current accounting/identity retained | Owner transaction with driver emulation and failure fixtures; separate live-write acceptance |
+| Tank saved-material restore | Same physical tank; saved material, current lifetime | Not full-memory or lifetime restoration |
 
 See [tank format and native emulator results](TANK_DATA.md) for the separate tank evidence.
 
 ## Panel workflow
 
-Open **Materials → Review cartridge reset** to open the consumable dialog.
+Open **Materials → Manage cartridge & tank** to open the consumable dialog.
 Authenticate even if ordinary WLAN viewing permits anonymous sessions. HTTP does
 not encrypt the secret; use the enrolled HTTPS path where available.
 
@@ -34,7 +40,7 @@ not encrypt the secret; use the enrolled HTTPS path where available.
   consumable memory. Changing consumables or state during capture rejects it.
 - **Review saved backups:** lists at most the latest 12 verified entries and the
   total retained. Cartridge entries offer a read-only usage restore preview.
-  Tank entries explicitly disable restore.
+  Tank entries offer saved-material restoration, preserving current lifetime.
 - **Prepare a fresh preview:** inspects the current legacy cartridge and prepares
   a zero-usage plan. Already-matching state performs no write.
 - **Review material assignment:** lists only explicitly eligible public Form 3
@@ -72,7 +78,7 @@ store refuses more captures; it never deletes originals automatically.
 
 The transaction engine retains an additional durable pre-write backup. Usage
 writes keep the existing file → B → A ordering, full readbacks and daemon reload
-verification. Material changes preserve usage and identity but modify the
+verification. Cartridge material changes preserve usage and identity but modify the
 material field/checksum in the RO data area: unlike usage A/B copies, this area
 has **no redundant record**. A power interruption between material rows is a
 recovery case. Page protection is inspected, never cleared or programmed.

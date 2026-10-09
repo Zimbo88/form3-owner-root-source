@@ -1,6 +1,13 @@
 # Owner panel: live pages and consumable workflows
 
-These are original screenshots of **the actual installed 0.5.15-review panel**,
+The current tank/material workflow and **seven original 0.5.16 captures** are in
+[Tank material editing](TANK_MATERIAL_PANEL.md#installed-reference-and-original-screenshots).
+Its [separate receipt](tank_panel_acceptance.json) records installation and read-only
+acceptance. Use **Materials → Manage cartridge & tank** in that version.
+
+## Historical 0.5.15 page gallery
+
+The following are original screenshots of **the installed 0.5.15-review panel**,
 opened directly over its owner LAN connection on 2026-10-09. A fresh Firefox profile
 was used. Private hostname, IP/MAC addresses, consumable identifiers and backup
 hashes were obscured in the browser before capture. Numeric observations were not
@@ -14,7 +21,7 @@ UNAVAILABLE belong to each observation; a live screenshot can contain cached dat
 The [acceptance receipt](consumable_panel_acceptance.json) separates the real
 read-only workflows from fixture-tested write paths.
 
-Use **Materials → Review cartridge reset** for backups, usage and material
+In the historical version, use **Materials → Review cartridge reset** for backups, usage and material
 previews. Keep power connected and follow the typed confirmation/idle/version
 gates before any independently intended write. This guide is not permission to
 copy another consumable’s identity or turn an unknown format into a supported one.

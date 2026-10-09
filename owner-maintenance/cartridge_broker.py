@@ -38,12 +38,12 @@ def token():
 
 
 def strict_request(value):
-    if not isinstance(value, dict) or value.get('operation') not in ('status', 'prepare', 'apply', 'backup', 'backups', 'prepare_restore','materials','prepare_material','apply_material'):
+    if not isinstance(value, dict) or value.get('operation') not in ('status', 'prepare', 'apply', 'backup', 'backups', 'prepare_restore','materials','prepare_material','apply_material','prepare_tank_material','apply_tank_material'):
         raise ValueError('Unknown reset operation')
-    required = {'operation', 'plan_id'} if value['operation'] in ('apply','apply_material') else {'operation'}
+    required = {'operation', 'plan_id'} if value['operation'] in ('apply','apply_material','apply_tank_material') else {'operation'}
     if value['operation']=='backup':required={'operation','kind'}
     if value['operation']=='prepare_restore':required={'operation','backup_id'}
-    if value['operation']=='prepare_material':required={'operation','material'}
+    if value['operation'] in ('prepare_material','prepare_tank_material'):required={'operation','material'}
     if set(value) != required:
         raise ValueError('Unknown reset request field')
     if 'plan_id' in value and (not isinstance(value['plan_id'], str) or not re.match(r'^[a-f0-9]{48}$', value['plan_id'])):
@@ -65,6 +65,15 @@ def private_directory(path, mode=0o700, gid=0):
         raise ValueError('Unexpected private directory ownership or mode')
 
 
+
+def preview_readiness():
+    try:
+        object.__new__(Device).states()
+        return {'apply_ready':True,'apply_blocker':None}
+    except (ValueError,OSError,subprocess.TimeoutExpired):
+        return {'apply_ready':False,'apply_blocker':'Read-only preview. Apply requires full native idle, including preheat, and no current job; prepare again when idle.'}
+
+
 def prepare_plan(restore_id=None, store=None, material_target=None):
     if read_file('/proc/device-tree/model', 256).rstrip(b'\0\n') != b'Formlabs Daguerre':
         raise ValueError('Only the reviewed Form 3 platform is supported')
@@ -80,7 +89,7 @@ def prepare_plan(restore_id=None, store=None, material_target=None):
             'source_hashes':PINS, 'record_sha256':digest(raw),
             'baseline_record_b64':base64.b64encode(raw).decode('ascii')}
     device = Device(plan)
-    device.guard()
+    device.guard(require_idle=False)
     image = device.read_image()
     time.sleep(0.25)
     if image != device.read_image():
@@ -99,9 +108,10 @@ def prepare_plan(restore_id=None, store=None, material_target=None):
         target,revised,changes=material_candidate(image,record,name,material_target)
         plan.update(material_target=material_target,catalog_sha256=digest(catalog),protection_b64=base64.b64encode(control[128:]).decode(),material_before_b64=base64.b64encode(image).decode(),
                     eeprom_sha256=digest(image),target_sha256=digest(target),target_b64=base64.b64encode(target).decode(),initial_writecount=record['WriteCount'],target_writecount=record['WriteCount'])
-        Device(plan).preflight()
-        return plan,{'already_fresh':False,'material':code,'nominal_ml':1000,'action':'material_assignment',
+        Device(plan).preflight(preview_only=True)
+        preview={'already_fresh':False,'material':code,'nominal_ml':1000,'action':'material_assignment',
                      'before':{'material':code},'after':{'material':material_target},'usage_unchanged':True,'physical_resin_compatibility':'NOT ESTABLISHED'}
+        preview.update(preview_readiness());return plan,preview
     restored=None
     if restore_id is not None:
         if store is None:raise ValueError('Private restore store unavailable')
@@ -116,13 +126,54 @@ def prepare_plan(restore_id=None, store=None, material_target=None):
                 target_b64=base64.b64encode(target).decode('ascii'),
                 initial_writecount=record['WriteCount'], target_writecount=revised['WriteCount'])
     device = Device(plan)
-    device.preflight()
+    device.preflight(preview_only=True)
     preview = {'material':code,'nominal_ml':1000,'before':before,
                'after':dict(before) if fresh else decoded['rw_copies'][0]['usage'], 'already_fresh':fresh,
                'action':'restore_usage' if restored is not None else 'reset_usage',
                'identity_changed':False,'physical_volume_measured':False,
                'format':'C/0, RW/1, 128 bytes', 'estimated_remaining_after_ml':max(0,1000-desired['EstimatedVolumeDispensed_ml'])}
+    preview.update(preview_readiness())
     return plan, preview
+
+
+
+def prepare_tank_plan(material_target=None,restore_id=None,store=None):
+    from package_format import unique_json
+    from tank_codec import material_candidate
+    from material_catalog import allowed_materials
+    from cartridge_transaction import TankDevice
+    if read_file('/proc/device-tree/model',256).rstrip(b'\0\n')!=b'Formlabs Daguerre':
+        raise ValueError('Only the reviewed Form 3 platform is supported')
+    value=capture('tank');name=value['device_name'];image=value['eeprom'];raw=value['record']
+    if value['validation']!='CHECKSUMS_AND_MIRROR_VERIFIED':raise ValueError('Tank backup inputs disagree')
+    record=unique_json(raw)
+    if restore_id is not None:
+        if store is None:raise ValueError('Tank restore store unavailable')
+        material_target=store.restore_tank_material(restore_id,value)
+    catalog=read_file('/data/settings/KnownConsumables.json',2<<20)
+    if material_target not in allowed_materials(catalog):raise ValueError('Tank target is not an explicit public Form 3 catalog entry')
+    target,revised,decoded=material_candidate(image,record,name,material_target)
+    plan={'kind':'tank','operation':'tank_material_restore' if restore_id is not None else 'tank_material',
+          'device_name':name,'record_path':'/data/Tanks/'+name+'.json','firmware':'2.5.6-2773',
+          'boot_id':read_file('/proc/sys/kernel/random/boot_id',128).decode().strip(),'source_hashes':PINS,
+          'record_sha256':digest(raw),'baseline_record_b64':base64.b64encode(raw).decode(),
+          'eeprom_sha256':digest(image),'baseline_image_b64':base64.b64encode(image).decode(),
+          'target_sha256':digest(target),'target_b64':base64.b64encode(target).decode(),
+          'catalog_sha256':digest(catalog),'material_target':material_target}
+    if restore_id is not None:plan['restore_backup_id']=restore_id
+    TankDevice(plan).preflight(preview_only=True)
+    preview={'kind':'tank','action':plan['operation'],'already_fresh':target==image,'material':record['LastResinUsed'],
+             'before':{'material':record['LastResinUsed']},'after':{'material':material_target},
+             'identity_changed':False,'lifetime_preserved':True,'physical_resin_compatibility':'NOT ESTABLISHED',
+             'clean_tank_confirmation_required':True,'scope':'T/65 tank version 3.3; material only; lifetime unchanged'}
+    preview.update(preview_readiness())
+    return plan,preview
+
+
+def prepare_saved_plan(identity,store):
+    meta,_,_=store.load(identity)
+    if meta['kind']=='tank':return prepare_tank_plan(restore_id=identity,store=store)
+    return prepare_plan(identity,store)
 
 
 class Broker(object):
@@ -155,35 +206,40 @@ class Broker(object):
         if value['operation']=='materials':
             from material_catalog import allowed_materials
             raw=read_file('/data/settings/KnownConsumables.json',2<<20)
-            return {'state':'MATERIALS','codes':allowed_materials(raw),'tank_write_available':False,
-                    'tank_reason':'Native eligibility checks, accounting side effects and rollback are not yet validated for a panel writer',
+            return {'state':'MATERIALS','codes':allowed_materials(raw),'tank_write_available':True,
+                    'tank_reason':'T/65 version 3.3 only. Empty/clean tank confirmation, idle and checksum gates; lifetime and identity preserved',
                     'catalog_sha256':digest(raw)}
         if value['operation']=='backups':
             with self.lock:
                 if self.worker and self.worker.is_alive():raise ValueError('Wait for the current operation')
                 rows=self.backups.list()
                 return {'state':'BACKUPS','backups':rows[:12],'total':len(rows),'raw_download_available':False,
-                        'tank_restore_available':False,'restore_scope':'Same-cartridge usage only; identity and material unchanged'}
+                        'tank_restore_available':True,'restore_scope':'Same-cartridge usage or same-tank material only; current tank lifetime preserved'}
         with self.lock:
             if self.closing or self.state.get('state') == 'RECOVERY_REQUIRED':
                 raise ValueError('Reset unavailable pending recovery or shutdown')
             if self.worker and self.worker.is_alive():
                 raise ValueError('A reset operation is already running')
-            if value['operation'] in ('prepare','prepare_restore','backup','prepare_material'):
+            if value['operation'] in ('prepare','prepare_restore','backup','prepare_material','prepare_tank_material'):
                 self.plan = None
                 self.state = {'state':'PREPARING'}
                 if value['operation']=='backup':
                     self.state={'state':'BACKING_UP'}
                     target=lambda:self.backup_worker(value['kind'])
                 elif value['operation']=='prepare_restore':
-                    target=lambda:self.prepare_worker(lambda:prepare_plan(value['backup_id'],self.backups))
+                    target=lambda:self.prepare_worker(lambda:prepare_saved_plan(value['backup_id'],self.backups))
                 elif value['operation']=='prepare_material':
                     target=lambda:self.prepare_worker(lambda:prepare_plan(material_target=value['material']))
+                elif value['operation']=='prepare_tank_material':
+                    target=lambda:self.prepare_worker(lambda:prepare_tank_plan(material_target=value['material']))
                 else:target = self.prepare_worker
             else:
                 if self.state.get('state') != 'READY' or value['plan_id'] != self.state.get('plan_id') or time.monotonic() > self.deadline:
                     raise ValueError('A matching unexpired preview is required')
-                if bool(self.plan.get('material_target')) != (value['operation']=='apply_material'):
+                if self.state.get('preview',{}).get('apply_ready') is False:
+                    raise ValueError('Prepare a new preview after the printer reaches full idle')
+                expected='apply_tank_material' if self.plan.get('kind')=='tank' else ('apply_material' if self.plan.get('material_target') else 'apply')
+                if value['operation']!=expected:
                     raise ValueError('Operation does not match the prepared transaction')
                 self.state = dict(self.state, state='APPLYING')
                 target = self.apply_worker

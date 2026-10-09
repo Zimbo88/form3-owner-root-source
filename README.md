@@ -138,3 +138,7 @@ Neither source-only packaging nor a checksum establishes legal permission.
 
 Maintained by **Mathias Zimmermann**. This project is not affiliated with or
 endorsed by Formlabs.
+
+Tank material editing and same-tank saved-material restoration are documented in
+[the tank panel workflow](docs/public/TANK_MATERIAL_PANEL.md). Current lifetime
+and physical identity are preserved; unknown formats remain refused.

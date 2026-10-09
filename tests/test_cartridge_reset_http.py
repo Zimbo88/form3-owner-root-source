@@ -99,3 +99,25 @@ class ResetHTTPTests(unittest.TestCase):
         body['secret']=self.secret
         self.assertEqual(self.request('/api/cartridge-reset/material-apply',body)[0],202)
         self.assertEqual(self.helper.calls,[('apply_material','a'*48)])
+
+    def test_tank_material_preview_is_typed_and_authenticated(self):
+        endpoint='/api/cartridge-reset/tank-material-preview';body={'material':'FLGPCL41'}
+        self.assertEqual(self.request(endpoint,body)[0],401)
+        self.login()
+        self.assertEqual(self.request(endpoint,body,{'X-CSRF-Token':'wrong'})[0],403)
+        self.assertEqual(self.request(endpoint,body,{'Origin':'http://other.invalid'})[0],403)
+        self.assertEqual(self.request(endpoint,dict(body,path='/etc/shadow'))[0],400)
+        self.assertEqual(self.request(endpoint,body)[0],202)
+        self.assertEqual(self.helper.calls,[(('prepare_tank_material',),{'material':'FLGPCL41'})])
+
+    def test_tank_apply_requires_clean_confirmation_and_reauthentication(self):
+        self.login();endpoint='/api/cartridge-reset/tank-material-apply'
+        body={'plan_id':'a'*48,'confirmation':'CHANGE CLEAN TANK MATERIAL','secret':self.secret}
+        self.assertEqual(self.request(endpoint,body)[0],400)
+        for bad in (False,1,'yes',None):
+            self.assertEqual(self.request(endpoint,dict(body,tank_empty_clean=bad))[0],400)
+        body['tank_empty_clean']=True
+        self.assertEqual(self.request(endpoint,dict(body,secret='wrong'))[0],403)
+        self.assertEqual(self.request(endpoint,body,{'X-CSRF-Token':'wrong'})[0],403)
+        self.assertEqual(self.request(endpoint,body)[0],202)
+        self.assertEqual(self.helper.calls,[('apply_tank_material','a'*48)])

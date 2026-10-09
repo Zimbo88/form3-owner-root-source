@@ -10,11 +10,11 @@ SOCKET='/run/form3-cartridge-reset/broker.sock'
 
 class ResetClient(object):
     def request(self,operation,plan_id=None,kind=None,backup_id=None,material=None):
-        if operation not in ('status','prepare','apply','backup','backups','prepare_restore','materials','prepare_material','apply_material'):
+        if operation not in ('status','prepare','apply','backup','backups','prepare_restore','materials','prepare_material','apply_material','prepare_tank_material','apply_tank_material'):
             raise ValueError('Unknown reset operation')
         data={'operation':operation}
-        if operation in ('apply','apply_material'):data['plan_id']=plan_id
-        if operation=='prepare_material':
+        if operation in ('apply','apply_material','apply_tank_material'):data['plan_id']=plan_id
+        if operation in ('prepare_material','prepare_tank_material'):
             if not isinstance(material,str) or not __import__('re').fullmatch(r'FL[A-Z0-9]{6}',material):raise ValueError('Invalid material code')
             data['material']=material
         if operation=='backup':

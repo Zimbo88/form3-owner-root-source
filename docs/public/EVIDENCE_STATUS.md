@@ -4,6 +4,19 @@ This is the evidence index, not a new hardware acceptance receipt. The current
 repository version is [VERSION](../../VERSION). A version string alone does not
 bind a hardware observation to every file in a later checkout.
 
+## Tank material extension
+
+The [0.5.16 tank material workflow](TANK_MATERIAL_PANEL.md) implements an owner
+material-only transaction and same-tank saved-material restoration. Lifetime is
+preserved. Source, synthetic failure/rollback tests and driver instruction
+emulation are distinct from a successful live write; the earlier 0.5.15 receipt
+is not promoted to write acceptance. Current deployment observations have their
+own [receipt](tank_panel_acceptance.json) and
+[screenshots](TANK_MATERIAL_PANEL.md#installed-reference-and-original-screenshots).
+The maintenance package is installed; 26 synthetic checks ran on its genuine
+Python/kernel. Live previews and no-ops passed. A real tank write remains
+**NOT CONFIRMED**, independently of the implemented and fixture-tested writer.
+
 ## Consumable extension (2026-10-09)
 
 The current source adds format-scoped cartridge backup/usage/material workflows

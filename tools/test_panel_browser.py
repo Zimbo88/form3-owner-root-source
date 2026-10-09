@@ -42,10 +42,14 @@ class ResetFixture:
  def request(self,op,plan_id=None,**kwargs):
   if op=='prepare':self.state={'state':'READY','plan_id':'a'*48,'preview':{'material':'FLGPCL02','nominal_ml':1000,'before':{'WriteCount':10,'EstimatedVolumeDispensed_ml':250},'after':{'WriteCount':11,'EstimatedVolumeDispensed_ml':0}}}
   if op=='backup':self.state={'state':'BACKUP_COMPLETE','backup':{'id':'b'*32,'kind':kwargs['kind'],'bytes':128 if kwargs['kind']=='cartridge' else 512,'validation':'SYNTHETIC SNAPSHOT'}}
-  if op=='backups':return {'state':'BACKUPS','total':2,'backups':[{'id':'b'*32,'kind':'cartridge','material':'FLGPCL04','created':1700000000,'eeprom_sha256':'c'*64},{'id':'d'*32,'kind':'tank','material':'FLGPCL04','created':1700000000,'eeprom_sha256':'e'*64}]}
-  if op=='materials':return {'state':'MATERIALS','codes':['FLGPCL04','FLGPWH41'],'tank_write_available':False,'tank_reason':'Native eligibility and rollback are not yet validated for a panel writer.'}
+  if op=='backups':return {'state':'BACKUPS','tank_restore_available':True,'total':2,'backups':[{'id':'b'*32,'kind':'cartridge','material':'FLGPCL04','created':1700000000,'eeprom_sha256':'c'*64},{'id':'d'*32,'kind':'tank','material':'FLGPCL04','created':1700000000,'eeprom_sha256':'e'*64}]}
+  if op=='materials':return {'state':'MATERIALS','codes':['FLGPCL04','FLGPWH41'],'tank_write_available':True,'tank_reason':'T/65 tank version 3.3; material only; lifetime preserved.'}
   if op=='prepare_material':self.state={'state':'READY','plan_id':'f'*48,'preview':{'action':'material_assignment','material':'FLGPCL02','nominal_ml':1000,'before':{'material':'FLGPCL02'},'after':{'material':kwargs['material']}}}
   if op=='prepare_restore':self.state={'state':'READY','plan_id':'a'*48,'preview':{'action':'restore_usage','material':'FLGPCL04','nominal_ml':1000,'before':{'WriteCount':11,'EstimatedVolumeDispensed_ml':0},'after':{'WriteCount':12,'EstimatedVolumeDispensed_ml':250}}}
+  if op=='prepare_tank_material' or (op=='prepare_restore' and kwargs.get('backup_id')=='d'*32):self.state={'state':'READY','plan_id':'e'*48,'preview':{'kind':'tank','action':'tank_material' if op=='prepare_tank_material' else 'tank_material_restore','material':'FLGPWH41','before':{'material':'FLGPWH41'},'after':{'material':kwargs.get('material','FLGPCL04')},'lifetime_preserved':True}}
+  if op=='apply_tank_material':
+   if plan_id!='e'*48:raise ValueError('Unexpected tank fixture plan')
+   self.applies+=1;self.state={'state':'COMPLETE','stages':{'synthetic_tank_material':'PASS'}}
   if op=='apply_material':
    if plan_id!='f'*48:raise ValueError('Unexpected material fixture plan')
    self.applies+=1;self.state={'state':'COMPLETE','stages':{'synthetic_material':'PASS'}}
@@ -140,7 +144,7 @@ try:
  js('document.getElementById("form-alias").value="Browser fixture";Array.from(document.querySelectorAll("button")).find(x=>x.textContent==="Save owner preferences").click();');time.sleep(.3)
  if store.settings()['display_alias']!='Browser fixture':raise RuntimeError('Settings UI write failed')
  js('document.querySelector("nav [data-page=materials]").click();');time.sleep(.3)
- js('Array.from(document.querySelectorAll("button")).find(b=>b.textContent==="Review cartridge reset").click();');time.sleep(.2)
+ js('Array.from(document.querySelectorAll("button")).find(b=>b.textContent==="Manage cartridge & tank").click();');time.sleep(.2)
  js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==="Prepare a fresh preview").click();')
  js('document.getElementById("form-reset-login").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(1.8)
  if not js('return !!document.getElementById("form-reset-confirmation");')['value']:raise RuntimeError('Reset preview not rendered')
@@ -153,7 +157,7 @@ try:
  open('/result/reset-SYNTHETIC.png','wb').write(base64.b64decode(shot))
  js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==="Close").click();')
  for label,filename,expected in [('Back up cartridge','backup-cartridge-SYNTHETIC','BACKUP COMPLETE'),('Back up tank','backup-tank-SYNTHETIC','BACKUP COMPLETE'),('Review saved backups','backups-SYNTHETIC','BACKUPS'),('Review material assignment','material-assignment-SYNTHETIC','MATERIALS')]:
-  js('Array.from(document.querySelectorAll("button")).find(b=>b.textContent==="Review cartridge reset").click();');time.sleep(.2)
+  js('Array.from(document.querySelectorAll("button")).find(b=>b.textContent==="Manage cartridge & tank").click();');time.sleep(.2)
   js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==='+json.dumps(label)+').click();')
   js('document.getElementById("form-reset-login").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(1.7)
   if not js('return document.querySelector("dialog").textContent.includes('+json.dumps(expected)+');')['value']:raise RuntimeError('Backup/material dialog failed')
@@ -174,6 +178,23 @@ try:
    shot=command('WebDriver:TakeScreenshot',{'id':None,'full':False,'scroll':False})['value']
    open('/result/'+suffix+'-complete-SYNTHETIC.png','wb').write(base64.b64decode(shot))
   js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==="Close").click();')
+ # New tank material and same-tank material restore: synthetic apply only.
+ for entry,label,filename in [('Review material assignment','Review tank material change','tank-material'),('Review saved backups','Review saved tank material','tank-restore')]:
+  js('Array.from(document.querySelectorAll("button")).find(b=>b.textContent==="Manage cartridge & tank").click();');time.sleep(.2)
+  js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==='+json.dumps(entry)+').click();');time.sleep(.1)
+  js('document.getElementById("form-reset-login").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(.4)
+  js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==='+json.dumps(label)+').click();');time.sleep(.1)
+  js('document.getElementById("form-reset-login").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(.4)
+  if not js('return !!document.getElementById("tank-empty-clean") && !document.getElementById("tank-empty-clean").checked && document.querySelector("dialog").textContent.includes("lifetime");')['value']:raise RuntimeError('Tank confirmation gate missing')
+  shot=command('WebDriver:TakeScreenshot',{'id':None,'full':False,'scroll':False})['value']
+  open('/result/'+filename+'-preview-SYNTHETIC.png','wb').write(base64.b64decode(shot))
+  before=reset_fixture.applies
+  js('document.getElementById("form-reset-confirmation").value="CHANGE CLEAN TANK MATERIAL";document.getElementById("form-reset-secret").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(.3)
+  if reset_fixture.applies!=before:raise RuntimeError('Unchecked tank confirmation reached broker')
+  js('document.getElementById("tank-empty-clean").checked=true;document.getElementById("form-reset-secret").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(.3)
+  if reset_fixture.applies!=before+1:raise RuntimeError('Confirmed synthetic tank apply did not run once')
+  if not js('return document.querySelector("dialog").textContent.includes("COMPLETE");')['value']:raise RuntimeError('Tank completion not rendered')
+  js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==="Close").click();');time.sleep(.1)
  js('document.getElementById("logout").click();');time.sleep(.2)
  if not js('return document.getElementById("dashboard").hidden;')['value']:raise RuntimeError('Logout failed')
  print(json.dumps({'passed':True,'pages':results,'cartridge_reset_browser_flow':'SYNTHETIC PASS; no hardware writes','settings_saved':True,'unsaved_draft_preserved':True,'logout':True,'data':'DEMO ONLY','network_namespace':'loopback only','main_navigation_entries':5,'small_viewport':small_view,'mobile_no_horizontal_overflow':True,'gpu_utilization_unavailable':True,'firefox_content_sandbox_disabled':False}))
