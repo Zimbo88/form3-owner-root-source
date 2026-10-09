@@ -318,7 +318,7 @@ def supervise():
                     reset_broker=None;reset_retry=time.monotonic()+30
                 if reset_broker is None and not pending and time.monotonic()>=reset_retry and not os.path.exists(BASE+'/cartridge-reset.disabled'):
                     try:
-                        for name in ('cartridge_broker.py','cartridge_transaction.py','cartridge_codec.py'):
+                        for name in ('cartridge_broker.py','cartridge_transaction.py','cartridge_codec.py','consumable_backup.py','tank_codec.py','cartridge_material.py','material_catalog.py','read_ds2431_protection.py'):
                             trusted(BASE+'/bootstrap/'+name)
                         reset_broker=subprocess.Popen([PYTHON,'-E','-B','-S',BASE+'/bootstrap/cartridge_broker.py',
                             '--uid',str(c['uid']),'--gid',str(c['gid'])],stdin=subprocess.DEVNULL,

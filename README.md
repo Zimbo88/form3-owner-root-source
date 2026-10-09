@@ -24,6 +24,13 @@ firmware or a universal Form 3 unlock.
   no vendor firmware, device dumps, keys or private logs. Inputs come from your
   own authorized acquisition. A stock software-only first-root route is unproved.
 
+## Third-party resin: one successful reference print
+
+I completed a print with **Anycubic High Clear**, the standard **Clear V4
+(`FLGPCL04`) profile**, and **no Open Material Mode**. I considered the result
+excellent. This is an owner-reported successful experiment, not a general resin
+compatibility certification. [Full report, cartridge reuse experience and limits](docs/public/THIRD_PARTY_RESIN.md).
+
 ## Start here
 
 1. Read [ROOT_GUIDE](docs/public/ROOT_GUIDE.md) for the concept, limits and prerequisites.
@@ -67,6 +74,9 @@ are HISTORICAL/CACHED.
 
 - [Panel and limitations](owner-ui/README.md), [saved print diagnostics](docs/public/LOG_REVIEW.md).
 - [Optional local touchscreen clock and original artwork](docs/public/NATIVE_DISPLAY.md).
+- [Consumable backups and material workflows](docs/public/CONSUMABLE_BACKUPS.md),
+  [tank decoding and emulator evidence](docs/public/TANK_DATA.md),
+  [illustrated panel guide](docs/public/PANEL_GUIDE.md).
 - [Scoped legacy Clear usage adjustment](docs/public/CARTRIDGE_PANEL_RESET.md):
   implemented and fixture-tested, read-only panel preview accepted on hardware;
   separate earlier live-write evidence has a narrower provenance boundary.

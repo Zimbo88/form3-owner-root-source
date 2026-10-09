@@ -1,5 +1,12 @@
 # Owner Root maintenance panel
 
+The current source version is defined in [VERSION](../VERSION). The
+[consumable extension](../docs/public/CONSUMABLE_BACKUPS.md) adds private snapshots,
+same-cartridge usage restore and a gated material preview/apply path. Tank restore
+and general tank assignment remain unavailable. The
+[panel guide](../docs/public/PANEL_GUIDE.md) shows actual UI screenshots with
+synthetic data; these are not live hardware acceptance.
+
 An unprivileged panel on **port 1328**, with five main navigation areas and related
 settings tabs. [Features and limits](../docs/public/LIMITS.md) are the current user-facing
 catalog. [Acceptance](../docs/public/EVIDENCE_STATUS.md) distinguishes reference-owner

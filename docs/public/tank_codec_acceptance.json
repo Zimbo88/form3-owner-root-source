@@ -1,0 +1,46 @@
+{
+  "current_generalized_tank_material_live_write": "NOT RUN; unavailable",
+  "daemon_sha256": "a2a5e3c47cf1c0c2cc627bcfcba10c0c20a843420fa46ca39290be27e861a8c1",
+  "hardware_read_only": {
+    "both_capture_results": "CHECKSUMS_AND_MIRROR_VERIFIED",
+    "cartridge_bytes": 128,
+    "consumable_write": false,
+    "kernel": "4.9.65+",
+    "python": "3.5.3",
+    "tank_bytes": 512,
+    "vendor_service_stopped": false
+  },
+  "native_crypto_streams": {
+    "cases": 6,
+    "modeled_crypto": false,
+    "passed": true
+  },
+  "native_merge": {
+    "cases": 3,
+    "modeled_dependencies": [],
+    "passed": true
+  },
+  "native_serialization": {
+    "cases": 9,
+    "modeled_dependencies": [
+      "Go allocation",
+      "reflect serialization",
+      "encryption supplied by independently tested authored codec"
+    ],
+    "passed": true
+  },
+  "schema": 1,
+  "scope": "Tank codec and read-only snapshot; not tank write acceptance",
+  "source_sha256": {
+    "owner-maintenance/consumable_backup.py": "1bdc7ad7316e50248197330885a963db2a1f805d235389c8457d38d13b7ec582",
+    "owner-maintenance/tank_codec.py": "868b02d4f93673636a2910825265e3d17918cf45c1e66cf227aad333cd6cb275",
+    "tests/test_tank_codec.py": "dee1a2cfa13069b4ce3cc623d75cf2e543608cf9642f5bde8296a97c692a006a",
+    "tools/probe_tank_native.py": "6339bd15905da5f5f8a216efcbc05b7ae39551d535ed5a0f2dbd005ff3650834"
+  },
+  "synthetic_decoder_tests": {
+    "cases": 8,
+    "passed": true
+  },
+  "tank_restore": "NOT RUN; unavailable",
+  "version": "0.5.14-review"
+}

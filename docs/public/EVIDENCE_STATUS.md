@@ -4,6 +4,23 @@ This is the evidence index, not a new hardware acceptance receipt. The current
 repository version is [VERSION](../../VERSION). A version string alone does not
 bind a hardware observation to every file in a later checkout.
 
+## Consumable extension (2026-10-09)
+
+The current source adds format-scoped cartridge backup/usage/material workflows
+and a validated T/65 tank snapshot decoder. The source/fixture boundary remains
+separate from a hardware write: [current scope](CONSUMABLE_BACKUPS.md),
+[tank layout and emulator proof](TANK_DATA.md), and the sanitized
+[tank receipt](tank_codec_acceptance.json). The recorded genuine-runtime capture
+is read-only; it does not certify a new tank writer or restore path.
+
+**CURRENT-SOURCE HARDWARE, LIMITED:** the 0.5.14 maintenance extension and
+0.5.15 panel fix were installed on the reference printer. The
+[package-bound receipt](consumable_panel_acceptance.json) records real browser
+backup, authentication, catalog and preview checks. The [19 live screenshots](PANEL_GUIDE.md)
+show that installed panel with private identifiers redacted. No consumable write,
+vendor-service restart or printer reboot was performed for this review.
+
+
 ## How to read the labels
 
 | Label | What it establishes | What it does not establish |
@@ -53,6 +70,7 @@ vendor rule.
 
 There is **no defensible single “last completely hardware-confirmed version”**
 in the public artifacts. Report the version, package and tested behavior together.
-This documentation review changes no printer runtime. It neither repeats nor
-extends the historical hardware results. New source-only results belong in the
+The earlier public-documentation review changed no printer runtime. The separate
+2026-10-09 deployment above records its own limited hardware observations and
+does not extend the historical receipts. New source-only results belong in the
 [publication review](../maintainer/PUBLICATION_REVIEW.md), not in old receipts.

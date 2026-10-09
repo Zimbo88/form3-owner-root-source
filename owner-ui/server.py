@@ -396,7 +396,7 @@ def make_server(provider, token, port=1328, store=None, bundle=None, bind='127.0
                 return self.reply(503, {'error': 'Reviewed data unavailable or invalid; no fallback values'})
 
         def do_POST(self):
-            allowed = {'/api/login', '/api/logout', '/api/settings', '/api/refills', '/api/export', '/api/power', '/api/cartridge-reset/prepare', '/api/cartridge-reset/apply'}
+            allowed = {'/api/login', '/api/logout', '/api/settings', '/api/refills', '/api/export', '/api/power', '/api/cartridge-reset/prepare', '/api/cartridge-reset/apply', '/api/cartridge-reset/backup', '/api/cartridge-reset/backups', '/api/cartridge-reset/restore-preview', '/api/cartridge-reset/materials', '/api/cartridge-reset/material-preview', '/api/cartridge-reset/material-apply'}
             if self.path not in allowed:
                 return self.reply(405, {'error': 'No approved write action'})
             if not self.boundary(mutation=True):
@@ -433,11 +433,28 @@ def make_server(provider, token, port=1328, store=None, bundle=None, bind='127.0
                         return self.reply(403, {'error':'Owner login is required for a cartridge reset'})
                     if reset_client is None:
                         return self.reply(409, {'error':'Reviewed root helper is not enabled'})
-                    if self.path.endswith('/prepare'):
+                    if self.path.endswith('/materials'):
+                        if body:raise ValueError('Material listing takes no paths')
+                        result=reset_client.request('materials')
+                    elif self.path.endswith('/material-preview'):
+                        if set(body)!={'material'} or not isinstance(body['material'],str) or not re.fullmatch(r'FL[A-Z0-9]{6}',body['material']):raise ValueError('Invalid material code')
+                        result=reset_client.request('prepare_material',material=body['material'])
+                    elif self.path.endswith('/backup'):
+                        if set(body)!={'kind'} or body['kind'] not in ('cartridge','tank'):raise ValueError('Choose cartridge or tank')
+                        result=reset_client.request('backup',kind=body['kind'])
+                    elif self.path.endswith('/backups'):
+                        if body:raise ValueError('Backup listing takes no paths')
+                        result=reset_client.request('backups')
+                    elif self.path.endswith('/restore-preview'):
+                        if set(body)!={'backup_id'} or not isinstance(body['backup_id'],str) or not re.fullmatch(r'[a-f0-9]{32}',body['backup_id']):raise ValueError('Invalid backup identifier')
+                        result=reset_client.request('prepare_restore',backup_id=body['backup_id'])
+                    elif self.path.endswith('/prepare'):
                         if body:raise ValueError('Preview takes no device paths or settings')
                         result=reset_client.request('prepare')
                     else:
-                        if set(body)!={'plan_id','confirmation','secret'} or body.get('confirmation')!='RESET CLEAR USAGE':
+                        material_apply=self.path.endswith('/material-apply')
+                        phrases=('CHANGE CARTRIDGE MATERIAL',) if material_apply else ('APPLY CARTRIDGE USAGE','RESET CLEAR USAGE')
+                        if set(body)!={'plan_id','confirmation','secret'} or body.get('confirmation') not in phrases:
                             raise ValueError('Explicit usage reset confirmation required')
                         now=time.monotonic()
                         with lock:
@@ -447,7 +464,7 @@ def make_server(provider, token, port=1328, store=None, bundle=None, bind='127.0
                             if not self.secret_ok(body.get('secret')):
                                 failures.append(now)
                                 return self.reply(403, {'error':'Re-enter the owner access secret'})
-                        result=reset_client.request('apply',body['plan_id'])
+                        result=reset_client.request('apply_material' if material_apply else 'apply',body['plan_id'])
                     return self.reply(409 if result.get('state')=='REFUSED' else 202,result)
                 if self.path == '/api/logout':
                     with lock:

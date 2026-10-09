@@ -63,3 +63,16 @@ class BrokerTests(unittest.TestCase):
         for i in range(512):Path(self.tmp.name,str(i)).touch()
         self.broker.request({'operation':'prepare'});self.broker.worker.join(2)
         self.assertEqual(self.broker.status()['state'],'UNAVAILABLE');self.assertEqual(self.writes,[])
+
+    def test_material_apply_cannot_consume_usage_preview(self):
+        token=self.ready()
+        with self.assertRaises(ValueError):self.broker.request({'operation':'apply_material','plan_id':token})
+        self.assertEqual(self.writes,[])
+
+    def test_usage_apply_cannot_consume_material_preview(self):
+        self.broker.prepare_fn=lambda:({'material_target':'FLGPCL04'},{'already_fresh':False})
+        token=self.ready()
+        with self.assertRaises(ValueError):self.broker.request({'operation':'apply','plan_id':token})
+        self.assertEqual(self.writes,[])
+        self.broker.request({'operation':'apply_material','plan_id':token});self.broker.worker.join(2)
+        self.assertEqual(len(self.writes),1)

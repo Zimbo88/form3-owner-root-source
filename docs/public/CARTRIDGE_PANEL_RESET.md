@@ -1,5 +1,11 @@
 # Clear cartridge usage adjustment in the panel
 
+> **Historical scope:** this document describes the 0.5.13 Clear-only feature
+> and its narrower acceptance. The [0.5.14 consumable extension](CONSUMABLE_BACKUPS.md)
+> distinguishes new source/fixture coverage, backup limitations and unconfirmed
+> generalized hardware paths. Do not read the historical preview acceptance as
+> live-write acceptance of every current operation.
+
 ## Scope and prerequisites
 
 Version **0.5.13-review** adds an explicit electronic usage adjustment under

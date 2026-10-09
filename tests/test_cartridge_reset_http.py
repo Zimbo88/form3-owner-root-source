@@ -6,7 +6,7 @@ import server
 
 class FakeBroker(object):
     def __init__(self):self.calls=[]
-    def request(self,*args):self.calls.append(args);return {'state':'AVAILABLE'}
+    def request(self,*args,**kwargs):self.calls.append((args,kwargs) if kwargs else args);return {'state':'AVAILABLE'}
 
 class ResetHTTPTests(unittest.TestCase):
     def setUp(self):
@@ -60,3 +60,42 @@ class ResetHTTPTests(unittest.TestCase):
         self.login();self.assertEqual(self.request('/api/cartridge-reset')[0],200)
     def test_bearer_cannot_mutate(self):
         self.assertEqual(self.request('/api/cartridge-reset/prepare',{}, {'Authorization':'Bearer '+self.secret})[0],401)
+
+    def test_backup_restore_and_material_typed_requests(self):
+        self.login()
+        cases=[('backup',{'kind':'tank'},(('backup',),{'kind':'tank'})),
+               ('backups',{},('backups',)),
+               ('restore-preview',{'backup_id':'b'*32},(('prepare_restore',),{'backup_id':'b'*32})),
+               ('materials',{},('materials',)),
+               ('material-preview',{'material':'FLGPCL04'},(('prepare_material',),{'material':'FLGPCL04'}))]
+        for endpoint,body,expected in cases:
+            self.assertEqual(self.request('/api/cartridge-reset/'+endpoint,body)[0],202)
+            self.assertEqual(self.helper.calls[-1],expected)
+
+    def test_new_operations_require_login_csrf_and_origin(self):
+        cases=[('backup',{'kind':'cartridge'}),('restore-preview',{'backup_id':'b'*32}),
+               ('material-preview',{'material':'FLGPCL04'}),('backups',{}),('materials',{})]
+        for endpoint,body in cases:
+            self.assertEqual(self.request('/api/cartridge-reset/'+endpoint,body)[0],401)
+        self.login()
+        for endpoint,body in cases:
+            for headers in ({'X-CSRF-Token':'wrong'},{'Origin':'http://foreign.invalid'}):
+                self.assertEqual(self.request('/api/cartridge-reset/'+endpoint,body,headers)[0],403)
+        self.assertEqual(self.helper.calls,[])
+
+    def test_new_operations_reject_paths_unknown_types_and_fields(self):
+        self.login()
+        for endpoint,body in [('backup',{'kind':'tank','path':'/etc/shadow'}),('backup',{'kind':'chip'}),
+                              ('restore-preview',{'backup_id':'../x'}),('material-preview',{'material':'FLGPCL04\n'}),
+                              ('materials',{'device':'other'}),('backups',{'all':True})]:
+            self.assertEqual(self.request('/api/cartridge-reset/'+endpoint,body)[0],400)
+        self.assertEqual(self.helper.calls,[])
+
+    def test_material_apply_requires_distinct_confirmation_and_secret(self):
+        self.login();body=self.apply_body()
+        self.assertEqual(self.request('/api/cartridge-reset/material-apply',body)[0],400)
+        body['confirmation']='CHANGE CARTRIDGE MATERIAL';body['secret']='wrong'
+        self.assertEqual(self.request('/api/cartridge-reset/material-apply',body)[0],403)
+        body['secret']=self.secret
+        self.assertEqual(self.request('/api/cartridge-reset/material-apply',body)[0],202)
+        self.assertEqual(self.helper.calls,[('apply_material','a'*48)])

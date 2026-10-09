@@ -115,7 +115,11 @@ def decode(image, record, device_name):
                   'CumulativeDispenseTime_s': seconds}
         copies.append({'copy': name, 'offset': offset, 'checksum_valid': True,
                        'usage': values,
-                       'record_matches': {f: values[f] == record.get(f) for f in FIELDS}})
+                       'record_exact_matches': {f: values[f] == record.get(f) for f in FIELDS},
+                       'record_matches': {f: (values[f] == int(record[f]*10)/10 if
+                           f == 'EstimatedVolumeDispensed_ml' and type(record.get(f)) in (int,float)
+                           and math.isfinite(record[f]) and 0 <= record[f] < 6553.6 else
+                           values[f] == record.get(f)) for f in FIELDS}})
     return {'schema_version': 1, 'reference_daemon_sha256': BINARY_SHA256,
             'ro_checksum_valid': True, 'rw_copies': copies,
             'rw_usage_equal': copies[0]['usage'] == copies[1]['usage'],
@@ -127,17 +131,43 @@ def decode(image, record, device_name):
 
 
 
-def candidate(image, record, device_name):
+def validate_legacy_material(image, record, device_name):
+    """Same pinned C/0 RW/1 serializer, independently checked material projection.
+
+    Material-neutral accounting support is a format claim, not all-cartridge
+    hardware acceptance. Unknown capacities/formats remain unsupported.
+    """
+    decode(image, record, device_name)
+    code = record.get('ResinID')
+    if not isinstance(code, str) or not re.fullmatch(r'FL[A-Z0-9]{6}', code):
+        raise ValueError('Invalid legacy material code')
+    if record.get('OriginalVolume_mL') != 1000 or record.get('DataVersionRO') != 0 or record.get('DataVersionRW') != 1:
+        raise ValueError('Only 1000 mL C/0 RW/1 records are supported')
+    plain = _decrypt(derive_key(record.get('SecretKey'), device_name), image[2:6]*2, image[10:43], 10)
+    if plain[21:29] != code.encode('ascii'):
+        raise ValueError('RO material and persistent mirror disagree')
+    return code
+
+
+def candidate(image, record, device_name, usage=None):
     before = decode(image, record, device_name)
     if not before['rw_usage_equal'] or not all(all(c['record_matches'].values()) for c in before['rw_copies']):
         raise ValueError('Baseline copies/mirror disagree')
     old = before['rw_copies'][0]['usage']
     if old['WriteCount'] >= 0xffffffff:
         raise ValueError('Counter overflow refused')
+    desired = {'EstimatedVolumeDispensed_ml':0.0, 'DispenseCount':0, 'CumulativeDispenseTime_s':0} if usage is None else usage
+    if not isinstance(desired, dict) or set(desired) != {'EstimatedVolumeDispensed_ml','DispenseCount','CumulativeDispenseTime_s'}:
+        raise ValueError('Only the three usage fields may be restored')
+    count, seconds, volume = desired['DispenseCount'], desired['CumulativeDispenseTime_s'], desired['EstimatedVolumeDispensed_ml']
+    if type(count) is not int or not 0 <= count <= 0xffffff or type(seconds) not in (int,float) or not 0 <= seconds <= 65535 or int(seconds) != seconds:
+        raise ValueError('Usage counters are outside the legacy format')
+    if type(volume) not in (int,float) or not math.isfinite(volume) or not 0 <= volume <= 6553.5 or abs(volume*10-round(volume*10)) > 1e-6:
+        raise ValueError('Usage volume is outside the legacy format')
     revised = dict(record)
-    revised.update(EstimatedVolumeDispensed_ml=0.0, DispenseCount=0,
-                   CumulativeDispenseTime_s=0, WriteCount=old['WriteCount']+1)
-    plain = bytes(3) + struct.pack('<IHH', revised['WriteCount'], 0, 0)
+    revised.update(desired)
+    revised['WriteCount'] = old['WriteCount']+1
+    plain = count.to_bytes(3, 'big') + struct.pack('<IHH', revised['WriteCount'], int(round(volume*10)), int(seconds))
     encrypted = _decrypt(derive_key(record.get('SecretKey'), device_name), image[2:6]*2, plain, 0)
     rw = bytes([1]) + encrypted + struct.pack('<I', checksum(plain))
     output = bytearray(image)

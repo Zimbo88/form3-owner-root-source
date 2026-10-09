@@ -1,0 +1,62 @@
+{
+  "activation_history": "Initial on-printer self-connect check timed out and rolled back. Existing interface restriction also blocked that check on the prior release. External laptop SSH/HTTP acceptance then passed. No gate was removed.",
+  "checks": {
+    "authenticated_login": true,
+    "backup_list": true,
+    "cartridge_backup": true,
+    "csrf_rejected": true,
+    "http_cookie": true,
+    "logout": true,
+    "material_catalog": true,
+    "privileged_session_required": true,
+    "root_page": true,
+    "status_api": true,
+    "tank_backup": true,
+    "tank_writer_disabled": true,
+    "usage_preview": true
+  },
+  "consumable_writes": false,
+  "fixture_suite": {
+    "errors": 0,
+    "failures": 0,
+    "log_sha256": "52dee317137fc345a31701342bb5d34a818f36fb9a8aca98d1b3dc5cc2cf27e1",
+    "public_tests": 549,
+    "skipped": 0
+  },
+  "last_update_kind": "panel",
+  "live_browser_additional_checks": {
+    "cartridge_material_preview": true,
+    "current_material_noop": true,
+    "no_apply_clicked": true,
+    "same_cartridge_usage_restore_preview": true,
+    "tank_restore_disabled": true
+  },
+  "live_browser_pages": 9,
+  "live_browser_scope": "Read-only status, backups and previews; never apply",
+  "live_screenshots": 19,
+  "maintenance_baseline_version": "0.5.14-review",
+  "manifest_sha256": "40f57280d3991cffa23db3c488520b7ff128666dfeae5f451cb4f5454274a81c",
+  "native_crypto_cases": 6,
+  "native_merge_cases": 3,
+  "native_serialization_cases": 9,
+  "package_sha256": "300f1d482707ae76a6808f409dd209cafa58ea9dbb2edf6478e561cd2938456b",
+  "passed": true,
+  "plan_hash": "dcdaa7c2ab46e22b53fc1928d58cbdfc0fdb19e5f3716c84deee91bc0e79d0ef",
+  "printer_reboot": false,
+  "root_readonly_restored": true,
+  "screenshot_privacy": {
+    "identifiers_redacted_before_capture": true,
+    "manual_review": true,
+    "ocr": "NOT RUN: tesseract unavailable",
+    "png_metadata_removed": true
+  },
+  "snapshot_values_not_public": true,
+  "source_commit": "f22c9c52f68cc574582e59a6864acbdec3c901a0",
+  "ssh_identity_changed": false,
+  "tank_material_apply": "UNAVAILABLE: native eligibility, write/reload side effects and rollback incomplete",
+  "tank_restore": "UNAVAILABLE: live restore transaction unvalidated",
+  "vendor_port35_present": true,
+  "vendor_service_restart": false,
+  "version": "0.5.15-review",
+  "write_acceptance": "New generalized consumable apply paths are fixture tested; not exercised on hardware in this review"
+}

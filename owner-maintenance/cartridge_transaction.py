@@ -19,7 +19,7 @@ import sys
 import tempfile
 import time
 
-from cartridge_codec import candidate, decode, parse_record
+from cartridge_codec import candidate, decode, parse_record, validate_legacy_material
 
 SERVICE = '/etc/init.d/tank-cartridge-daemon'
 DAEMON = '/usr/bin/TankCartridgeDaemon'
@@ -269,14 +269,30 @@ class Device(object):
         baseline_record = parse_record(baseline_raw)
         if mirror_semantic_pin(record) != mirror_semantic_pin(baseline_record):
             raise ValueError('Mirror fields changed beyond writeback timestamp')
-        if record.get('ResinID') != 'FLGPCL02' or record.get('OriginalVolume_mL') != 1000:
-            raise ValueError('Wrong material or nominal volume')
-        target, rw, revised, decoded, changes = candidate(a, record, self.plan['device_name'])
+        validate_legacy_material(a, record, self.plan['device_name'])
+        if record.get('ResinID') != baseline_record.get('ResinID'):
+            raise ValueError('Material changed since preview')
+        if self.plan.get('material_target'):
+            from cartridge_material import candidate as material_candidate
+            from material_catalog import allowed_materials
+            from read_ds2431_protection import read_memory
+            if base64.b64decode(self.plan['material_before_b64'],validate=True)!=a:
+                raise ValueError('Material rollback baseline mismatch')
+            catalog=read_file('/data/settings/KnownConsumables.json',2<<20)
+            if digest(catalog)!=self.plan['catalog_sha256'] or self.plan['material_target'] not in allowed_materials(catalog):
+                raise ValueError('Material catalog or target eligibility changed')
+            controls=read_memory(self.plan['device_name'],digest(a))
+            if controls[128:]!=base64.b64decode(self.plan['protection_b64'],validate=True) or any(controls[i] in (0x55,0xaa) for i in (128,129)):
+                raise ValueError('Material pages protected or protection state changed')
+            target,revised,changes=material_candidate(a,record,self.plan['device_name'],self.plan['material_target'])
+            decoded=decode(target,revised,self.plan['device_name'])
+        else:
+            target, rw, revised, decoded, changes = candidate(a, record, self.plan['device_name'], self.plan.get('restore_usage'))
         if target != base64.b64decode(self.plan['target_b64']) or digest(target) != self.plan['target_sha256']:
             raise ValueError('Target plan mismatch')
         # Assert exact non-usage JSON preservation, including unknown private fields.
         for key in record:
-            if key not in USAGE and record[key] != revised[key]:
+            if key not in (set(USAGE)|({'ResinID'} if self.plan.get('material_target') else set())) and record[key] != revised[key]:
                 raise ValueError('Non-usage field changed')
         target_file = (json.dumps(revised, sort_keys=True, separators=(',', ':'), allow_nan=False)+'\n').encode()
         st = os.lstat(self.mirror_path)
@@ -307,6 +323,21 @@ class Device(object):
                 raise ValueError('EEPROM short write')
         finally:
             os.close(fd)
+
+    def write_material_rows(self, offset, data):
+        self.exclusion()
+        if not self.plan.get('material_target') or (offset,len(data)) not in ((24,16),(0,16)):
+            raise ValueError('Unexpected material row write')
+        target=base64.b64decode(self.plan['target_b64'],validate=True)
+        before=base64.b64decode(self.plan['material_before_b64'],validate=True)
+        if data not in (target[offset:offset+16],before[offset:offset+16]):
+            raise ValueError('Unplanned material bytes')
+        fd=os.open(self.image_path,os.O_WRONLY|os.O_NOFOLLOW)
+        try:
+            st=os.fstat(fd)
+            if not stat.S_ISREG(st.st_mode) or st.st_size!=128 or os.lseek(fd,offset,os.SEEK_SET)!=offset or os.write(fd,data)!=16:
+                raise ValueError('Material row write failed')
+        finally:os.close(fd)
 
     def service(self, action):
         if action not in ('stop', 'start'):
@@ -400,13 +431,16 @@ def main():
         durable_new(os.path.join(backup,'mirror_metadata_before_commit.private.json'), json.dumps(device.metadata,sort_keys=True).encode())
         receipt['mirror_before_commit_sha256'] = digest(original)
         event('quiesced_baseline','PASS')
-        commit_records(device, before, target, original, target_file, event)
+        if plan.get('material_target'):
+            from cartridge_material import commit_material
+            commit_material(device,before,target,original,target_file,event)
+        else:commit_records(device, before, target, original, target_file, event)
         actual = device.read_image()
         verified = decode(actual, parse_record(device.read_mirror()), plan['device_name'])
         if not all(all(c['record_matches'].values()) for c in verified['rw_copies']):
             raise ValueError('Committed decode/mirror mismatch')
         durable_new(os.path.join(backup,'eeprom_after_write.bin'), actual)
-        event('electronic_reset','PASS')
+        event('electronic_commit','PASS')
         device.service('start')
         event('daemon_restart','PASS')
         # Observe bounded native reload; no print/fill/power command is sent.
@@ -421,22 +455,26 @@ def main():
             rec = parse_record(raw)
             result = decode(actual, rec, plan['device_name'])
             allowed = set(range(64,80)) | set(range(96,112))
-            if any(actual[i] != before[i] for i in range(128) if i not in allowed):
+            reference=target if plan.get('material_target') else before
+            if any(actual[i] != reference[i] for i in range(128) if i not in allowed):
                 raise ValueError('Post-start non-RW bytes changed')
-            if rec.get('ResinID') != 'FLGPCL02' or rec.get('OriginalVolume_mL') != 1000:
+            expected_material=plan.get('material_target') or parse_record(original).get('ResinID')
+            if rec.get('ResinID') != expected_material or rec.get('OriginalVolume_mL') != 1000:
                 raise ValueError('Post-start material mismatch')
             for c in result['rw_copies']:
                 usage = c['usage']
-                if any(usage[f] != 0 for f in USAGE[:3]) or usage['WriteCount'] < plan['target_writecount']:
+                desired = decoded['rw_copies'][0]['usage']
+                if any(usage[f] != desired[f] for f in USAGE[:3]) or usage['WriteCount'] < plan['target_writecount']:
                     raise ValueError('Post-start usage restored/changed')
                 if not all(c['record_matches'].values()):
                     raise ValueError('Post-start mirror mismatch')
             observations.append({'epoch':time.time(),'sha256':digest(actual),
                                  'usage':result['rw_copies'][0]['usage']})
         receipt['observations'] = observations
-        receipt['material'] = 'FLGPCL02'
+        receipt['material'] = plan.get('material_target') or parse_record(original)['ResinID']
+        receipt['operation'] = 'material_assignment' if plan.get('material_target') else ('usage_restore' if plan.get('restore_usage') else 'usage_reset')
         receipt['final_usage'] = observations[-1]['usage']
-        receipt['status'] = 'ELECTRONIC RESET VERIFIED; DISPLAY NOT INDEPENDENTLY OBSERVED'
+        receipt['status'] = 'CONSUMABLE TRANSACTION VERIFIED; DISPLAY NOT INDEPENDENTLY OBSERVED'
         durable_new(os.path.join(backup,'eeprom_after_reload.bin'), actual)
         durable_new(os.path.join(backup,'mirror_after_reload.private.json'), raw)
         event('post_start_merge','PASS')

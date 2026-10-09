@@ -19,8 +19,9 @@ import subprocess
 import threading
 import time
 
-from cartridge_codec import candidate, parse_record
+from cartridge_codec import candidate, parse_record, validate_legacy_material
 from cartridge_transaction import Device, read_file, durable_new, digest, sync_dir
+from consumable_backup import Store, capture, selected
 
 RUN = '/run/form3-cartridge-reset'
 SOCKET = RUN + '/broker.sock'
@@ -37,13 +38,20 @@ def token():
 
 
 def strict_request(value):
-    if not isinstance(value, dict) or value.get('operation') not in ('status', 'prepare', 'apply'):
+    if not isinstance(value, dict) or value.get('operation') not in ('status', 'prepare', 'apply', 'backup', 'backups', 'prepare_restore','materials','prepare_material','apply_material'):
         raise ValueError('Unknown reset operation')
-    required = {'operation', 'plan_id'} if value['operation'] == 'apply' else {'operation'}
+    required = {'operation', 'plan_id'} if value['operation'] in ('apply','apply_material') else {'operation'}
+    if value['operation']=='backup':required={'operation','kind'}
+    if value['operation']=='prepare_restore':required={'operation','backup_id'}
+    if value['operation']=='prepare_material':required={'operation','material'}
     if set(value) != required:
         raise ValueError('Unknown reset request field')
     if 'plan_id' in value and (not isinstance(value['plan_id'], str) or not re.match(r'^[a-f0-9]{48}$', value['plan_id'])):
         raise ValueError('Invalid plan identifier')
+    if 'kind' in value and value['kind'] not in ('cartridge','tank'):raise ValueError('Invalid backup kind')
+    if 'backup_id' in value and (not isinstance(value['backup_id'],str) or not re.fullmatch(r'[a-f0-9]{32}',value['backup_id'])):
+        raise ValueError('Invalid backup identifier')
+    if 'material' in value and (not isinstance(value['material'],str) or not re.fullmatch(r'FL[A-Z0-9]{6}',value['material'])):raise ValueError('Invalid material code')
     return value
 
 
@@ -57,27 +65,16 @@ def private_directory(path, mode=0o700, gid=0):
         raise ValueError('Unexpected private directory ownership or mode')
 
 
-def prepare_plan():
+def prepare_plan(restore_id=None, store=None, material_target=None):
     if read_file('/proc/device-tree/model', 256).rstrip(b'\0\n') != b'Formlabs Daguerre':
         raise ValueError('Only the reviewed Form 3 platform is supported')
     for path, pin in PINS.items():
         if digest(read_file(path, 64 << 20)) != pin:
             raise ValueError('Unsupported firmware component; no reset')
-    path = '/data/printernet_client/ping.json'
-    if not 0 <= time.time() - os.stat(path).st_mtime <= 30:
-        raise ValueError('Current cartridge selection unavailable or stale')
-    status = json.loads(read_file(path, 512 << 10).decode())['payload']['device_status']
-    carts = status.get('cartridges')
-    if not isinstance(carts, list) or len(carts) != 1 or carts[0].get('type') != 'CARTRIDGE_PRESENT':
-        raise ValueError('Exactly one selected cartridge is required')
-    name = carts[0].get('serial')
-    if not isinstance(name, str) or not re.match(r'^2d-[a-f0-9]{12}$', name):
-        raise ValueError('Unsupported cartridge identity format')
+    name=selected('cartridge')
     record_path = '/data/Cartridges/' + name + '.json'
     raw = read_file(record_path)
     record = parse_record(raw)
-    if record.get('ResinID') != 'FLGPCL02' or record.get('OriginalVolume_mL') != 1000:
-        raise ValueError('Only legacy Clear FLGPCL02 / 1000 mL is validated')
     plan = {'device_name': name, 'record_path': record_path, 'firmware':'2.5.6-2773',
             'boot_id':read_file('/proc/sys/kernel/random/boot_id',128).decode().strip(),
             'source_hashes':PINS, 'record_sha256':digest(raw),
@@ -88,31 +85,57 @@ def prepare_plan():
     time.sleep(0.25)
     if image != device.read_image():
         raise ValueError('Cartridge changed between reads')
-    target, rw, revised, decoded, changes = candidate(image, record, name)
+    code=validate_legacy_material(image,record,name)
+    if material_target is not None:
+        from material_catalog import allowed_materials
+        from cartridge_material import candidate as material_candidate
+        from read_ds2431_protection import read_memory
+        catalog=read_file('/data/settings/KnownConsumables.json',2<<20)
+        if material_target not in allowed_materials(catalog):raise ValueError('Target is not an explicit public Form 3 catalog entry')
+        if material_target==code:
+            return {},{'already_fresh':True,'material':code,'nominal_ml':1000,'action':'material_assignment','before':{'material':code},'after':{'material':code}}
+        control=read_memory(name,digest(image))
+        if any(control[i] in (0x55,0xaa) for i in (128,129)):raise ValueError('Material pages are protected or one-way')
+        target,revised,changes=material_candidate(image,record,name,material_target)
+        plan.update(material_target=material_target,catalog_sha256=digest(catalog),protection_b64=base64.b64encode(control[128:]).decode(),material_before_b64=base64.b64encode(image).decode(),
+                    eeprom_sha256=digest(image),target_sha256=digest(target),target_b64=base64.b64encode(target).decode(),initial_writecount=record['WriteCount'],target_writecount=record['WriteCount'])
+        Device(plan).preflight()
+        return plan,{'already_fresh':False,'material':code,'nominal_ml':1000,'action':'material_assignment',
+                     'before':{'material':code},'after':{'material':material_target},'usage_unchanged':True,'physical_resin_compatibility':'NOT ESTABLISHED'}
+    restored=None
+    if restore_id is not None:
+        if store is None:raise ValueError('Private restore store unavailable')
+        restored=store.restore_usage(restore_id,{'kind':'cartridge','device_name':name,'eeprom':image,'record':raw})
+        plan['restore_usage']=restored
+        plan['restore_backup_id']=restore_id
+    target, rw, revised, decoded, changes = candidate(image, record, name, restored)
     before = {k:record[k] for k in ('EstimatedVolumeDispensed_ml','DispenseCount','CumulativeDispenseTime_s','WriteCount')}
-    fresh = all(before[k] == 0 for k in before if k != 'WriteCount')
+    desired=restored or {k:0 for k in before if k!='WriteCount'}
+    fresh = all(before[k] == desired[k] for k in before if k != 'WriteCount')
     plan.update(eeprom_sha256=digest(image), target_sha256=digest(target),
                 target_b64=base64.b64encode(target).decode('ascii'),
                 initial_writecount=record['WriteCount'], target_writecount=revised['WriteCount'])
     device = Device(plan)
     device.preflight()
-    preview = {'material':'FLGPCL02','nominal_ml':1000,'before':before,
+    preview = {'material':code,'nominal_ml':1000,'before':before,
                'after':dict(before) if fresh else decoded['rw_copies'][0]['usage'], 'already_fresh':fresh,
+               'action':'restore_usage' if restored is not None else 'reset_usage',
                'identity_changed':False,'physical_volume_measured':False,
-               'format':'C/0, RW/1, 128 bytes', 'estimated_remaining_after_ml':1000}
+               'format':'C/0, RW/1, 128 bytes', 'estimated_remaining_after_ml':max(0,1000-desired['EstimatedVolumeDispensed_ml'])}
     return plan, preview
 
 
 class Broker(object):
     def __init__(self, root=ROOT, prepare=prepare_plan, execute=None):
         self.root, self.prepare_fn = root, prepare
+        self.backups=Store(os.path.join(root,'backups'))
         self.execute_fn = execute or self.execute
         self.lock = threading.RLock()
         self.worker = None
         self.plan = None
         self.deadline = 0
         self.closing = False
-        self.state = {'state':'AVAILABLE','supported_materials':['FLGPCL02'], 'format':'C/0 RW/1',
+        self.state = {'state':'AVAILABLE','supported_format':'1000 mL C/0 RW/1 with verified RO material', 'format':'C/0 RW/1',
                       'operation':'Electronic usage adjustment; not a physical refill'}
         if os.path.exists(os.path.join(root,'in-progress.json')):
             self.state = {'state':'RECOVERY_REQUIRED', 'error':'Previous transaction interrupted; review private backup before another reset'}
@@ -129,18 +152,39 @@ class Broker(object):
         strict_request(value)
         if value['operation'] == 'status':
             return self.status()
+        if value['operation']=='materials':
+            from material_catalog import allowed_materials
+            raw=read_file('/data/settings/KnownConsumables.json',2<<20)
+            return {'state':'MATERIALS','codes':allowed_materials(raw),'tank_write_available':False,
+                    'tank_reason':'Native eligibility checks, accounting side effects and rollback are not yet validated for a panel writer',
+                    'catalog_sha256':digest(raw)}
+        if value['operation']=='backups':
+            with self.lock:
+                if self.worker and self.worker.is_alive():raise ValueError('Wait for the current operation')
+                rows=self.backups.list()
+                return {'state':'BACKUPS','backups':rows[:12],'total':len(rows),'raw_download_available':False,
+                        'tank_restore_available':False,'restore_scope':'Same-cartridge usage only; identity and material unchanged'}
         with self.lock:
             if self.closing or self.state.get('state') == 'RECOVERY_REQUIRED':
                 raise ValueError('Reset unavailable pending recovery or shutdown')
             if self.worker and self.worker.is_alive():
                 raise ValueError('A reset operation is already running')
-            if value['operation'] == 'prepare':
+            if value['operation'] in ('prepare','prepare_restore','backup','prepare_material'):
                 self.plan = None
                 self.state = {'state':'PREPARING'}
-                target = self.prepare_worker
+                if value['operation']=='backup':
+                    self.state={'state':'BACKING_UP'}
+                    target=lambda:self.backup_worker(value['kind'])
+                elif value['operation']=='prepare_restore':
+                    target=lambda:self.prepare_worker(lambda:prepare_plan(value['backup_id'],self.backups))
+                elif value['operation']=='prepare_material':
+                    target=lambda:self.prepare_worker(lambda:prepare_plan(material_target=value['material']))
+                else:target = self.prepare_worker
             else:
                 if self.state.get('state') != 'READY' or value['plan_id'] != self.state.get('plan_id') or time.monotonic() > self.deadline:
                     raise ValueError('A matching unexpired preview is required')
+                if bool(self.plan.get('material_target')) != (value['operation']=='apply_material'):
+                    raise ValueError('Operation does not match the prepared transaction')
                 self.state = dict(self.state, state='APPLYING')
                 target = self.apply_worker
             self.worker = threading.Thread(target=target)
@@ -149,11 +193,18 @@ class Broker(object):
             self.worker.start()
             return dict(self.state)
 
-    def prepare_worker(self):
+    def backup_worker(self,kind):
+        try:
+            summary=self.backups.backup(kind)
+            with self.lock:self.state={'state':'BACKUP_COMPLETE','backup':summary,'eeprom_written':False}
+        except Exception as exc:
+            with self.lock:self.state={'state':'UNAVAILABLE','error':str(exc) if type(exc) is ValueError else 'Backup failed; inspect private diagnostics'}
+
+    def prepare_worker(self,prepare=None):
         try:
             if len(os.listdir(self.root)) >= 512:
                 raise ValueError('Private transaction retention limit reached; archive records before another reset')
-            plan, preview = self.prepare_fn()
+            plan, preview = (prepare or self.prepare_fn)()
             with self.lock:
                 self.plan = plan
                 self.deadline = time.monotonic() + 300
@@ -193,6 +244,7 @@ class Broker(object):
         receipt = json.loads(read_file(output,65536).decode())
         ok = code == 0 and receipt.get('stages',{}).get('post_start_merge') == 'PASS'
         summary = {'state':'COMPLETE' if ok else 'RECOVERY_REQUIRED', 'transaction_id':identity,
+                   'operation':receipt.get('operation'),
                    'stages':receipt.get('stages',{}), 'material':receipt.get('material'),
                    'usage':receipt.get('final_usage'), 'backup_retained':True,
                    'physical_volume_measured':False,'reboot_performed':False}

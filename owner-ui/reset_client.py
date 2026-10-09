@@ -9,11 +9,20 @@ SOCKET='/run/form3-cartridge-reset/broker.sock'
 
 
 class ResetClient(object):
-    def request(self,operation,plan_id=None):
-        if operation not in ('status','prepare','apply'):
+    def request(self,operation,plan_id=None,kind=None,backup_id=None,material=None):
+        if operation not in ('status','prepare','apply','backup','backups','prepare_restore','materials','prepare_material','apply_material'):
             raise ValueError('Unknown reset operation')
         data={'operation':operation}
-        if operation=='apply':data['plan_id']=plan_id
+        if operation in ('apply','apply_material'):data['plan_id']=plan_id
+        if operation=='prepare_material':
+            if not isinstance(material,str) or not __import__('re').fullmatch(r'FL[A-Z0-9]{6}',material):raise ValueError('Invalid material code')
+            data['material']=material
+        if operation=='backup':
+            if kind not in ('cartridge','tank'):raise ValueError('Invalid backup kind')
+            data['kind']=kind
+        if operation=='prepare_restore':
+            if not isinstance(backup_id,str) or not __import__('re').fullmatch(r'[a-f0-9]{32}',backup_id):raise ValueError('Invalid backup identifier')
+            data['backup_id']=backup_id
         info=os.lstat(SOCKET)
         if not stat.S_ISSOCK(info.st_mode) or info.st_uid!=0 or info.st_mode & 0o007:
             raise ValueError('Untrusted local reset broker')

@@ -39,8 +39,16 @@ class BrowserProvider(server.SampleProvider):
   return r
 class ResetFixture:
  def __init__(self):self.state={'state':'AVAILABLE'};self.applies=0
- def request(self,op,plan_id=None):
+ def request(self,op,plan_id=None,**kwargs):
   if op=='prepare':self.state={'state':'READY','plan_id':'a'*48,'preview':{'material':'FLGPCL02','nominal_ml':1000,'before':{'WriteCount':10,'EstimatedVolumeDispensed_ml':250},'after':{'WriteCount':11,'EstimatedVolumeDispensed_ml':0}}}
+  if op=='backup':self.state={'state':'BACKUP_COMPLETE','backup':{'id':'b'*32,'kind':kwargs['kind'],'bytes':128 if kwargs['kind']=='cartridge' else 512,'validation':'SYNTHETIC SNAPSHOT'}}
+  if op=='backups':return {'state':'BACKUPS','total':2,'backups':[{'id':'b'*32,'kind':'cartridge','material':'FLGPCL04','created':1700000000,'eeprom_sha256':'c'*64},{'id':'d'*32,'kind':'tank','material':'FLGPCL04','created':1700000000,'eeprom_sha256':'e'*64}]}
+  if op=='materials':return {'state':'MATERIALS','codes':['FLGPCL04','FLGPWH41'],'tank_write_available':False,'tank_reason':'Native eligibility and rollback are not yet validated for a panel writer.'}
+  if op=='prepare_material':self.state={'state':'READY','plan_id':'f'*48,'preview':{'action':'material_assignment','material':'FLGPCL02','nominal_ml':1000,'before':{'material':'FLGPCL02'},'after':{'material':kwargs['material']}}}
+  if op=='prepare_restore':self.state={'state':'READY','plan_id':'a'*48,'preview':{'action':'restore_usage','material':'FLGPCL04','nominal_ml':1000,'before':{'WriteCount':11,'EstimatedVolumeDispensed_ml':0},'after':{'WriteCount':12,'EstimatedVolumeDispensed_ml':250}}}
+  if op=='apply_material':
+   if plan_id!='f'*48:raise ValueError('Unexpected material fixture plan')
+   self.applies+=1;self.state={'state':'COMPLETE','stages':{'synthetic_material':'PASS'}}
   if op=='apply':
    if plan_id!='a'*48:raise ValueError('Unexpected fixture plan')
    self.applies+=1;self.state={'state':'COMPLETE','stages':{'synthetic_transaction':'PASS'},'usage':{'EstimatedVolumeDispensed_ml':0}}
@@ -84,6 +92,8 @@ try:
  command('WebDriver:SetWindowRect',{'width':1440,'height':1040})
  command('WebDriver:Navigate',{'url':'http://127.0.0.1:1328/'})
  def js(script):return command('WebDriver:ExecuteScript',{'script':script,'args':[],'newSandbox':False,'sandbox':'default','line':1,'filename':'authored-fixture'})
+ shot=command('WebDriver:TakeScreenshot',{'id':None,'full':False,'scroll':False})['value']
+ open('/result/login-DEMO.png','wb').write(base64.b64decode(shot))
  js('document.getElementById("token").value="browser-fixture-only-owner-secret";document.getElementById("login-form").requestSubmit();')
  deadline=time.monotonic()+8
  while time.monotonic()<deadline:
@@ -112,8 +122,8 @@ try:
    raise RuntimeError('Historical clock warning not rendered')
   results.append({'page':page,'rendered':True})
   if page=='diagnostics' and not js('return document.getElementById("content").textContent.includes("Heater fan speed") && document.getElementById("content").textContent.includes("not proof of a successful print");')['value']:raise RuntimeError('Capture diagnostics not rendered')
-  if page in ('status','sensors','materials','diagnostics'):
-   shot=command('WebDriver:TakeScreenshot',{'id':None,'full':False,'scroll':False})['value']
+  if page in pages:
+   shot=command('WebDriver:TakeScreenshot',{'id':None,'full':True,'scroll':False})['value']
    open('/result/'+page+'-DEMO.png','wb').write(base64.b64decode(shot))
  js('document.querySelector("nav [data-page=status]").click();')
  if js('return document.querySelectorAll("nav button").length;')['value']!=5:raise RuntimeError('Navigation not consolidated')
@@ -134,12 +144,36 @@ try:
  js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==="Prepare a fresh preview").click();')
  js('document.getElementById("form-reset-login").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(1.8)
  if not js('return !!document.getElementById("form-reset-confirmation");')['value']:raise RuntimeError('Reset preview not rendered')
- js('document.getElementById("form-reset-confirmation").value="RESET CLEAR USAGE";document.getElementById("form-reset-secret").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(.3)
+ shot=command('WebDriver:TakeScreenshot',{'id':None,'full':False,'scroll':False})['value']
+ open('/result/reset-preview-SYNTHETIC.png','wb').write(base64.b64decode(shot))
+ js('document.getElementById("form-reset-confirmation").value="APPLY CARTRIDGE USAGE";document.getElementById("form-reset-secret").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(.3)
  if reset_fixture.applies!=1:raise RuntimeError('Synthetic apply not called exactly once')
  if not js('return document.querySelector("dialog").textContent.includes("COMPLETE") && !document.querySelector("dialog").textContent.includes("browser-fixture-only-owner-secret");')['value']:raise RuntimeError('Reset result or redaction failed')
  shot=command('WebDriver:TakeScreenshot',{'id':None,'full':False,'scroll':False})['value']
  open('/result/reset-SYNTHETIC.png','wb').write(base64.b64decode(shot))
  js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==="Close").click();')
+ for label,filename,expected in [('Back up cartridge','backup-cartridge-SYNTHETIC','BACKUP COMPLETE'),('Back up tank','backup-tank-SYNTHETIC','BACKUP COMPLETE'),('Review saved backups','backups-SYNTHETIC','BACKUPS'),('Review material assignment','material-assignment-SYNTHETIC','MATERIALS')]:
+  js('Array.from(document.querySelectorAll("button")).find(b=>b.textContent==="Review cartridge reset").click();');time.sleep(.2)
+  js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==='+json.dumps(label)+').click();')
+  js('document.getElementById("form-reset-login").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(1.7)
+  if not js('return document.querySelector("dialog").textContent.includes('+json.dumps(expected)+');')['value']:raise RuntimeError('Backup/material dialog failed')
+  shot=command('WebDriver:TakeScreenshot',{'id':None,'full':False,'scroll':False})['value']
+  open('/result/'+filename+'.png','wb').write(base64.b64decode(shot))
+  if expected in ('BACKUPS','MATERIALS'):
+   label2='Review saved usage restore' if expected=='BACKUPS' else 'Review cartridge material change'
+   js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==='+json.dumps(label2)+').click();')
+   js('document.getElementById("form-reset-login").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(1.7)
+   if not js('return !!document.getElementById("form-reset-confirmation");')['value']:raise RuntimeError('Restore/material preview missing')
+   if not js('return Array.from(document.querySelectorAll("dialog button")).some(b=>b.textContent==="Back up tank");')['value']:raise RuntimeError('Ready preview hides backup navigation')
+   suffix='restore' if expected=='BACKUPS' else 'material'
+   shot=command('WebDriver:TakeScreenshot',{'id':None,'full':False,'scroll':False})['value']
+   open('/result/'+suffix+'-preview-SYNTHETIC.png','wb').write(base64.b64decode(shot))
+   phrase='APPLY CARTRIDGE USAGE' if expected=='BACKUPS' else 'CHANGE CARTRIDGE MATERIAL'
+   js('document.getElementById("form-reset-confirmation").value='+json.dumps(phrase)+';document.getElementById("form-reset-secret").value="browser-fixture-only-owner-secret";document.querySelector("dialog form").requestSubmit();');time.sleep(.3)
+   if not js('return document.querySelector("dialog").textContent.includes("COMPLETE");')['value']:raise RuntimeError('Restore/material synthetic apply failed')
+   shot=command('WebDriver:TakeScreenshot',{'id':None,'full':False,'scroll':False})['value']
+   open('/result/'+suffix+'-complete-SYNTHETIC.png','wb').write(base64.b64decode(shot))
+  js('Array.from(document.querySelectorAll("dialog button")).find(b=>b.textContent==="Close").click();')
  js('document.getElementById("logout").click();');time.sleep(.2)
  if not js('return document.getElementById("dashboard").hidden;')['value']:raise RuntimeError('Logout failed')
  print(json.dumps({'passed':True,'pages':results,'cartridge_reset_browser_flow':'SYNTHETIC PASS; no hardware writes','settings_saved':True,'unsaved_draft_preserved':True,'logout':True,'data':'DEMO ONLY','network_namespace':'loopback only','main_navigation_entries':5,'small_viewport':small_view,'mobile_no_horizontal_overflow':True,'gpu_utilization_unavailable':True,'firefox_content_sandbox_disabled':False}))

@@ -53,7 +53,7 @@
       "destination": "README.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "First-person public project introduction; curated navigation and explicit compatibility limits.",
-      "sha256": "c8842947dbd7da0a5a6f47736a7659f9c8e1c19c3ad6a3940ec7ea15ed7e9b1b",
+      "sha256": "4ffb5668bb4338f46cad6ffad2ff4e3134e5199a4e575d33ddc1cee6a926c1dd",
       "source": "README.md"
     },
     {
@@ -77,7 +77,7 @@
       "destination": "VERSION",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Project version, distribution boundary or retained authorship/third-party notice.",
-      "sha256": "b3b13b546714e64193eb7d674e19d2041f920e437a0cd42d3de3d77389fb76ba",
+      "sha256": "07c45b4ad6957260e9b84da990582e1d8da73fdd94836606ed5297143e0eb19b",
       "source": "VERSION"
     },
     {
@@ -493,7 +493,7 @@
       "destination": "docs/public/CARTRIDGE_PANEL_RESET.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
-      "sha256": "6d5d53d3743784cd4c5ae23b85754d7ae398ddb9bb432c7989b2cfdedf3ff51d",
+      "sha256": "8baf8c26ff1ad5658afc77ec6299845d8b8fb16bcaada47a60a19808fd4fa775",
       "source": "docs/public/CARTRIDGE_PANEL_RESET.md"
     },
     {
@@ -522,10 +522,18 @@
     },
     {
       "category": "guide",
+      "destination": "docs/public/CONSUMABLE_BACKUPS.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored consumable extension, source research or sanitized acceptance; no raw firmware, device secrets or proprietary decompilation.",
+      "sha256": "93d50dc3f6362b8f949be749ad86edfec33f96a691a2471b87b40f016a766a13",
+      "source": "docs/public/CONSUMABLE_BACKUPS.md"
+    },
+    {
+      "category": "guide",
       "destination": "docs/public/EVIDENCE_STATUS.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored public-source review, documentation or synthetic validation; no device evidence or vendor code.",
-      "sha256": "abd46f1ac67e44c3d9eda3a8db1f9039301f895b8a141b6b23cfefe4971b8f17",
+      "sha256": "5f01786ca434df5a6892eb15453dad55f290c7e584952a85b3788067fac20b79",
       "source": "docs/public/EVIDENCE_STATUS.md"
     },
     {
@@ -575,6 +583,22 @@
       "provenance": "Authored scoped reproduction guide; no private research records or recovered vendor source.",
       "sha256": "74925b4827580115fe343815f6000f5141b376b3702101fea4abda54208011ea",
       "source": "docs/public/OWNER_INSTALL.md"
+    },
+    {
+      "category": "guide",
+      "destination": "docs/public/PANEL_FIXTURE_GUIDE.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored consumable extension, source research or sanitized acceptance; no raw firmware, device secrets or proprietary decompilation.",
+      "sha256": "05eec520f2c3a6b776d45f545d6e71bb8e52b4f3ce8cb3846e68b875a8587bd0",
+      "source": "docs/public/PANEL_FIXTURE_GUIDE.md"
+    },
+    {
+      "category": "guide",
+      "destination": "docs/public/PANEL_GUIDE.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored consumable extension, source research or sanitized acceptance; no raw firmware, device secrets or proprietary decompilation.",
+      "sha256": "e57c6515e5d4b8f369eefb87821a01341356f50685cf92f6e8080b8cb226dc32",
+      "source": "docs/public/PANEL_GUIDE.md"
     },
     {
       "category": "guide",
@@ -641,6 +665,22 @@
       "source": "docs/public/SECURE_SSH.md"
     },
     {
+      "category": "guide",
+      "destination": "docs/public/TANK_DATA.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored consumable extension, source research or sanitized acceptance; no raw firmware, device secrets or proprietary decompilation.",
+      "sha256": "2af336bcd845cce0a33f55e56d13636742bf47d47ae5f808e41de0e67278db8a",
+      "source": "docs/public/TANK_DATA.md"
+    },
+    {
+      "category": "guide",
+      "destination": "docs/public/THIRD_PARTY_RESIN.md",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored consumable extension, source research or sanitized acceptance; no raw firmware, device secrets or proprietary decompilation.",
+      "sha256": "202e4f1a654df089da4ef2b564af5dcd8d5c914973c5e38d0e015069678497e3",
+      "source": "docs/public/THIRD_PARTY_RESIN.md"
+    },
+    {
       "category": "original-artwork",
       "destination": "docs/public/assets/clip-orientation.svg",
       "license": "MIT; Mathias Zimmermann",
@@ -655,6 +695,342 @@
       "provenance": "Original conditional signal diagram; unapproved auxiliary pins are explicitly unconnected.",
       "sha256": "8cd6601a25fdb0bcbe84f2c7f719a4d2697168fe4911053ae6c6842cbaa3a27d",
       "source": "docs/public/assets/clip-signal-map.svg"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-0.5.14/backup-cartridge-SYNTHETIC.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "e4fdae013d43dbbfd99c03ae5efcfa230b4c78d21b01260aa30d7cced1602321",
+      "source": "docs/public/assets/panel-0.5.14/backup-cartridge-SYNTHETIC.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-0.5.14/backup-tank-SYNTHETIC.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "2eba4062c52e61a9124348a341c7fbc42f3621f8210cd8f9900944ed81636938",
+      "source": "docs/public/assets/panel-0.5.14/backup-tank-SYNTHETIC.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-0.5.14/backups-SYNTHETIC.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "740429e40d80439cddf7c05f779adba162edd5f783365dac24c9c97f7afdf5f0",
+      "source": "docs/public/assets/panel-0.5.14/backups-SYNTHETIC.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-0.5.14/diagnostics-DEMO.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "454018fd0733f5c8846a2ac152d0af2948573f564f929fee10b88b76ee3f4a09",
+      "source": "docs/public/assets/panel-0.5.14/diagnostics-DEMO.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-0.5.14/jobs-DEMO.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "74853d04242bcf7a61fae18c3f9f51bfdee0f5e1b793f45a2f6f4a690e677264",
+      "source": "docs/public/assets/panel-0.5.14/jobs-DEMO.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-0.5.14/login-DEMO.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "7684d382fb0b1472a151870417f41c247c3ae2ff3ab87c48cb8eadee262c0f67",
+      "source": "docs/public/assets/panel-0.5.14/login-DEMO.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-0.5.14/maintenance-DEMO.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "08d866dbabef9317ce4ff40c4f8046390d44f0fbe64e1282e912a3d725e64fc3",
+      "source": "docs/public/assets/panel-0.5.14/maintenance-DEMO.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-0.5.14/material-assignment-SYNTHETIC.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "a0ba4e17ba34a722d681f3bd0685fd5be79128ba49f5e1bcb8c89e9b796f80e6",
+      "source": "docs/public/assets/panel-0.5.14/material-assignment-SYNTHETIC.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-0.5.14/material-complete-SYNTHETIC.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "0fa778983352db8de45f760ad08ff2388ed5c68e3b4ea33720b19afc1f501499",
+      "source": "docs/public/assets/panel-0.5.14/material-complete-SYNTHETIC.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-0.5.14/material-preview-SYNTHETIC.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "a5912fcc2f176e7fe69b0992ca097dedc666f9fd854b1d57df0ad6943d319ece",
+      "source": "docs/public/assets/panel-0.5.14/material-preview-SYNTHETIC.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-0.5.14/materials-DEMO.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "f7d7af82b86955d1a463cca7cbc6c963d81c894adcecce49d8e60ac990981e36",
+      "source": "docs/public/assets/panel-0.5.14/materials-DEMO.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-0.5.14/network-DEMO.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "13f764dd04eaa9a10605fcb5e12c212d48370c70fc3d7e01fe28665ead4ec7d0",
+      "source": "docs/public/assets/panel-0.5.14/network-DEMO.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-0.5.14/overview-mobile-DEMO.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "01581547124a43ec1fffd856b356d7729eac9f3d374327096249b00e76aa4f20",
+      "source": "docs/public/assets/panel-0.5.14/overview-mobile-DEMO.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-0.5.14/privacy-DEMO.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "9fb6f4ec6b379c891e4b60cf805d3d2f748a59c7d9b0535fe3a3e80426229b41",
+      "source": "docs/public/assets/panel-0.5.14/privacy-DEMO.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-0.5.14/reset-SYNTHETIC.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "7adc72addbbdcc2334cb2646948b0f475dfdb104261a7e39dd62d3b84dae55df",
+      "source": "docs/public/assets/panel-0.5.14/reset-SYNTHETIC.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-0.5.14/reset-preview-SYNTHETIC.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "76a292f8905a8dc6690cf80db3f3348f89de22e7d81f940c7a58b6007eb81cd0",
+      "source": "docs/public/assets/panel-0.5.14/reset-preview-SYNTHETIC.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-0.5.14/restore-complete-SYNTHETIC.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "7adc72addbbdcc2334cb2646948b0f475dfdb104261a7e39dd62d3b84dae55df",
+      "source": "docs/public/assets/panel-0.5.14/restore-complete-SYNTHETIC.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-0.5.14/restore-preview-SYNTHETIC.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "10749bae33c7973aabf62ac1f6a70598c55c39806dd030f0de9df41252f74032",
+      "source": "docs/public/assets/panel-0.5.14/restore-preview-SYNTHETIC.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-0.5.14/sensors-DEMO.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "d69b57e98229f32e8ffe5b51ed0e4f44ae260aac0700d3376e4619b17e9ba0db",
+      "source": "docs/public/assets/panel-0.5.14/sensors-DEMO.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-0.5.14/settings-DEMO.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "85f9957b6fa28635254ea5f17b72114bcbbd2545af5595acbcba4b667780c416",
+      "source": "docs/public/assets/panel-0.5.14/settings-DEMO.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-0.5.14/status-DEMO.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "0ade1e34a783c0ca5afd622f53a9d60757239ea9033c3977680b924f4ed6a5a9",
+      "source": "docs/public/assets/panel-0.5.14/status-DEMO.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-live-0.5.15/authentication-LIVE.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "276596bfce14fd4dc98f535946afbb625a8e83e05648711fe763a7c306f58803",
+      "source": "docs/public/assets/panel-live-0.5.15/authentication-LIVE.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-live-0.5.15/backup-cartridge-LIVE.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "b90afb10576d7e28dfef278b2c3fd345d031cacd129b955318ee1747fff11139",
+      "source": "docs/public/assets/panel-live-0.5.15/backup-cartridge-LIVE.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-live-0.5.15/backup-tank-LIVE.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "54f3638a3f29c8eebcc34e03c4e51916f22f3bf1fff9ea7553334255a66fb7b0",
+      "source": "docs/public/assets/panel-live-0.5.15/backup-tank-LIVE.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-live-0.5.15/backups-LIVE.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "84dc28401bdf5d7cd355e1b63fef6e8c1911d8c55ccfeb1d75184b770ecf91a4",
+      "source": "docs/public/assets/panel-live-0.5.15/backups-LIVE.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-live-0.5.15/diagnostics-LIVE.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "7463a831f9e460003c7a07fbb16ab8b8c6ad1c71d6116b0ba4de73873c0f617b",
+      "source": "docs/public/assets/panel-live-0.5.15/diagnostics-LIVE.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-live-0.5.15/jobs-LIVE.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "7e2e90e87d18c52807684162ab5d8e7ac8a3064a91fe100ba72f97cd61564bca",
+      "source": "docs/public/assets/panel-live-0.5.15/jobs-LIVE.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-live-0.5.15/maintenance-LIVE.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "c9e0c2f682fbe81e9a5b97db6acd5974f6aa5abf95deb9588f4c504c914d64b9",
+      "source": "docs/public/assets/panel-live-0.5.15/maintenance-LIVE.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-live-0.5.15/material-catalog-LIVE.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "809d2aa6bc6d6e4484ade9ff45b0dffce0648400b7ba3a60222e9bb7c7b5f3a5",
+      "source": "docs/public/assets/panel-live-0.5.15/material-catalog-LIVE.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-live-0.5.15/material-noop-LIVE.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "94d01ab3b15cd8462389990beb6b6fb7d71e1e64d8e3cceac335ea18b342ec9a",
+      "source": "docs/public/assets/panel-live-0.5.15/material-noop-LIVE.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-live-0.5.15/material-preview-LIVE.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "6ffdb93ac18e09e4b142cb4f569bd90120e50b5e988ff10db378754b52c9c10f",
+      "source": "docs/public/assets/panel-live-0.5.15/material-preview-LIVE.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-live-0.5.15/materials-LIVE.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "586e4216226e88138af673d35c56631dbeb8fc20f77a3722b0608cbbeede5598",
+      "source": "docs/public/assets/panel-live-0.5.15/materials-LIVE.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-live-0.5.15/mobile-LIVE.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "92e4d2cc9c21525ff8052d377c9ac9407fb8147c5b3cea4d6b00f5a82b8de5db",
+      "source": "docs/public/assets/panel-live-0.5.15/mobile-LIVE.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-live-0.5.15/network-LIVE.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "2a58089d8432fbaeea9224981b4b8c1017154595259e49858ed30cc35a213a40",
+      "source": "docs/public/assets/panel-live-0.5.15/network-LIVE.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-live-0.5.15/privacy-LIVE.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "cd61f9ead901772038d929153df5965c17abdd59b8444e5cb9b9b08b28281058",
+      "source": "docs/public/assets/panel-live-0.5.15/privacy-LIVE.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-live-0.5.15/restore-preview-LIVE.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "118e31f58a42628d9fb741ab0e20b5b7cda0cf67afb04530acc057b3d0cb2991",
+      "source": "docs/public/assets/panel-live-0.5.15/restore-preview-LIVE.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-live-0.5.15/sensors-LIVE.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "66a8ddfcbdf351706e4515549344feba14aa8dff4e0b43f311e3a7b5baf9d3c3",
+      "source": "docs/public/assets/panel-live-0.5.15/sensors-LIVE.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-live-0.5.15/settings-LIVE.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "bb2f4c495620388962a9be3a50254b6502902c19b9b7e1bf890d6818d77f6fcb",
+      "source": "docs/public/assets/panel-live-0.5.15/settings-LIVE.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-live-0.5.15/status-LIVE.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "1f3db8ee6c43f2d69366712a85df0ff6c1fdfbe660d0d5505bfe1d5d3e1d655d",
+      "source": "docs/public/assets/panel-live-0.5.15/status-LIVE.png"
+    },
+    {
+      "category": "original-artwork",
+      "destination": "docs/public/assets/panel-live-0.5.15/usage-preview-LIVE.png",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Original owner-panel capture; private identifiers redacted before capture; metadata removed. LIVE and synthetic galleries are separate.",
+      "sha256": "8a4d85be8b7c6d72ee8fe9d94a6beb4eda3ba1f58f464cd29013be4afa973b9d",
+      "source": "docs/public/assets/panel-live-0.5.15/usage-preview-LIVE.png"
+    },
+    {
+      "category": "compatibility-checksums",
+      "destination": "docs/public/consumable_panel_acceptance.json",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored consumable extension, source research or sanitized acceptance; no raw firmware, device secrets or proprietary decompilation.",
+      "sha256": "36fdeca59ad6c7aa7fabc6a1f89b4011a352ec6d5c44c5f5dcd3e1b612259635",
+      "source": "docs/public/consumable_panel_acceptance.json"
+    },
+    {
+      "category": "compatibility-checksums",
+      "destination": "docs/public/tank_codec_acceptance.json",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored consumable extension, source research or sanitized acceptance; no raw firmware, device secrets or proprietary decompilation.",
+      "sha256": "4e1e1b1e9e82a54ae756d89e55ae5c7571510ba8b462b471621055cf94bf533e",
+      "source": "docs/public/tank_codec_acceptance.json"
     },
     {
       "category": "original-artwork",
@@ -725,7 +1101,7 @@
       "destination": "owner-maintenance/bootstrap.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
-      "sha256": "438e4a2b48bb9f625005fa8b4e9768da76b7c1a12a1c28e3bda5dbd69c36313f",
+      "sha256": "4d68eed9935943c37236b72e529e18b3e4fc3a16ca2ebb6e50e978304df91c48",
       "source": "owner-maintenance/bootstrap.py"
     },
     {
@@ -733,7 +1109,7 @@
       "destination": "owner-maintenance/cartridge_broker.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
-      "sha256": "b58681df2d7ecce42bd3b230ed1973c6ef256d83f5da33cdeb4ff6b7a44af3f5",
+      "sha256": "f682b647dce06cd6b3c8ac0fb532c3da79037906d01972870bac0b0263d7175a",
       "source": "owner-maintenance/cartridge_broker.py"
     },
     {
@@ -741,16 +1117,32 @@
       "destination": "owner-maintenance/cartridge_codec.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
-      "sha256": "1068ba93e77a7964cdccb5abf35a91a706620a05cad341d4dc74b9b225b1cb40",
+      "sha256": "8dbbb2ce271f9236c1d75bb8a46f1143408b736fbdbbd60ff5318ca24bb9a158",
       "source": "owner-maintenance/cartridge_codec.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "owner-maintenance/cartridge_material.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored consumable extension, source research or sanitized acceptance; no raw firmware, device secrets or proprietary decompilation.",
+      "sha256": "9ba2d81007956937f15264875aecdeaf0d1b379ba0e8dcc9aec440f7b9cbe2ee",
+      "source": "owner-maintenance/cartridge_material.py"
     },
     {
       "category": "authored-code",
       "destination": "owner-maintenance/cartridge_transaction.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
-      "sha256": "ab390ee96cb071e3980d7588a2ae502038a6c237d5459d39d4300f07c92a9c4d",
+      "sha256": "886e56cd1ed67fba7485e95ac02f2a7caeffe195338e3e04263a2568322f242a",
       "source": "owner-maintenance/cartridge_transaction.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "owner-maintenance/consumable_backup.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored consumable extension, source research or sanitized acceptance; no raw firmware, device secrets or proprietary decompilation.",
+      "sha256": "1bdc7ad7316e50248197330885a963db2a1f805d235389c8457d38d13b7ec582",
+      "source": "owner-maintenance/consumable_backup.py"
     },
     {
       "category": "authored-code",
@@ -759,6 +1151,14 @@
       "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
       "sha256": "8a56ebe47eaace4caf43a5e78f0d8f949d2b88067283f4cb415948287f43d3c9",
       "source": "owner-maintenance/lan_ipv4.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "owner-maintenance/material_catalog.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored consumable extension, source research or sanitized acceptance; no raw firmware, device secrets or proprietary decompilation.",
+      "sha256": "f61d5953ac5f1c69542db87adacdef7a8e84ce747b6b6e0e898befce66a9e00b",
+      "source": "owner-maintenance/material_catalog.py"
     },
     {
       "category": "authored-code",
@@ -781,8 +1181,16 @@
       "destination": "owner-maintenance/package_format.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored project implementation; reviewed source, no vendor payload or credentials.",
-      "sha256": "7896ca01321876f34d386edd54f3f7df62df313fe96de214ae1d06ead5da1440",
+      "sha256": "3998bff2356f790fcd7bf2d12985f65322b30633038f870edc7a70a700d39a2d",
       "source": "owner-maintenance/package_format.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "owner-maintenance/read_ds2431_protection.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored consumable extension, source research or sanitized acceptance; no raw firmware, device secrets or proprietary decompilation.",
+      "sha256": "61dc35a0c1176b9c38d7f4b90eb8b928596f8bc79f43e3bd6de91df7bf3cfda0",
+      "source": "owner-maintenance/read_ds2431_protection.py"
     },
     {
       "category": "authored-code",
@@ -793,11 +1201,19 @@
       "source": "owner-maintenance/socket_launcher.py"
     },
     {
+      "category": "authored-code",
+      "destination": "owner-maintenance/tank_codec.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored consumable extension, source research or sanitized acceptance; no raw firmware, device secrets or proprietary decompilation.",
+      "sha256": "868b02d4f93673636a2910825265e3d17918cf45c1e66cf227aad333cd6cb275",
+      "source": "owner-maintenance/tank_codec.py"
+    },
+    {
       "category": "guide",
       "destination": "owner-ui/README.md",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored standalone panel/read-adapter source or project documentation; no vendor payload.",
-      "sha256": "79dffd53c9a6a558ffb85d0329747ab4df3f3422d3281b90cf3e7d876b548c39",
+      "sha256": "5c224bad53320827bcf762d1b779318afdd37cbe408daf20ece25260425a3c3d",
       "source": "owner-ui/README.md"
     },
     {
@@ -837,7 +1253,7 @@
       "destination": "owner-ui/panel_data.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored standalone panel/read-adapter source or project documentation; no vendor payload.",
-      "sha256": "6f412ea877d1a52de55822d15038d0621d6296732e6fe9a758503ad042403073",
+      "sha256": "03f63addd0ee84350eed98fc5fd3dd16483c83bf0222106d606ba6973ee1faf4",
       "source": "owner-ui/panel_data.py"
     },
     {
@@ -845,7 +1261,7 @@
       "destination": "owner-ui/reset_client.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
-      "sha256": "a836046152eafc9cfe7660349d682af1469ba27029a774f6839ebf56e10025c0",
+      "sha256": "a87ebef419250fd84c3ef8d077a62445f0efb21577ff0aee7ad4d9e548543f5a",
       "source": "owner-ui/reset_client.py"
     },
     {
@@ -853,7 +1269,7 @@
       "destination": "owner-ui/server.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored standalone panel/read-adapter source or project documentation; no vendor payload.",
-      "sha256": "16477c44fd24241f2bcc0177a7a17b58be1256f4aac7c327e8fc5033eb492b0d",
+      "sha256": "4fa854c6c36cdad8a2693dd1533d6f9997b2affccf67ae31e3cd6dbecb4bdac2",
       "source": "owner-ui/server.py"
     },
     {
@@ -877,7 +1293,7 @@
       "destination": "owner-ui/static/reset.js",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
-      "sha256": "82203b15234277ec4b8c49157b5f848c2135f05abcbbc846645afbb7ea482efa",
+      "sha256": "adb2969a59508007fbed0f106161841a84b8c0724df390cc575e65eeab1e3e02",
       "source": "owner-ui/static/reset.js"
     },
     {
@@ -1082,6 +1498,14 @@
     },
     {
       "category": "synthetic-test",
+      "destination": "tests/test_cartridge_material.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored consumable extension, source research or sanitized acceptance; no raw firmware, device secrets or proprietary decompilation.",
+      "sha256": "333efe9ce292a94c6fd48901a1c5594020614514f2b37fcc3ebbb05b202f2685",
+      "source": "tests/test_cartridge_material.py"
+    },
+    {
+      "category": "synthetic-test",
       "destination": "tests/test_cartridge_memory.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored static/read-only metadata inspection, synthetic tests or generic reproduction guide; no keys or acquired cartridge data.",
@@ -1101,7 +1525,7 @@
       "destination": "tests/test_cartridge_reset_broker.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
-      "sha256": "96e67f2c5de45788614ef2f47bc7c393a510904235cfb8fb1f3bbcc0d3f7210c",
+      "sha256": "947f1554bda0a862135dcc0e08ba844f6b33d31caf6669b57f2894a007d7d0f9",
       "source": "tests/test_cartridge_reset_broker.py"
     },
     {
@@ -1117,7 +1541,7 @@
       "destination": "tests/test_cartridge_reset_codec.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
-      "sha256": "3779c15293fee7c854eacbbf51b6ef4f1ab240b5ccf81fbbd756c90c69072ae8",
+      "sha256": "7d00169c08c5e7c41c1ef6983b67cc05c55eaecfa207ad42ca509040a0c2155b",
       "source": "tests/test_cartridge_reset_codec.py"
     },
     {
@@ -1125,7 +1549,7 @@
       "destination": "tests/test_cartridge_reset_http.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored scoped Clear usage adjustment, synthetic tests or user documentation. No device secrets or proprietary extracts.",
-      "sha256": "4b6f07d15f570a356b1080000e81f4ca9ad4c73c8d42fb02057675243a68e1bd",
+      "sha256": "1af20049fd01e87439c45ebf2713fa531ba0e43665623732e2a34a4e810ab9c7",
       "source": "tests/test_cartridge_reset_http.py"
     },
     {
@@ -1143,6 +1567,14 @@
       "provenance": "Authored synthetic failure model or sanitized native-function findings; no vendor code, real consumable bytes, keys or device writer.",
       "sha256": "e9cc05ce89ac03c0f3620e4c6e4e7a53e00e0f2b9030d28093981e32b665c0fe",
       "source": "tests/test_cartridge_writeback_model.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_consumable_backup.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored consumable extension, source research or sanitized acceptance; no raw firmware, device secrets or proprietary decompilation.",
+      "sha256": "b59efa1e89e26cfe5e7f87b2c612e1b1c18c9b5a7cd14279169f43b8af12b292",
+      "source": "tests/test_consumable_backup.py"
     },
     {
       "category": "synthetic-test",
@@ -1250,6 +1682,14 @@
     },
     {
       "category": "synthetic-test",
+      "destination": "tests/test_panel_material_catalog.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored consumable extension, source research or sanitized acceptance; no raw firmware, device secrets or proprietary decompilation.",
+      "sha256": "e0900a8cd742e252a7432a073012c1461f78005df139c4009d7f1cd2c0622365",
+      "source": "tests/test_panel_material_catalog.py"
+    },
+    {
+      "category": "synthetic-test",
       "destination": "tests/test_post_print_review.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored bounded read-only capture/review tool or synthetic safety fixture; no acquired records.",
@@ -1351,6 +1791,14 @@
       "provenance": "Authored synthetic test/driver; optional evidence cases require separately supplied local input and are never fabricated as passed.",
       "sha256": "2c346ba51789593005ea8f25f12dbb5e34a00b75fd1c76724e0d6eb9be8c2786",
       "source": "tests/test_status_research.py"
+    },
+    {
+      "category": "synthetic-test",
+      "destination": "tests/test_tank_codec.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored consumable extension, source research or sanitized acceptance; no raw firmware, device secrets or proprietary decompilation.",
+      "sha256": "dee1a2cfa13069b4ce3cc623d75cf2e543608cf9642f5bde8296a97c692a006a",
+      "source": "tests/test_tank_codec.py"
     },
     {
       "category": "synthetic-test",
@@ -1610,6 +2058,14 @@
     },
     {
       "category": "authored-code",
+      "destination": "tools/inspect_tank_snapshot.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored consumable extension, source research or sanitized acceptance; no raw firmware, device secrets or proprietary decompilation.",
+      "sha256": "466f9d558ad0f8c190d795ea70ec9dbb0024e08be2aa0f74b81d34a5fc5e60fa",
+      "source": "tools/inspect_tank_snapshot.py"
+    },
+    {
+      "category": "authored-code",
       "destination": "tools/model_cartridge_reconciliation.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored offline reconciliation model, synthetic fixtures or sanitized findings; no memory writer, secrets or vendor code.",
@@ -1658,11 +2114,27 @@
     },
     {
       "category": "authored-code",
+      "destination": "tools/probe_tank_native.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored consumable extension, source research or sanitized acceptance; no raw firmware, device secrets or proprietary decompilation.",
+      "sha256": "6339bd15905da5f5f8a216efcbc05b7ae39551d535ed5a0f2dbd005ff3650834",
+      "source": "tools/probe_tank_native.py"
+    },
+    {
+      "category": "authored-code",
       "destination": "tools/python35_grammar.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Authored public-source review, documentation or synthetic validation; no device evidence or vendor code.",
       "sha256": "524e7cc7fbaf550f8bff8a8ead962aee0f80401ea367af682483ef17c243a9ef",
       "source": "tools/python35_grammar.py"
+    },
+    {
+      "category": "authored-code",
+      "destination": "tools/read_ds2431_protection.py",
+      "license": "MIT; retain existing contributor notices",
+      "provenance": "Authored consumable extension, source research or sanitized acceptance; no raw firmware, device secrets or proprietary decompilation.",
+      "sha256": "0ae345e93dfc9fbfa838b184f1af4be85f4d90cf4cc47d22d0a3082cbc72b9ab",
+      "source": "tools/read_ds2431_protection.py"
     },
     {
       "category": "authored-code",
@@ -1757,7 +2229,7 @@
       "destination": "tools/test_panel_browser.py",
       "license": "MIT; retain existing contributor notices",
       "provenance": "Disconnected browser driver with visibly synthetic data and disposable credentials.",
-      "sha256": "6a0dff0eccadfce507b1d6a6cd1c2ecd6ee0382042421d9654dac3155bf7eae6",
+      "sha256": "38a2cec08b6777f3ebd5d2e3d2df81a42921392b3ecf65df16613fbcfaa56790",
       "source": "tools/test_panel_browser.py"
     }
   ],

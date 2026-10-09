@@ -12,7 +12,8 @@ LEGACY_PATHS={'panel/lan_ipv4.py','bootstrap/lan_ipv4.py','panel/server.py','pan
        'bootstrap/ownerctl.py','bootstrap/package_format.py'}
 RESET_PATHS={'bootstrap/cartridge_codec.py','bootstrap/cartridge_transaction.py',
              'bootstrap/cartridge_broker.py','panel/reset_client.py','panel/static/reset.js'}
-PATHS=LEGACY_PATHS|RESET_PATHS
+BACKUP_PATHS={'bootstrap/consumable_backup.py','bootstrap/tank_codec.py','bootstrap/cartridge_material.py','bootstrap/material_catalog.py','bootstrap/read_ds2431_protection.py'}
+PATHS=LEGACY_PATHS|RESET_PATHS|BACKUP_PATHS
 
 def digest(raw):return hashlib.sha256(raw).hexdigest()
 def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=True,allow_nan=False).encode('ascii')
@@ -90,6 +91,8 @@ def verify(package,public_key,expected_signer,openssl=None):
     if not required<=set(m['files']):raise ValueError('Incomplete panel package')
     if m['kind'] in ('install','maintenance') and not LEGACY_PATHS<=set(m['files']):raise ValueError('Incomplete install package')
     if m['kind'] in ('install','maintenance') and RESET_PATHS & set(m['files']) and not RESET_PATHS <= set(m['files']):raise ValueError('Incomplete maintenance reset extension')
+    if BACKUP_PATHS & set(m['files']) and not (RESET_PATHS|BACKUP_PATHS) <= set(m['files']):raise ValueError('Incomplete consumable backup extension')
+    if m['kind'] in ('install','maintenance') and tuple(int(x) for x in m['version'].split('-')[0].split('.')) >= (0,5,14) and not BACKUP_PATHS <= set(m['files']):raise ValueError('Missing consumable backup helper')
     # Retain verification of existing pre-extension receipts/packages. New
     # extensions must be complete per privilege boundary, never partial.
     for prefix in ('panel/','bootstrap/'):

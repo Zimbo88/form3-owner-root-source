@@ -51,3 +51,15 @@ class CandidateTests(unittest.TestCase):
         image,record,name=self.fixture(0xffffffff)
         with self.assertRaises(ValueError): candidate(image,record,name)
 if __name__=='__main__': unittest.main()
+
+class QuantizationTests(unittest.TestCase):
+    def test_native_tenth_ml_projection_does_not_require_equal_json_float(self):
+        from test_cartridge_material import fixture,NAME
+        from cartridge_codec import decode,candidate
+        image,record=fixture();record['EstimatedVolumeDispensed_ml']=1033.654
+        decoded=decode(image,record,NAME)
+        self.assertTrue(decoded['rw_copies'][0]['record_matches']['EstimatedVolumeDispensed_ml'])
+        self.assertFalse(decoded['rw_copies'][0]['record_exact_matches']['EstimatedVolumeDispensed_ml'])
+        candidate(image,record,NAME)
+        record['EstimatedVolumeDispensed_ml']=1033.7
+        with self.assertRaises(ValueError):candidate(image,record,NAME)
